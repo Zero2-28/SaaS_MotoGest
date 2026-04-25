@@ -3,6 +3,8 @@ Thumbs.db
 *.log
 .env
 node_modules/
+.github/agents/
 
 # Archivos de contexto interno del proyecto
 CONTEXT.md
+
