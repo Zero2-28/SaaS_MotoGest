@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables — MotoGest Pro Dark Theme ───────────────────────── */
+@layer base {
+  :root {
+    /* Fondo carbono total */
+    --background:    0 0% 4%;       /* #0A0A0A */
+    --foreground:    0 0% 100%;     /* #FFFFFF */
+
+    --card:          0 0% 7%;       /* #111111 */
+    --card-foreground: 0 0% 100%;
+
+    --popover:       0 0% 10%;      /* #1A1A1A */
+    --popover-foreground: 0 0% 100%;
+
+    /* Rojo Ducati como primario */
+    --primary:       0 100% 40%;    /* #CC0000 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary:     0 0% 14%;      /* #242424 */
+    --secondary-foreground: 0 0% 63%;/* #A0A0A0 */
+
+    --muted:         0 0% 10%;
+    --muted-foreground: 0 0% 63%;   /* #A0A0A0 */
+
+    /* Naranja Honda como acento */
+    --accent:        25 100% 50%;   /* #FF6B00 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive:   0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border:        0 0% 18%;      /* líneas sutiles */
+    --input:         0 0% 14%;
+    --ring:          0 100% 40%;    /* foco: rojo */
+
+    --radius: 0.5rem;
+  }
+}
+
+/* ── Reset y base global ───────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Scrollbar oscura para dark mode total */
+    scrollbar-color: #3A3A3A #111111;
+    scrollbar-width: thin;
+  }
+
+  /* Scrollbar WebKit */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-carbon-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-carbon-500 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-carbon-600;
+  }
+
+  /* Títulos display con fuente agresiva */
+  h1, h2 {
+    @apply font-display tracking-wide;
+  }
+}
+
+/* ── Utilidades personalizadas ─────────────────────────────────────── */
+@layer utilities {
+  /* Gradiente de texto rojo — para títulos hero */
+  .text-gradient-racing {
+    background: linear-gradient(135deg, #CC0000, #FF6B00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Borde izquierdo rojo — indicador activo sidebar */
+  .border-l-racing {
+    border-left: 3px solid #CC0000;
+  }
+
+  /* Glow rojo para hover de cards de producto */
+  .hover-glow-racing:hover {
+    box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+    transition: box-shadow 0.2s ease-out;
+  }
+
+  /* Skeleton shimmer para estados de carga */
+  .skeleton {
+    @apply relative overflow-hidden rounded;
+    background-color: #d4d4d4;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+}

@@ -1,0 +1,405 @@
+{
+  "info": {
+    "name": "MOTOGEST JWT Auth Tests",
+    "description": "Colección de pruebas para el sistema JWT completo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "EMPLOYEE AUTH",
+      "item": [
+        {
+          "name": "Login Empleado - Exitoso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@motogest.pro\",\n  \"password\": \"Admin2026*\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Empleado - Password Incorrecta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@motogest.pro\",\n  \"password\": \"PasswordIncorrecto123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Vendedor - Exitoso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vendedor@motogest.pro\",\n  \"password\": \"Vendedor2026*\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token - Empleado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{employee_refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/refresh",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout Empleado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{employee_refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CLIENT AUTH",
+      "item": [
+        {
+          "name": "Register Cliente - Nuevo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"ClientePassword123\",\n  \"telefono\": \"+51999999999\",\n  \"ciudad\": \"Ayacucho\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Cliente - Email Duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Another Person\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"AnotherPassword123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente - Exitoso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"ClientePassword123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente - Password Incorrecta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"PasswordIncorrecto\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token - Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{client_refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/refresh",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{client_refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/clientes/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mis Pedidos - Cliente Autenticado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{client_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/clientes/mis-pedidos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes", "mis-pedidos"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PROTECTED ENDPOINTS",
+      "item": [
+        {
+          "name": "List Productos - Sin Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Clientes - Con Token Empleado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{employee_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Clientes - Con Token Expirado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOjEsImVtYWlsIjoiYWRtaW5AbW90b2dlc3QucHJvIiwicm9sSWQiOjEsInN1Y3Vyc2FsSWQiOm51bGwsImlhdCI6MTU3NzgzNjgwMCwiZXhwIjoxNTc3ODM2ODYwfQ.FAKE_SIGNATURE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Clientes - Con Token Inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalid_token_here"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["clientes"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "employee_access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "employee_refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "client_access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "client_refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

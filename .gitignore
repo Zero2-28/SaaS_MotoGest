@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+node_modules/
+
+# Archivos de contexto interno del proyecto
+CONTEXT.md

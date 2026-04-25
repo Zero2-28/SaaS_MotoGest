@@ -1,0 +1,28 @@
+# Dependencias
+node_modules
+.pnp
+.pnp.js
+
+# Build
+dist
+dist-ssr
+*.local
+
+# Variables de entorno — nunca commitear .env con valores reales
+.env
+.env.local
+.env.*.local
+.env.production
+*.log
+coverage/
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

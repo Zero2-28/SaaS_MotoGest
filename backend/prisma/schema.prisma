@@ -1,0 +1,462 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================================
+// SYSTEM & AUXILIARY TABLES
+// ============================================================================
+
+model Role {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique // 'admin', 'vendedor', 'repartidor'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuarios Usuario[]
+
+  @@map("roles")
+}
+
+// ============================================================================
+// AUTHENTICATION & USERS
+// ============================================================================
+
+model Usuario {
+  id                 Int      @id @default(autoincrement())
+  nombre             String
+  email              String   @unique
+  password           String   // bcrypt hashed
+  rolId              Int
+  sucursalId         Int?     // null for admin, assigned for vendedor/repartidor
+  activo             Boolean  @default(true)
+  google_id          String?  @unique // vinculado via OAuth Google
+  avatar_url         String?          // foto de perfil de Google
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  rol                Role      @relation(fields: [rolId], references: [id], onDelete: Cascade)
+  sucursal           Sucursal? @relation(fields: [sucursalId], references: [id], onDelete: SetNull)
+  refreshTokens      RefreshToken[]
+  notificaciones     Notificacion[]
+  pedidosAsignados   Pedido[]
+
+  @@map("usuarios")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model ClienteRefreshToken {
+  id        Int      @id @default(autoincrement())
+  clienteId Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@map("cliente_refresh_tokens")
+}
+
+// ============================================================================
+// ORGANIZATIONAL STRUCTURE
+// ============================================================================
+
+model Sucursal {
+  id        Int     @id @default(autoincrement())
+  nombre    String
+  ubicacion String
+  telefono  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuarios                 Usuario[]
+  inventarioSucursal       InventarioSucursal[]
+  movimientosInventario    MovimientoInventario[]
+  ventas                   Venta[]
+  comprobantes             Comprobante[]
+
+  @@map("sucursales")
+}
+
+// ============================================================================
+// CUSTOMERS & SUPPLIERS
+// ============================================================================
+
+model Cliente {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  email           String?  @unique
+  password        String
+  telefono        String?
+  direccion       String?
+  ciudad          String?
+  tipoDocumento   String?  // RUC, DNI, etc.
+  numeroDocumento String?
+  activo          Boolean  @default(true)
+  google_id       String?  @unique // vinculado via OAuth Google
+  avatar_url      String?           // foto de perfil de Google
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  ventas             Venta[]
+  pedidos            Pedido[]
+  puntosFidelizacion PuntosFidelizacion[]
+  clienteRefreshTokens ClienteRefreshToken[]
+
+  @@map("clientes")
+}
+
+model Proveedor {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  email           String?
+  telefono        String?
+  direccion       String?
+  tipoDocumento   String?
+  numeroDocumento String?
+  contacto        String?
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  compras Compra[]
+
+  @@map("proveedores")
+}
+
+// ============================================================================
+// PRODUCTS & INVENTORY
+// ============================================================================
+
+model Categoria {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique
+  descripcion String?
+  imagen_url  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  productos Producto[]
+
+  @@map("categorias")
+}
+
+model Producto {
+  id              Int     @id @default(autoincrement())
+  codigo          String  @unique
+  nombre          String
+  descripcion     String?
+  imagen_url      String?
+  categoriaId     Int
+  precioCompra    Float
+  precioVenta     Float
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  categoria                Categoria @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  inventarioSucursal       InventarioSucursal[]
+  detalleCompra            DetalleCompra[]
+  detalleVenta             DetalleVenta[]
+  detalleDevolucion        DetalleDevolucion[]
+  movimientosInventario    MovimientoInventario[]
+
+  @@map("productos")
+}
+
+model InventarioSucursal {
+  id             Int      @id @default(autoincrement())
+  productoId     Int
+  sucursalId     Int
+  cantidad       Int      @default(0)
+  stockMinimo    Int      @default(5)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  producto       Producto  @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  sucursal       Sucursal  @relation(fields: [sucursalId], references: [id], onDelete: Cascade)
+
+  @@unique([productoId, sucursalId])
+  @@map("inventario_sucursal")
+}
+
+model MovimientoInventario {
+  id             Int      @id @default(autoincrement())
+  productoId     Int
+  sucursalId     Int
+  tipo           String   // 'entrada', 'salida', 'ajuste', 'devolucion'
+  cantidad       Int
+  motivo         String?  // 'compra_recibida', 'venta', 'devolucion', 'ajuste_manual'
+  referenciaId   Int?     // Referencia a compra, venta, devolucion, etc.
+  createdAt      DateTime @default(now())
+
+  producto       Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  sucursal       Sucursal @relation(fields: [sucursalId], references: [id], onDelete: Cascade)
+
+  @@map("movimientos_inventario")
+}
+
+// ============================================================================
+// PURCHASES
+// ============================================================================
+
+model Compra {
+  id              Int      @id @default(autoincrement())
+  numeroCompra    String   @unique // Formato: CMP-2026-0001
+  proveedorId     Int
+  fechaCompra     DateTime @default(now())
+  estado          String   @default("pendiente") // 'pendiente', 'confirmado', 'recibido', 'cancelado'
+  subtotal        Float    @default(0)
+  impuesto        Float    @default(0)
+  total           Float    @default(0)
+  observaciones   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  proveedor       Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Restrict)
+  detalles        DetalleCompra[]
+
+  @@map("compras")
+}
+
+model DetalleCompra {
+  id        Int      @id @default(autoincrement())
+  compraId  Int
+  productoId Int
+  cantidad  Int
+  precioUnitario Float
+  subtotal  Float
+  createdAt DateTime @default(now())
+
+  compra    Compra   @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  producto  Producto @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  @@map("detalle_compra")
+}
+
+// ============================================================================
+// SALES
+// ============================================================================
+
+model Venta {
+  id            Int      @id @default(autoincrement())
+  numeroVenta   String   @unique // Formato: VTA-2026-0001
+  clienteId     Int?
+  sucursalId    Int
+  fechaVenta    DateTime @default(now())
+  estado        String   @default("completada") // 'completada', 'cancelada', 'devolucion_parcial'
+  comprobanteId Int?
+  subtotal      Float    @default(0)
+  impuesto      Float    @default(0)
+  descuento     Float    @default(0)
+  total         Float    @default(0)
+  metodoPago    String?  // 'efectivo', 'tarjeta', 'transferencia'
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cliente       Cliente?  @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+  sucursal      Sucursal  @relation(fields: [sucursalId], references: [id], onDelete: Restrict)
+  comprobante   Comprobante? @relation(fields: [comprobanteId], references: [id], onDelete: SetNull)
+  detalles      DetalleVenta[]
+  pagos         Pago[]
+  devoluciones  Devolucion[]
+
+  @@map("ventas")
+}
+
+model DetalleVenta {
+  id        Int      @id @default(autoincrement())
+  ventaId   Int
+  productoId Int
+  cantidad  Int
+  precioUnitario Float
+  subtotal  Float
+  createdAt DateTime @default(now())
+
+  venta     Venta    @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  producto  Producto @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  @@map("detalle_venta")
+}
+
+model Comprobante {
+  id          Int      @id @default(autoincrement())
+  serie       String   // Ej: B001
+  numero      String   // Ej: 00000001
+  tipo        String   // 'factura', 'boleta', 'ticket'
+  sucursalId  Int
+  fechaEmision DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  sucursal    Sucursal @relation(fields: [sucursalId], references: [id], onDelete: Restrict)
+  ventas      Venta[]
+
+  @@unique([serie, numero])
+  @@map("comprobantes")
+}
+
+// ============================================================================
+// RETURNS
+// ============================================================================
+
+model Devolucion {
+  id              Int      @id @default(autoincrement())
+  numeroDevolucion String  @unique // Formato: DEV-2026-0001
+  ventaId         Int
+  fechaDevolucion DateTime @default(now())
+  motivo          String
+  estado          String   @default("pendiente") // 'pendiente', 'aprobada', 'rechazada'
+  subtotal        Float    @default(0)
+  impuesto        Float    @default(0)
+  total           Float    @default(0)
+  observaciones   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  venta           Venta    @relation(fields: [ventaId], references: [id], onDelete: Restrict)
+  detalles        DetalleDevolucion[]
+
+  @@map("devoluciones")
+}
+
+model DetalleDevolucion {
+  id          Int      @id @default(autoincrement())
+  devolucionId Int
+  productoId  Int
+  cantidad    Int
+  precioUnitario Float
+  subtotal    Float
+  createdAt   DateTime @default(now())
+
+  devolucion  Devolucion @relation(fields: [devolucionId], references: [id], onDelete: Cascade)
+  producto    Producto   @relation(fields: [productoId], references: [id], onDelete: Restrict)
+
+  @@map("detalle_devolucion")
+}
+
+// ============================================================================
+// PROMOTIONS & LOYALTY
+// ============================================================================
+
+model Promocion {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  tipoDescuento String // 'porcentaje', 'cantidad'
+  valor       Float
+  fechaInicio DateTime
+  fechaFin    DateTime
+  activa      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("promociones")
+}
+
+model PuntosFidelizacion {
+  id        Int      @id @default(autoincrement())
+  clienteId Int
+  puntos    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@unique([clienteId])
+  @@map("puntos_fidelizacion")
+}
+
+// ============================================================================
+// PAYMENTS
+// ============================================================================
+
+model Pago {
+  id              Int      @id @default(autoincrement())
+  ventaId         Int
+  stripePaymentId String?  @unique
+  monto           Float
+  estado          String   @default("pendiente") // 'pendiente', 'completado', 'fallido'
+  metodoPago      String?  // 'stripe', 'efectivo', 'transferencia'
+  fechaPago       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  venta           Venta    @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+
+  @@map("pagos")
+}
+
+// ============================================================================
+// ORDERS
+// ============================================================================
+
+model Pedido {
+  id              Int      @id @default(autoincrement())
+  codigoPedido    String   @unique // Formato: CT-2026-0001
+  clienteId       Int
+  usuarioId       Int?     // repartidor asignado (null = sin asignar)
+  fechaPedido     DateTime @default(now())
+  fechaEntrega    DateTime?
+  estado          String   @default("pendiente") // 'pendiente','confirmado','preparando','listo','en_transito','entregado','cancelado'
+  subtotal        Float    @default(0)
+  impuesto        Float    @default(0)
+  total           Float    @default(0)
+  observaciones   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  cliente         Cliente  @relation(fields: [clienteId], references: [id], onDelete: Restrict)
+  usuario         Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  historial       HistorialPedido[]
+
+  @@map("pedidos")
+}
+
+model HistorialPedido {
+  id        Int      @id @default(autoincrement())
+  pedidoId  Int
+  estado    String
+  fecha     DateTime @default(now())
+  comentario String?
+
+  pedido    Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+
+  @@map("historial_pedido")
+}
+
+// ============================================================================
+// NOTIFICATIONS
+// ============================================================================
+
+model Notificacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  tipo      String   @default("general") // 'general', 'stock_bajo', 'pedido_nuevo', 'pago_confirmado'
+  titulo    String
+  mensaje   String
+  leida     Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("notificaciones")
+}
