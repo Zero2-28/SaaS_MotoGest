@@ -12,8 +12,7 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "prisma db seed",
     "lint": "tsc --noEmit",
-    "test": "node --test",
-    "prepare": "husky install"
+    "test": "node --test"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
