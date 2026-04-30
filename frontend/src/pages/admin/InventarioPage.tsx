@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AlertTriangle, Plus, CheckCircle, Search } from 'lucide-react'
+import { AlertTriangle, Plus, CheckCircle, Search, Trash2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -31,7 +31,12 @@ const ajusteSchema = z.object({
 
 type AjusteForm = z.infer<typeof ajusteSchema>
 
-function StockRow({ item, onAjustar }: { item: StockItem; onAjustar: (item: StockItem) => void }) {
+function StockRow({ item, onAjustar, esAdmin, onEliminar }: {
+  item: StockItem
+  onAjustar: (item: StockItem) => void
+  esAdmin?: boolean
+  onEliminar?: (item: StockItem) => void
+}) {
   const [imgSrc, setImgSrc] = useState(item.producto.imagen_url ?? IMG_PLACEHOLDER)
   const porcentaje = Math.min(100, (item.cantidad / (item.stockMinimo * 3)) * 100)
   const nivel = item.cantidad === 0
@@ -64,15 +69,29 @@ function StockRow({ item, onAjustar }: { item: StockItem; onAjustar: (item: Stoc
         </p>
         <Progress value={porcentaje} aria-label={`Stock al ${porcentaje.toFixed(0)}%`} />
       </div>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => onAjustar(item)}
-        aria-label={`Ajustar stock de ${item.producto.nombre}`}
-      >
-        <Plus className="h-3 w-3 mr-1" />
-        Ajustar
-      </Button>
+      <div className="flex items-center gap-1">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => onAjustar(item)}
+          aria-label={`Ajustar stock de ${item.producto.nombre}`}
+        >
+          <Plus className="h-3 w-3 mr-1" />
+          Ajustar
+        </Button>
+        {esAdmin && onEliminar && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="text-red-500 hover:bg-red-50 hover:text-red-600"
+            onClick={() => onEliminar(item)}
+            aria-label={`Eliminar producto ${item.producto.nombre}`}
+            title="Eliminar producto"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
@@ -88,8 +107,12 @@ export default function InventarioPage() {
   const [categoriaFiltro, setCategoriaFiltro] = useState<string>('todas')
   const [busqueda, setBusqueda]         = useState('')
   const [cargando, setCargando]         = useState(true)
-  const [ajustandoItem, setAjustandoItem] = useState<StockItem | null>(null)
-  const [guardando, setGuardando]       = useState(false)
+  const [ajustandoItem, setAjustandoItem]   = useState<StockItem | null>(null)
+  const [guardando, setGuardando]           = useState(false)
+  const [eliminandoItem, setEliminandoItem] = useState<StockItem | null>(null)
+  const [eliminando, setEliminando]         = useState(false)
+  const [errorEliminar, setErrorEliminar]   = useState<string | null>(null)
+  const [motivoEliminar, setMotivoEliminar] = useState('')
 
   useEffect(() => {
     if (!esAdmin) return
@@ -156,6 +179,30 @@ export default function InventarioPage() {
       // Error de API — no cierra el modal para que el usuario pueda reintentar
     } finally {
       setGuardando(false)
+    }
+  }
+
+  function cerrarDialogEliminar() {
+    setEliminandoItem(null)
+    setErrorEliminar(null)
+    setMotivoEliminar('')
+  }
+
+  async function confirmarEliminar() {
+    if (!eliminandoItem) return
+    setEliminando(true)
+    setErrorEliminar(null)
+    try {
+      const params = motivoEliminar.trim()
+        ? `?motivo=${encodeURIComponent(motivoEliminar.trim())}`
+        : ''
+      await api.delete(`/productos/${eliminandoItem.productoId}${params}`)
+      cerrarDialogEliminar()
+      await cargar(false)
+    } catch {
+      setErrorEliminar('No se pudo eliminar el producto. Intenta nuevamente.')
+    } finally {
+      setEliminando(false)
     }
   }
 
@@ -297,6 +344,8 @@ export default function InventarioPage() {
                   key={item.id}
                   item={item}
                   onAjustar={(i) => { setAjustandoItem(i); reset() }}
+                  esAdmin={esAdmin}
+                  onEliminar={(i) => setEliminandoItem(i)}
                 />
               ))}
             </div>
@@ -354,6 +403,57 @@ export default function InventarioPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog eliminar producto */}
+      <Dialog
+        open={!!eliminandoItem}
+        onOpenChange={(open) => { if (!open) cerrarDialogEliminar() }}
+      >
+        <DialogContent className="bg-white text-[#111111]">
+          <DialogHeader>
+            <DialogTitle>¿Eliminar producto?</DialogTitle>
+            <DialogDescription>
+              Esta acción desactivará{' '}
+              <strong className="text-[#111111]">{eliminandoItem?.producto.nombre}</strong>{' '}
+              del sistema. El historial se mantendrá.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="motivo-eliminar">Motivo (opcional)</Label>
+            <textarea
+              id="motivo-eliminar"
+              rows={3}
+              placeholder="Ej: producto descontinuado, dañado, fuera de stock permanente..."
+              value={motivoEliminar}
+              onChange={(e) => setMotivoEliminar(e.target.value)}
+              className="w-full rounded-md border border-[#D1D5DB] bg-[#F9FAFB] px-3 py-2 text-sm text-[#111111] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#CC0000] focus:ring-1 focus:ring-[#CC0000]/20 resize-none"
+            />
+          </div>
+          {errorEliminar && (
+            <p role="alert" className="text-sm text-red-500">{errorEliminar}</p>
+          )}
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={cerrarDialogEliminar}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              className="bg-red-600 hover:bg-red-700 text-white"
+              disabled={eliminando}
+              onClick={() => void confirmarEliminar()}
+            >
+              {eliminando
+                ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                : 'Sí, eliminar'
+              }
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

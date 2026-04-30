@@ -2,7 +2,7 @@ import prisma from "../lib/prisma";
 import { AppError } from "../lib/appError";
 
 export const listCategoriasService = async (): Promise<unknown[]> => {
-  return prisma.categoria.findMany({ orderBy: { id: "desc" } });
+  return prisma.categoria.findMany({ where: { activo: true }, orderBy: { id: "desc" } });
 };
 
 export const getCategoriaByIdService = async (id: number): Promise<unknown> => {
@@ -37,5 +37,5 @@ export const deleteCategoriaService = async (id: number): Promise<unknown> => {
   if (!exists) {
     throw new AppError("Categoría no encontrada", 404);
   }
-  return prisma.categoria.delete({ where: { id } });
+  return prisma.categoria.update({ where: { id }, data: { activo: false } });
 };

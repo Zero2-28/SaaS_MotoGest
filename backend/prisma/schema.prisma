@@ -152,6 +152,7 @@ model Categoria {
   nombre      String   @unique
   descripcion String?
   imagen_url  String?
+  activo      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

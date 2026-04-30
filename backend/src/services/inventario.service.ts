@@ -9,6 +9,7 @@ export const alertasInventarioService = async (input: {
   const inventario = await prisma.inventarioSucursal.findMany({
     where: {
       ...(input.sucursalId ? { sucursalId: input.sucursalId } : {}),
+      producto: { activo: true },
     },
     include: {
       producto: { include: { categoria: true } },
@@ -27,7 +28,7 @@ export const inventarioPorSucursalService = async (
   sucursalId: number
 ): Promise<unknown[]> => {
   const items = await prisma.inventarioSucursal.findMany({
-    where: { sucursalId },
+    where: { sucursalId, producto: { activo: true } },
     include: {
       producto: { include: { categoria: true } },
       sucursal: true,
