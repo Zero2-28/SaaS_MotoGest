@@ -8,6 +8,14 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import prisma from "../lib/prisma";
 
+// Emails autorizados para login con Google como empleado/admin
+const EMAILS_PERMITIDOS_ADMIN: string[] = [
+  'email_admin_future@gmail.com',
+  'email_vendedor_future@gmail.com',
+  'robertos@gmail.com',
+  // Agregar más emails aquí cuando sea necesario
+]
+
 // ── Estrategia 1: Empleados ───────────────────────────────────────────────────
 // Solo vincula si el email ya existe en la tabla usuarios.
 // Los empleados NO se auto-registran — solo el admin puede crearlos.
@@ -24,6 +32,11 @@ passport.use(
       const verify = async () => {
         const email = profile.emails?.[0]?.value;
         if (!email) {
+          done(null, false);
+          return;
+        }
+
+        if (!EMAILS_PERMITIDOS_ADMIN.includes(email)) {
           done(null, false);
           return;
         }
