@@ -218,12 +218,14 @@ export interface Pedido {
   clienteId: number
   cliente: { id: number; nombre: string; email: string }
   usuarioId?: number | null
+  ventaId?: number | null
   repartidor?: { id: number; nombre: string } | null
   estado: EstadoPedido
   subtotal: number
   impuesto: number
   total: number
   observaciones: string | null
+  direccionEntrega?: string | null
   historial: PedidoHistorial[]
   fechaPedido: string | null
   fechaEntrega: string | null

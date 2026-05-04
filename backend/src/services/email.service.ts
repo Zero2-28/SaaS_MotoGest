@@ -241,6 +241,118 @@ export const enviarCambioEstadoPedido = async (
   });
 };
 
+// Email de confirmación de compra online (se envía cuando Stripe confirma el pago)
+export const enviarCompraCompletadaCliente = async (
+  venta: {
+    numeroVenta: string;
+    total: number;
+    detalles: Array<{
+      cantidad: number;
+      precioUnitario: number;
+      subtotal: number;
+      producto: { nombre: string };
+    }>;
+  },
+  cliente: { nombre: string; email: string },
+  codigoPedido: string | null,
+  direccionEntrega: string | null
+): Promise<void> => {
+  const resend = getResend();
+  const frontendUrl = process.env.FRONTEND_URL ?? "https://motogest.pro";
+
+  const filas = venta.detalles
+    .map(
+      (d) => `
+      <tr>
+        <td style="padding:8px 10px;font-size:13px;color:#444;border-bottom:1px solid #f0f0f0;">
+          ${d.producto.nombre}
+        </td>
+        <td style="padding:8px 10px;font-size:13px;color:#444;text-align:center;
+          border-bottom:1px solid #f0f0f0;">${d.cantidad}</td>
+        <td style="padding:8px 10px;font-size:13px;color:#444;text-align:right;
+          border-bottom:1px solid #f0f0f0;">S/ ${d.precioUnitario.toFixed(2)}</td>
+        <td style="padding:8px 10px;font-size:13px;font-weight:bold;color:#1a1a1a;
+          text-align:right;border-bottom:1px solid #f0f0f0;">
+          S/ ${d.subtotal.toFixed(2)}
+        </td>
+      </tr>`
+    )
+    .join("");
+
+  const rastreoUrl = codigoPedido
+    ? `${frontendUrl}/rastreo?codigo=${codigoPedido}`
+    : `${frontendUrl}/rastreo`;
+
+  const contenido = `
+    <p style="color:#444;font-size:15px;line-height:1.6;">
+      Hola <strong>${cliente.nombre}</strong>,
+    </p>
+    <p style="color:#444;font-size:15px;line-height:1.6;">
+      ¡Tu compra fue confirmada exitosamente! Aquí tienes el resumen:
+    </p>
+    <table width="100%" cellpadding="0" cellspacing="0"
+      style="border:1px solid #e0e0e0;border-radius:4px;margin:16px 0;overflow:hidden;">
+      <thead>
+        <tr style="background:${ROJO};">
+          <th style="padding:10px;color:#fff;text-align:left;font-size:12px;">Producto</th>
+          <th style="padding:10px;color:#fff;text-align:center;font-size:12px;">Cant.</th>
+          <th style="padding:10px;color:#fff;text-align:right;font-size:12px;">P. Unit.</th>
+          <th style="padding:10px;color:#fff;text-align:right;font-size:12px;">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>${filas}</tbody>
+      <tfoot>
+        <tr style="border-top:2px solid ${ROJO};">
+          <td colspan="3" style="padding:12px 10px;text-align:right;font-weight:bold;font-size:14px;">
+            TOTAL
+          </td>
+          <td style="padding:12px 10px;text-align:right;font-weight:bold;color:${ROJO};font-size:18px;">
+            S/ ${venta.total.toFixed(2)}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    ${
+      codigoPedido
+        ? `<table width="100%" cellpadding="10" cellspacing="0"
+             style="border:1px solid #e0e0e0;border-radius:4px;margin:16px 0;">
+             <tr style="background:#f5f5f5;">
+               <td style="color:#888;font-size:13px;width:40%;">Código de seguimiento</td>
+               <td style="color:#1a1a1a;font-weight:bold;font-size:15px;font-family:monospace;">
+                 ${codigoPedido}
+               </td>
+             </tr>
+             ${
+               direccionEntrega
+                 ? `<tr>
+                      <td style="color:#888;font-size:13px;">Dirección de entrega</td>
+                      <td style="color:#444;font-size:13px;">${direccionEntrega}</td>
+                    </tr>`
+                 : ""
+             }
+           </table>`
+        : ""
+    }
+    <div style="margin:24px 0;">
+      <a href="${rastreoUrl}"
+        style="background:${ROJO};color:#fff;padding:13px 28px;border-radius:6px;
+          font-weight:bold;font-size:14px;text-decoration:none;display:inline-block;">
+        Rastrear mi pedido
+      </a>
+    </div>
+    <p style="color:#888;font-size:12px;margin:4px 0;">
+      N° Venta: <strong>${venta.numeroVenta}</strong>
+    </p>
+  `;
+
+  await resend.emails.send({
+    from: FROM,
+    to: cliente.email,
+    subject: `Compra confirmada${codigoPedido ? ` — ${codigoPedido}` : ""} — MOTOGEST PRO`,
+    html: wrapHtml("¡Tu compra fue exitosa!", contenido),
+  });
+};
+
 // Comprobante de venta con detalle de productos
 export const enviarComprobanteVenta = async (
   venta: {

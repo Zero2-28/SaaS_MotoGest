@@ -5,6 +5,7 @@ import { roleMiddleware } from "../middlewares/role.middleware";
 import {
   createVenta,
   createVentaCliente,
+  descargarComprobante,
   getVentaById,
   listVentas,
   reportesVentas,
@@ -20,6 +21,8 @@ router.use(authMiddleware);
 // /reportes debe ir antes de /:id para que Express no lo interprete como un ID
 router.get("/reportes", roleMiddleware(["admin", "vendedor"]), reportesVentas);
 router.get("/", roleMiddleware(["admin", "vendedor"]), listVentas);
+// /:id/comprobante antes de /:id
+router.get("/:id/comprobante", roleMiddleware(["admin", "vendedor"]), descargarComprobante);
 router.get("/:id", roleMiddleware(["admin", "vendedor"]), getVentaById);
 router.post("/", roleMiddleware(["admin", "vendedor"]), createVenta);
 

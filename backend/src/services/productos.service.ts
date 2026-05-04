@@ -63,14 +63,23 @@ export const listProductosService = async (input: {
 export const getProductoByIdService = async (id: number) => {
   const producto = await prisma.producto.findFirst({
     where: { id, activo: true },
-    select: selectPublico,
+    select: {
+      ...selectPublico,
+      // Incluye stock de la sucursal principal (id=1) para mostrar disponibilidad al cliente
+      inventarioSucursal: {
+        where: { sucursalId: 1 },
+        select: { cantidad: true },
+        take: 1,
+      },
+    },
   });
 
   if (!producto) {
     throw new AppError("Producto no encontrado", 404);
   }
 
-  return producto;
+  const { inventarioSucursal, ...rest } = producto;
+  return { ...rest, stock: inventarioSucursal[0]?.cantidad };
 };
 
 export const createProductoService = async (data: {

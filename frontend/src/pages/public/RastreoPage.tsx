@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -181,23 +181,45 @@ function Productos({ obs }: { obs: string | null }) {
   )
 }
 
+const ESTADOS_TERMINAL = ['entregado', 'cancelado']
+
 export default function RastreoPage() {
   const [pedido, setPedido] = useState<PedidoPublico | null>(null)
   const [buscado, setBuscado] = useState(false)
   const [hayError, setHayError] = useState(false)
+  const codigoActivo = useRef<string | null>(null)
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  // Polling cada 30s mientras el pedido no esté en estado terminal
+  useEffect(() => {
+    if (!pedido || ESTADOS_TERMINAL.includes(pedido.estado)) return
+    const codigo = codigoActivo.current
+    if (!codigo) return
+    const intervalo = setInterval(async () => {
+      try {
+        const data = await rastrearPedido(codigo)
+        setPedido(data)
+      } catch {
+        // Silenciado — no resetear el estado si falla el poll
+      }
+    }, 30000)
+    return () => clearInterval(intervalo)
+  }, [pedido?.estado])
 
   async function onSubmit({ codigo }: FormData) {
     setHayError(false)
     setPedido(null)
     setBuscado(false)
     try {
-      const data = await rastrearPedido(codigo.toUpperCase())
+      const upper = codigo.toUpperCase()
+      codigoActivo.current = upper
+      const data = await rastrearPedido(upper)
       setPedido(data)
     } catch {
+      codigoActivo.current = null
       setHayError(true)
     } finally {
       setBuscado(true)

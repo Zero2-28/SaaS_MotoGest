@@ -1,5 +1,5 @@
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Menu, X, Truck, User, LogOut, ChevronDown, Search, ShoppingBag } from 'lucide-react'
+import { ShoppingCart, Menu, X, Truck, User, LogOut, ChevronDown, Search, ShoppingBag, UserCircle, MapPin, Star, Bell, Lock } from 'lucide-react'
 import { useState, useRef, useEffect, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
@@ -157,24 +157,51 @@ function MiCuentaDropdown({
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full mt-2 z-50 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg animate-fade-in"
+          className="absolute right-0 top-full mt-2 z-50 w-52 rounded-lg border border-gray-100 bg-white py-1 shadow-lg animate-fade-in"
         >
+          {/* Ítem activo */}
           <Link
             to="/mi-cuenta/compras"
             role="menuitem"
             onClick={() => setOpen(false)}
             className="flex items-center gap-2 px-4 py-2 text-sm text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
           >
-            <ShoppingBag className="h-5 w-5" aria-hidden />
+            <ShoppingBag className="h-4 w-4" aria-hidden />
             Mis compras
           </Link>
+
+          {/* Ítems próximamente */}
+          {([
+            { Icon: UserCircle, label: 'Mi perfil' },
+            { Icon: MapPin,     label: 'Mis direcciones' },
+            { Icon: Star,       label: 'Mis puntos' },
+            { Icon: Bell,       label: 'Notificaciones' },
+            { Icon: Lock,       label: 'Cambiar contraseña' },
+          ] as const).map(({ Icon, label }) => (
+            <button
+              key={label}
+              role="menuitem"
+              disabled
+              aria-disabled="true"
+              className="flex w-full items-center justify-between gap-2 px-4 py-2 text-sm text-gray-300 cursor-not-allowed"
+            >
+              <span className="flex items-center gap-2">
+                <Icon className="h-4 w-4" aria-hidden />
+                {label}
+              </span>
+              <span className="text-[10px] font-semibold text-[#FF6B00] bg-[#FFF7ED] px-1.5 py-0.5 rounded-full leading-tight">
+                Próximamente
+              </span>
+            </button>
+          ))}
+
           <div className="my-1 border-t border-gray-100" />
           <button
             role="menuitem"
             onClick={() => { setOpen(false); onLogout() }}
             className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-racing transition-colors"
           >
-            <LogOut className="h-5 w-5" aria-hidden />
+            <LogOut className="h-4 w-4" aria-hidden />
             Cerrar sesión
           </button>
         </div>
@@ -440,8 +467,8 @@ function PublicFooter() {
               </h3>
               <ul className="flex flex-col gap-2 text-sm text-gray-400">
                 <li>📍 Av. San Francisco, Ayacucho</li>
-                <li>📞 +51 XXX XXX XXX</li>
-                <li>📧 contacto@calletuning.pe</li>
+                <li>📞 +51 999 999 999</li>
+                <li>📧 GerenteCalleTuning@gmail.com</li>
               </ul>
             </div>
 
@@ -460,7 +487,7 @@ function PublicFooter() {
                     <img
                       src={url}
                       alt={nombre}
-                      className="h-8 w-full object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity"
+                      className="h-8 w-full object-contain opacity-80 hover:opacity-100 transition-opacity"
                       loading="lazy"
                       width={60}
                       height={32}
@@ -489,6 +516,33 @@ function PublicFooter() {
   )
 }
 
+// ── Botón flotante de WhatsApp ────────────────────────────────────────────────
+function WhatsAppButton() {
+  return (
+    <a
+      href="https://wa.me/51948911607"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contáctanos por WhatsApp"
+      className="group fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-7 w-7 text-white"
+        aria-hidden="true"
+      >
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.527 5.845L.057 23.885l6.19-1.444A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.376l-.36-.214-3.722.868.936-3.42-.235-.372A9.818 9.818 0 1112 21.818z" />
+      </svg>
+      {/* Tooltip a la derecha del botón */}
+      <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-[#111111] px-2.5 py-1 text-xs text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+        Contáctanos por WhatsApp
+      </span>
+    </a>
+  )
+}
+
 // ── Layout público principal ──────────────────────────────────────────────────
 export default function PublicLayout() {
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -501,6 +555,7 @@ export default function PublicLayout() {
       </main>
       <PublicFooter />
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <WhatsAppButton />
     </div>
   )
 }

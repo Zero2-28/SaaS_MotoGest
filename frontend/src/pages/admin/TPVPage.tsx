@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Search, Plus, Minus, Trash2, ShoppingCart, CheckCircle, Lock, AlertCircle } from 'lucide-react'
+import { Search, Plus, Minus, Trash2, ShoppingCart, CheckCircle, Lock, AlertCircle, FileText, Download } from 'lucide-react'
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,7 @@ import { useAuthEmpleadoStore } from '@/stores/auth.store'
 import { getProductos } from '@/services/productos.service'
 import { getCategorias } from '@/services/categorias.service'
 import { getStockSucursal } from '@/services/inventario.service'
-import { crearVenta } from '@/services/ventas.service'
+import { crearVenta, verComprobante } from '@/services/ventas.service'
 import { crearIntentoPago } from '@/services/pagos.service'
 import type { Producto, MetodoPago, Venta, Categoria } from '@/types'
 import { formatPrecio } from '@/utils/format'
@@ -256,7 +256,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
   } = useCarritoStore()
   const { empleado } = useAuthEmpleadoStore()
   const [procesando, setProcesando] = useState(false)
-  const [exito, setExito] = useState(false)
+  const [ventaExito, setVentaExito] = useState<Venta | null>(null)
   const [stripeModal, setStripeModal] = useState<StripeModalData | null>(null)
   const [stockError, setStockError] = useState<string | null>(null)
 
@@ -297,8 +297,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
       } else {
         // Efectivo / transferencia: cobro inmediato
         vaciarCarrito()
-        setExito(true)
-        setTimeout(() => { setExito(false); onVentaCompleta() }, 2000)
+        setVentaExito(ventaCreada)
       }
     } catch {
       // Error de API — procesando vuelve a false por finally, el carrito queda intacto
@@ -308,10 +307,10 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
   }
 
   function handleStripeSuccess() {
+    const venta = stripeModal!.venta
     vaciarCarrito()
     setStripeModal(null)
-    setExito(true)
-    setTimeout(() => { setExito(false); onVentaCompleta() }, 2000)
+    setVentaExito(venta)
   }
 
   function handleStripeClose() {
@@ -320,12 +319,42 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
     setStripeModal(null)
   }
 
-  if (exito) {
+  if (ventaExito) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-16 animate-fade-in">
+      <div className="flex flex-col items-center justify-center gap-4 py-12 animate-fade-in text-center">
         <CheckCircle className="h-16 w-16 text-green-400" />
-        <p className="text-xl font-bold text-[#111111]">¡Venta registrada!</p>
-        <p className="text-sm text-muted-foreground">Iniciando nuevo cobro…</p>
+        <div>
+          <p className="text-xl font-bold text-[#111111]">¡Venta registrada!</p>
+          <p className="text-xs font-mono text-muted-foreground mt-1">{ventaExito.numeroVenta}</p>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void verComprobante(ventaExito.id, false)}
+            className="flex items-center gap-1.5"
+          >
+            <FileText className="h-3.5 w-3.5" />
+            Ver PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void verComprobante(ventaExito.id, true)}
+            className="flex items-center gap-1.5"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Descargar
+          </Button>
+        </div>
+
+        <Button
+          onClick={() => { setVentaExito(null); onVentaCompleta() }}
+          className="mt-1"
+        >
+          Nuevo cobro
+        </Button>
       </div>
     )
   }

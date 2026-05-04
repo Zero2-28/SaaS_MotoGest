@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: true,
     port: 5173,
     proxy: {
       // Proxy para evitar CORS en desarrollo

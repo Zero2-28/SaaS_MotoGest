@@ -78,6 +78,9 @@ function ProductoCard({ producto, view }: { producto: Producto; view: ViewMode }
   const agregarItem = useCarritoStore((s) => s.agregarItem)
   const [imgSrc, setImgSrc] = useState(() => getProductImage(producto))
 
+  const sinStock = !producto.activo || producto.stock === 0
+  const pocasUnidades = producto.stock !== undefined && producto.stock > 0 && producto.stock <= 5
+
   if (view === 'list') {
     return (
       <article className="flex gap-4 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md p-4 transition-all">
@@ -91,9 +94,16 @@ function ProductoCard({ producto, view }: { producto: Producto; view: ViewMode }
             width={96}
             height={96}
           />
-          {!producto.activo && (
+          {sinStock && (
             <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center">
-              <Badge variant="cancelado">Sin stock</Badge>
+              <Badge variant="cancelado">Agotado</Badge>
+            </div>
+          )}
+          {!sinStock && pocasUnidades && (
+            <div className="absolute bottom-1 left-1 right-1">
+              <span className="block text-center rounded bg-[#FF6B00]/90 px-1 py-0.5 text-[9px] font-semibold text-white leading-tight">
+                Pocas unidades
+              </span>
             </div>
           )}
         </Link>
@@ -113,12 +123,12 @@ function ProductoCard({ producto, view }: { producto: Producto; view: ViewMode }
             </span>
             <button
               onClick={() => agregarItem(producto)}
-              disabled={!producto.activo}
+              disabled={sinStock}
               aria-label={`Agregar ${producto.nombre} al carrito`}
               className="flex items-center gap-1.5 rounded-md bg-racing px-3 py-1.5 text-xs font-semibold text-white hover:bg-racing-700 disabled:opacity-40 transition-colors"
             >
               <ShoppingCart className="h-3.5 w-3.5" aria-hidden />
-              Agregar
+              {sinStock ? 'Agotado' : 'Agregar'}
             </button>
           </div>
         </div>
@@ -138,9 +148,16 @@ function ProductoCard({ producto, view }: { producto: Producto; view: ViewMode }
           width={400}
           height={192}
         />
-        {!producto.activo && (
+        {sinStock && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <Badge variant="cancelado">Sin stock</Badge>
+            <Badge variant="cancelado">Agotado</Badge>
+          </div>
+        )}
+        {!sinStock && pocasUnidades && (
+          <div className="absolute bottom-2 left-2">
+            <span className="rounded-full bg-[#FF6B00] px-2 py-0.5 text-[10px] font-semibold text-white">
+              Pocas unidades
+            </span>
           </div>
         )}
       </Link>
@@ -161,12 +178,12 @@ function ProductoCard({ producto, view }: { producto: Producto; view: ViewMode }
           </span>
           <button
             onClick={() => agregarItem(producto)}
-            disabled={!producto.activo}
+            disabled={sinStock}
             aria-label={`Agregar ${producto.nombre} al carrito`}
             className="flex w-full items-center justify-center gap-2 rounded-md bg-racing py-2.5 text-xs font-semibold text-white hover:bg-racing-700 disabled:opacity-40 transition-colors"
           >
             <ShoppingCart className="h-3.5 w-3.5" aria-hidden />
-            Agregar al carrito
+            {sinStock ? 'Agotado' : 'Agregar al carrito'}
           </button>
         </div>
       </div>

@@ -49,6 +49,11 @@ const avatares = {
   perfil: b('motogest-avatares', 'perfil.svg'),
 }
 
+// Banner "Por qué elegirnos"
+const banner = {
+  porQueElegirnos: b('PorqueElegirnos', 'motogestcliente2.webp'),
+}
+
 // Marcas — array ordenado para carrusel, con nombre y URL
 const marcas = [
   { nombre: 'CST',         url: b('motogest-marcas', 'Mesa%20de%20trabajo%206.webp') },
@@ -71,5 +76,6 @@ export const assets = {
   carousel,
   categorias,
   avatares,
+  banner,
   marcas,
 }

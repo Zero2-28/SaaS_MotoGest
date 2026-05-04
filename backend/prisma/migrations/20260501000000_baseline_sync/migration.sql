@@ -1,0 +1,1 @@
+-- Baseline sync: DB already matches schema.prisma, no changes needed.

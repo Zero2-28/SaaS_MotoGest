@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { z } from "zod";
 import { createVentaSchema } from "../schemas/schemas";
 import { AuthRequest } from "../middlewares/auth.middleware";
@@ -12,6 +12,7 @@ import {
 } from "../services/ventas.service";
 import { crearIntentoPagoService } from "../services/pagos.service";
 import { createPedidoDesdeVentaService } from "../services/pedidos.service";
+import { generarComprobantePdfService } from "../services/comprobante.service";
 
 interface ApiResponse<T = unknown> {
   success: boolean;
@@ -166,6 +167,8 @@ export const createVentaCliente = async (
           productoId: d.productoId,
           cantidad: d.cantidad,
         })),
+        direccionEntrega: validation.data.direccionEntrega,
+        ventaId: venta.id,
       });
       codigoPedido = pedido.codigoPedido;
     } catch (err: unknown) {
@@ -173,6 +176,37 @@ export const createVentaCliente = async (
     }
 
     sendSuccess(res, { venta, clientSecret, codigoPedido }, 201);
+  } catch (error: unknown) {
+    const appError = toAppError(error);
+    sendError(res, appError.message, appError.statusCode);
+  }
+};
+
+// ============================================================================
+// GET /ventas/:id/comprobante — Descarga PDF del comprobante (admin/vendedor)
+// ============================================================================
+
+const idSchema = z.object({ id: z.string().regex(/^\d+$/, "ID inválido") });
+
+export const descargarComprobante = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const validation = idSchema.safeParse(req.params);
+    if (!validation.success) {
+      sendError(res, "ID de venta inválido");
+      return;
+    }
+    // ?download=false → inline (abrir en navegador); cualquier otro valor → attachment
+    const isDownload = req.query.download !== "false";
+    const pdf = await generarComprobantePdfService(Number(validation.data.id));
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `${isDownload ? "attachment" : "inline"}; filename="comprobante-${validation.data.id}.pdf"`
+    );
+    res.send(pdf);
   } catch (error: unknown) {
     const appError = toAppError(error);
     sendError(res, appError.message, appError.statusCode);

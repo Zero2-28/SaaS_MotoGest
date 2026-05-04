@@ -33,16 +33,50 @@ function ProductoSkeleton() {
 function StockIndicador({ activo, stock }: { activo: boolean; stock?: number }) {
   if (stock !== undefined) {
     if (stock === 0) {
-      return <span className="flex items-center gap-1.5 text-sm font-medium text-racing">✗ Sin stock</span>
+      return (
+        <span className="flex items-center gap-1.5 text-sm font-medium text-[#CC0000]">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#CC0000]" aria-hidden />
+          Agotado
+        </span>
+      )
+    }
+    if (stock <= 5) {
+      return (
+        <span className="flex items-center gap-1.5 text-sm font-medium text-[#FF6B00]">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#FF6B00] animate-pulse" aria-hidden />
+          Solo quedan {stock} unidad{stock === 1 ? '' : 'es'}
+        </span>
+      )
     }
     if (stock <= 10) {
-      return <span className="flex items-center gap-1.5 text-sm font-medium text-turbo">⚠ Pocas unidades ({stock} disponibles)</span>
+      return (
+        <span className="flex items-center gap-1.5 text-sm">
+          <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
+          <span className="font-medium text-green-600">En stock</span>
+          <span className="font-medium text-[#FF6B00]">· pocas unidades</span>
+        </span>
+      )
     }
-    return <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">✓ En stock</span>
+    return (
+      <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">
+        <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
+        En stock
+      </span>
+    )
   }
   return activo
-    ? <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">✓ En stock</span>
-    : <span className="flex items-center gap-1.5 text-sm font-medium text-racing">✗ Sin stock</span>
+    ? (
+      <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">
+        <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
+        En stock
+      </span>
+    )
+    : (
+      <span className="flex items-center gap-1.5 text-sm font-medium text-[#CC0000]">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#CC0000]" aria-hidden />
+        Agotado
+      </span>
+    )
 }
 
 function RelacionadoCardSkeleton() {
@@ -376,7 +410,7 @@ export default function ProductoPage() {
               )}
             >
               {!hayStock ? (
-                'Sin stock'
+                'Agotado'
               ) : agregado ? (
                 <>
                   <CheckCircle className="h-5 w-5" aria-hidden />

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, FileText } from 'lucide-react'
+import { verComprobante } from '@/services/ventas.service'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -122,6 +123,29 @@ function PedidoCard({
           <span className="text-muted-foreground">Cliente: </span>
           <span className="text-[#111111]">{pedido.cliente.nombre}</span>
         </p>
+        {pedido.direccionEntrega && (
+          <p className="text-xs">
+            <span className="text-muted-foreground">Dirección: </span>
+            <span
+              className={
+                pedido.direccionEntrega === 'Por confirmar'
+                  ? 'font-medium text-[#FF6B00]'
+                  : 'text-[#111111]'
+              }
+            >
+              {pedido.direccionEntrega}
+            </span>
+          </p>
+        )}
+        {(() => {
+          const tel = pedido.direccionEntrega?.match(/Tel:\s*([^-]+)/)?.[1]?.trim()
+          return tel ? (
+            <p className="text-xs">
+              <span className="text-muted-foreground">Teléfono: </span>
+              <span className="text-[#111111] font-medium">{tel}</span>
+            </p>
+          ) : null
+        })()}
         {pedido.observaciones && (
           <p className="text-xs text-muted-foreground line-clamp-2">
             {formatObservaciones(pedido.observaciones)}
@@ -182,6 +206,18 @@ function PedidoCard({
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#9CA3AF] border-t-transparent shrink-0" />
           )}
         </div>
+      )}
+
+      {/* Botón PDF — solo si se conoce el ID de la venta origen */}
+      {pedido.ventaId && (
+        <button
+          onClick={() => void verComprobante(pedido.ventaId!, false)}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[#111111] transition-colors"
+          aria-label="Ver comprobante PDF"
+        >
+          <FileText className="h-3.5 w-3.5" aria-hidden />
+          Ver comprobante PDF
+        </button>
       )}
     </article>
   )

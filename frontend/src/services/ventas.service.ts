@@ -5,9 +5,9 @@ export interface CrearVentaPayload {
   clienteId?: number
   sucursalId: number
   metodoPago?: MetodoPago
-  // Backend usa "detalles", no "items"
   detalles: { productoId: number; cantidad: number; precioUnitario: number }[]
   descuento?: number
+  direccionEntrega?: string
 }
 
 // Checkout unificado: el backend crea la venta y el PaymentIntent de Stripe
@@ -52,4 +52,25 @@ export async function getMisCompras(token: string): Promise<VentaCliente[]> {
     headers: { Authorization: `Bearer ${token}` },
   })
   return data
+}
+
+// Descarga o abre en el visor el PDF del comprobante de una venta (requiere auth de empleado)
+export async function verComprobante(ventaId: number, descargar = false): Promise<void> {
+  const resp = await api.get<Blob>(`/ventas/${ventaId}/comprobante${descargar ? '' : '?download=false'}`, {
+    responseType: 'blob',
+  })
+  const url = URL.createObjectURL(resp.data)
+  if (descargar) {
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `comprobante-${ventaId}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  } else {
+    window.open(url, '_blank')
+    // La URL se revoca después de 60s para dar tiempo al visor PDF del navegador
+    setTimeout(() => URL.revokeObjectURL(url), 60000)
+  }
 }

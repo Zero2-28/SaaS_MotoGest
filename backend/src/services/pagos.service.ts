@@ -3,6 +3,7 @@ import { Pago } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { AppError } from "../lib/appError";
 import { notificarAdminsService } from "./notificaciones.service";
+import { enviarCompraCompletadaCliente } from "./email.service";
 
 // ============================================================================
 // HELPERS
@@ -95,13 +96,57 @@ export const procesarWebhookStripeService = async (input: {
       data: { estado: "completado", fechaPago: new Date() },
     });
 
+    const ventaIdStr = intent.metadata["ventaId"];
+
     // Fire-and-forget: notificar a admins del pago confirmado
-    const ventaId = intent.metadata["ventaId"];
     void notificarAdminsService({
       tipo: "pago_confirmado",
       titulo: "Pago confirmado por Stripe",
-      mensaje: `Pago ${intent.id} confirmado.${ventaId ? ` Venta ID: ${ventaId}.` : ""} Monto: S/ ${(intent.amount / 100).toFixed(2)}.`,
+      mensaje: `Pago ${intent.id} confirmado.${ventaIdStr ? ` Venta ID: ${ventaIdStr}.` : ""} Monto: S/ ${(intent.amount / 100).toFixed(2)}.`,
     }).catch((err: unknown) => console.error("Error notificación pago confirmado:", err));
+
+    // Fire-and-forget: email de compra completada al cliente
+    if (ventaIdStr) {
+      void (async () => {
+        try {
+          const venta = await prisma.venta.findUnique({
+            where: { id: Number(ventaIdStr) },
+            include: {
+              cliente: { select: { nombre: true, email: true } },
+              detalles: {
+                include: { producto: { select: { nombre: true } } },
+              },
+            },
+          });
+          if (!venta?.cliente?.email) return;
+
+          // Buscar el pedido CT asociado a este cliente creado cerca del momento de la venta
+          const pedido = await prisma.pedido.findFirst({
+            where: { clienteId: venta.clienteId ?? undefined },
+            orderBy: { createdAt: "desc" },
+            select: { codigoPedido: true, direccionEntrega: true },
+          });
+
+          await enviarCompraCompletadaCliente(
+            {
+              numeroVenta: venta.numeroVenta,
+              total: Number(venta.total),
+              detalles: venta.detalles.map((d) => ({
+                cantidad: d.cantidad,
+                precioUnitario: Number(d.precioUnitario),
+                subtotal: Number(d.subtotal),
+                producto: { nombre: d.producto.nombre },
+              })),
+            },
+            { nombre: venta.cliente.nombre, email: venta.cliente.email },
+            pedido?.codigoPedido ?? null,
+            pedido?.direccionEntrega ?? null
+          );
+        } catch (err: unknown) {
+          console.error("Error email compra completada:", err);
+        }
+      })();
+    }
   }
 
   if (event.type === "payment_intent.payment_failed") {

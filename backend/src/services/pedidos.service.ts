@@ -125,6 +125,7 @@ export const getPedidoPublicoService = async (codigo: string) => {
       fechaEntrega: true,
       total: true,
       observaciones: true,
+      direccionEntrega: true,
       cliente: { select: { direccion: true } },
       usuario: { select: { nombre: true } },
       historial: {
@@ -138,7 +139,8 @@ export const getPedidoPublicoService = async (codigo: string) => {
     const { cliente, usuario, ...rest } = pedido;
     return {
       ...rest,
-      direccionEntrega: cliente?.direccion ?? null,
+      // Preferir la dirección registrada en el pedido; si no, usar la del cliente
+      direccionEntrega: rest.direccionEntrega ?? cliente?.direccion ?? null,
       repartidorNombre: usuario?.nombre ?? null,
     };
   }
@@ -245,6 +247,8 @@ export const updateEstadoPedidoService = async (input: {
 export const createPedidoDesdeVentaService = async (input: {
   clienteId: number;
   detalles: Array<{ productoId: number; cantidad: number }>;
+  direccionEntrega?: string;
+  ventaId?: number;
 }): Promise<{ codigoPedido: string }> => {
   return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const productoIds = input.detalles.map((d) => d.productoId);
@@ -278,6 +282,8 @@ export const createPedidoDesdeVentaService = async (input: {
         impuesto: 0,
         total: subtotal,
         observaciones: JSON.stringify(detallesEnriquecidos),
+        direccionEntrega: input.direccionEntrega ?? null,
+        ventaId: input.ventaId ?? null,
         historial: {
           create: [{ estado: "pendiente", comentario: "Pedido generado desde venta online" }],
         },

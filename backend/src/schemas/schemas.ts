@@ -165,6 +165,7 @@ export const createVentaSchema = z.object({
     .min(1, "Al menos un detalle requerido"),
   descuento: z.number().min(0).optional(),
   metodoPago: z.enum(["efectivo", "tarjeta", "transferencia"]).optional(),
+  direccionEntrega: z.string().optional(),
 });
 
 export type CreateVentaInput = z.infer<typeof createVentaSchema>;

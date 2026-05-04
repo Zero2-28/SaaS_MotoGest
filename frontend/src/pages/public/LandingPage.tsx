@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ChevronLeft, ChevronRight, Zap, Shield, Truck, ShoppingCart } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight, ShoppingCart, Truck, ShieldCheck } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { getProductos } from '@/services/productos.service'
 import type { Producto } from '@/types'
@@ -185,7 +185,7 @@ function CategoriasSection() {
   }, [])
 
   return (
-    <section className="py-20 bg-white" aria-label="Categorías de productos">
+    <section className="pt-20 pb-4 bg-white" aria-label="Categorías de productos">
       <div className="container mx-auto px-4">
         <div className="mb-10 text-center">
           <h2 className="font-display text-display-md text-carbon-900">
@@ -228,45 +228,95 @@ function CategoriasSection() {
   )
 }
 
+// ── Banner promocional ────────────────────────────────────────────────────────
+function BannerPromocional() {
+  return (
+    <section
+      className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 py-5 md:h-20 px-6"
+      style={{ background: 'linear-gradient(to right, #CC0000, #AA0000)' }}
+      aria-label="Beneficios"
+    >
+      <span className="flex items-center gap-2 text-[15px] font-bold text-white">
+        <Truck size={18} aria-hidden />
+        Envíos en 24h dentro de Ayacucho
+      </span>
+      <span className="hidden md:block text-white/50 select-none text-lg font-light">|</span>
+      <span className="flex items-center gap-2 text-[15px] font-bold text-white">
+        <ShieldCheck size={18} aria-hidden />
+        Garantía en todos los productos
+      </span>
+      <Link
+        to="/catalogo"
+        className="inline-flex items-center gap-1.5 rounded-md border border-white/70 px-5 py-1.5 text-sm font-semibold text-white hover:bg-white/10 active:scale-[0.98] transition-colors"
+      >
+        Ver catálogo <ArrowRight size={16} aria-hidden />
+      </Link>
+    </section>
+  )
+}
+
 // ── Por qué elegirnos ─────────────────────────────────────────────────────────
-const FEATURES = [
-  {
-    icon: Zap,
-    title: 'Calidad Premium',
-    desc: 'Solo marcas certificadas. Productos probados en pista y calle.',
-  },
-  {
-    icon: Truck,
-    title: 'Envío Rápido',
-    desc: 'Despacho en 24h dentro de Ayacucho. Envíos a todo el país.',
-  },
-  {
-    icon: Shield,
-    title: 'Garantía Real',
-    desc: 'Todos nuestros productos cuentan con garantía del fabricante.',
-  },
+const PUNTOS_CLAVE = [
+  'Productos certificados de calidad premium',
+  'Despacho en 24h dentro de Ayacucho',
+  'Garantía real del fabricante',
 ]
+
+const MAPS_URL =
+  'https://www.google.com/maps/search/Av.+San+Francisco,+Ayacucho/@-13.1761141,-74.2147402,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D'
 
 function Features() {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="font-display text-display-md text-carbon-900 text-center mb-12">
-          POR QUÉ ELEGIRNOS
-        </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          {FEATURES.map(({ icon: Icon, title, desc }) => (
-            <div
-              key={title}
-              className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-racing/10">
-                <Icon className="h-6 w-6 text-racing" aria-hidden />
-              </div>
-              <h3 className="mb-2 text-base font-semibold text-carbon-900">{title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-            </div>
-          ))}
+    <section className="flex flex-col md:flex-row" aria-label="Por qué elegirnos">
+      {/* Columna izquierda — imagen completa sobre fondo oscuro uniforme */}
+      <div
+        className="relative md:w-1/2 min-h-[500px] flex items-center justify-center overflow-hidden"
+        style={{ background: '#444444' }}
+      >
+        <img
+          src={assets.banner.porQueElegirnos}
+          alt=""
+          aria-hidden
+          className="w-full h-full object-contain object-center"
+          style={{ filter: 'brightness(0.9)' }}
+          loading="lazy"
+          width={700}
+          height={500}
+        />
+      </div>
+
+      {/* Columna derecha — fondo oscuro, contenido centrado verticalmente */}
+      <div className="bg-[#444444] md:w-1/2 flex items-center px-10 py-12 md:px-12 md:py-16">
+        <div className="max-w-md">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#CC0000] mb-4">
+            CALLE TUNING
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl text-white leading-tight mb-6">
+            Por qué elegir<br />
+            Nuestro{' '}
+            <span className="text-[#CC0000]">Servicio</span>
+            {' '}de Confianza.
+          </h2>
+          <p className="text-sm text-[#A0A0A0] leading-relaxed mb-8">
+            En CALLE TUNING, nuestra prioridad es satisfacer las necesidades de nuestros
+            clientes y brindarles la mayor comodidad y confianza en cada producto.
+          </p>
+          <ul className="flex flex-col gap-3 mb-8">
+            {PUNTOS_CLAVE.map((punto) => (
+              <li key={punto} className="flex items-center gap-3 text-sm text-white">
+                <span className="text-[#CC0000] font-bold shrink-0">✓</span>
+                {punto}
+              </li>
+            ))}
+          </ul>
+          <a
+            href={MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block rounded-md bg-[#CC0000] px-8 py-3 text-sm font-semibold text-white hover:bg-[#aa0000] active:scale-[0.98] transition-colors"
+          >
+            Ubícanos en Google Maps
+          </a>
         </div>
       </div>
     </section>
@@ -407,6 +457,7 @@ export default function LandingPage() {
       <HeroCarrusel />
       <MarcasCarrusel />
       <CategoriasSection />
+      <BannerPromocional />
       <Features />
       <ProductosDestacados />
       <CTA />

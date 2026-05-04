@@ -411,19 +411,21 @@ model Pago {
 // ============================================================================
 
 model Pedido {
-  id              Int      @id @default(autoincrement())
-  codigoPedido    String   @unique // Formato: CT-2026-0001
-  clienteId       Int
-  usuarioId       Int?     // repartidor asignado (null = sin asignar)
-  fechaPedido     DateTime @default(now())
-  fechaEntrega    DateTime?
-  estado          String   @default("pendiente") // 'pendiente','confirmado','preparando','listo','en_transito','entregado','cancelado'
-  subtotal        Float    @default(0)
-  impuesto        Float    @default(0)
-  total           Float    @default(0)
-  observaciones   String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  codigoPedido     String   @unique // Formato: CT-2026-0001
+  clienteId        Int
+  usuarioId        Int?     // repartidor asignado (null = sin asignar)
+  ventaId          Int?     // ID de la venta origen (para descargar comprobante)
+  fechaPedido      DateTime @default(now())
+  fechaEntrega     DateTime?
+  estado           String   @default("pendiente") // 'pendiente','confirmado','preparando','listo','en_transito','entregado','cancelado'
+  subtotal         Float    @default(0)
+  impuesto         Float    @default(0)
+  total            Float    @default(0)
+  observaciones    String?
+  direccionEntrega String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   cliente         Cliente  @relation(fields: [clienteId], references: [id], onDelete: Restrict)
   usuario         Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
