@@ -173,8 +173,16 @@ export interface DetalleVentaCliente {
   producto: { id: number; codigo: string; nombre: string; imagen_url: string | null }
 }
 
+// Pedido asociado que viene embebido en cada VentaCliente
+export interface PedidoResumen {
+  codigoPedido: string
+  estado: string
+  direccionEntrega: string | null
+}
+
 export interface VentaCliente extends Omit<Venta, 'detalles'> {
   detalles: DetalleVentaCliente[]
+  pedido: PedidoResumen | null
 }
 
 // Respuesta de GET /ventas/reportes

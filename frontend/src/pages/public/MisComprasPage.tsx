@@ -10,14 +10,26 @@ import type { VentaCliente } from '@/types'
 const IMG_PLACEHOLDER = 'https://placehold.co/40x40/F9FAFB/9CA3AF?text=M'
 const PAGE_SIZE = 10
 
-const ESTADO_META: Record<string, { label: string; bg: string; color: string }> = {
+// Estados de la venta (completada, cancelada, devolucion_parcial)
+const ESTADO_VENTA_META: Record<string, { label: string; bg: string; color: string }> = {
   completada:          { label: 'Completada',    bg: '#F0FDF4', color: '#15803D' },
   cancelada:           { label: 'Cancelada',     bg: '#FEF2F2', color: '#CC0000' },
   devolucion_parcial:  { label: 'Dev. parcial',  bg: '#FFF7ED', color: '#C2410C' },
 }
 
+// Estados del pedido CT asociado
+const ESTADO_PEDIDO_META: Record<string, { label: string; bg: string; color: string }> = {
+  pendiente:   { label: 'Pendiente',      bg: '#F3F4F6', color: '#374151' },
+  confirmado:  { label: 'Confirmado',     bg: '#EFF6FF', color: '#3B82F6' },
+  preparando:  { label: 'En preparación', bg: '#FFF7ED', color: '#FF6B00' },
+  listo:       { label: 'Listo',          bg: '#FEFCE8', color: '#CA8A04' },
+  en_transito: { label: 'En tránsito',    bg: '#EFF6FF', color: '#1D4ED8' },
+  entregado:   { label: 'Entregado',      bg: '#F0FDF4', color: '#16A34A' },
+  cancelado:   { label: 'Cancelado',      bg: '#FEF2F2', color: '#CC0000' },
+}
+
 function EstadoBadge({ estado }: { estado: string }) {
-  const m = ESTADO_META[estado] ?? ESTADO_META.completada
+  const m = ESTADO_VENTA_META[estado] ?? ESTADO_VENTA_META.completada
   return (
     <span
       className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold"
@@ -28,13 +40,32 @@ function EstadoBadge({ estado }: { estado: string }) {
   )
 }
 
+function EstadoPedidoBadge({ estado }: { estado: string }) {
+  const m = ESTADO_PEDIDO_META[estado] ?? ESTADO_PEDIDO_META.pendiente
+  return (
+    <span
+      className="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
+      style={{ background: m.bg, color: m.color }}
+    >
+      {m.label}
+    </span>
+  )
+}
+
+// Extrae solo la dirección legible: elimina "Tel:", "Ref:" y todo lo que sigue
+function limpiarDireccion(dir: string): string {
+  return dir.replace(/\s*(tel[eé]fono?[.:)]?|tel[.:]|ref[.:]|referencia[.:])[^]*/i, '').trim()
+}
+
 function CompraCard({ venta }: { venta: VentaCliente }) {
   const [expanded, setExpanded] = useState(false)
+  const { pedido } = venta
 
   return (
     <article className="bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="flex items-start justify-between gap-3 p-5">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
+          {/* Número de venta + estado */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-mono text-sm font-bold text-[#111111]">
               {venta.numeroVenta}
@@ -47,6 +78,33 @@ function CompraCard({ venta }: { venta: VentaCliente }) {
           <p className="text-xs text-[#666666] mt-0.5">
             {venta.detalles.length} producto{venta.detalles.length !== 1 ? 's' : ''}
           </p>
+
+          {/* Sección del pedido CT */}
+          {pedido ? (
+            <div className="mt-2.5 space-y-1.5">
+              <EstadoPedidoBadge estado={pedido.estado} />
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs text-[#666666]">📦 Seguimiento:</span>
+                <Link
+                  to={`/rastreo?codigo=${pedido.codigoPedido}`}
+                  className="font-mono text-xs font-bold text-[#CC0000] hover:underline"
+                >
+                  {pedido.codigoPedido}
+                </Link>
+                <Link
+                  to={`/rastreo?codigo=${pedido.codigoPedido}`}
+                  className="text-[10px] font-semibold text-[#CC0000] border border-[#CC0000] rounded px-1.5 py-0.5 hover:bg-[#CC0000] hover:text-white transition-colors"
+                >
+                  Rastrear pedido →
+                </Link>
+              </div>
+              {pedido.direccionEntrega && (
+                <p className="text-xs text-[#666666]">
+                  📍 {limpiarDireccion(pedido.direccionEntrega)}
+                </p>
+              )}
+            </div>
+          ) : null}
         </div>
         <div className="text-right shrink-0">
           <p className="font-bold text-base text-[#111111] tabular-nums">

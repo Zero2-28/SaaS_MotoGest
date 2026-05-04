@@ -14,8 +14,8 @@ import { cn } from '@/utils/cn'
 const schema = z.object({
   codigo: z
     .string()
-    .min(1, 'Ingresa un número de venta o código de pedido')
-    .regex(/^(CT|VTA)-\d{4}-\d+$/i, 'Formato: VTA-2026-XXXX o CT-2026-XXXX'),
+    .min(1, 'Ingresa tu código de seguimiento CT-2026-XXXX')
+    .regex(/^CT-\d{4}-\d+$/i, 'Ingresa tu código de seguimiento CT-2026-XXXX'),
 })
 
 type FormData = z.infer<typeof schema>
@@ -244,7 +244,7 @@ export default function RastreoPage() {
         <div className="relative z-10 flex flex-col items-center gap-3 px-4 text-center">
           <Truck className="h-14 w-14 text-white" aria-hidden />
           <h1 className="text-3xl font-bold text-white">Rastrea tu pedido</h1>
-          <p className="text-base text-white/80">Ingresa tu número de venta o código de seguimiento</p>
+          <p className="text-base text-white/80">Ingresa tu código de seguimiento CT-2026-XXXX</p>
         </div>
       </div>
 
@@ -256,14 +256,19 @@ export default function RastreoPage() {
             <input
               id="codigo"
               {...register('codigo')}
-              placeholder="VTA-2026-XXXX o CT-2026-XXXX"
+              placeholder="CT-2026-XXXX"
               aria-invalid={!!errors.codigo}
-              aria-describedby={errors.codigo ? 'codigo-error' : undefined}
+              aria-describedby="codigo-desc"
               className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 text-sm uppercase tracking-wider text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20 aria-[invalid=true]:border-red-400"
             />
-            {errors.codigo && (
-              <p id="codigo-error" role="alert" className="mt-1 text-xs text-red-500">
-                {errors.codigo.message}
+            {errors.codigo ? (
+              <p id="codigo-desc" role="alert" className="mt-1 text-xs text-red-500">
+                Por favor ingresa un código de seguimiento CT-2026-XXXX.{' '}
+                <span className="block">Puedes encontrarlo en tu sección &apos;Mis compras&apos;</span>
+              </p>
+            ) : (
+              <p id="codigo-desc" className="mt-1 text-xs text-gray-400">
+                Ingresa tu código de seguimiento CT-2026-XXXX
               </p>
             )}
           </div>

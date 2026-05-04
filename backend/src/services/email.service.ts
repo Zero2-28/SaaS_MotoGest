@@ -13,7 +13,7 @@ const getResend = (): Resend => {
   return new Resend(key);
 };
 
-const FROM = "noreply@motogest.pro";
+const FROM = "MOTOGEST PRO <onboarding@resend.dev>";
 const ROJO = "#CC0000";
 const NARANJA = "#FF6B00";
 

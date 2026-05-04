@@ -338,7 +338,7 @@ export const getMisPedidosService = async (
 };
 
 export const getMisVentasService = async (clienteId: number) => {
-  return prisma.venta.findMany({
+  const ventas = await prisma.venta.findMany({
     where: { clienteId },
     orderBy: { id: "desc" },
     include: {
@@ -352,4 +352,25 @@ export const getMisVentasService = async (clienteId: number) => {
       sucursal: { select: { id: true, nombre: true } },
     },
   });
+
+  // Pedido asociado: Pedido.ventaId → Venta.id (relación no declarada en schema, se resuelve aquí)
+  const ventaIds = ventas.map((v) => v.id);
+  const pedidos = ventaIds.length > 0
+    ? await prisma.pedido.findMany({
+        where: { ventaId: { in: ventaIds } },
+        select: {
+          ventaId: true,
+          codigoPedido: true,
+          estado: true,
+          direccionEntrega: true,
+        },
+      })
+    : [];
+
+  const pedidoByVentaId = new Map(pedidos.map((p) => [p.ventaId, p]));
+
+  return ventas.map((v) => ({
+    ...v,
+    pedido: pedidoByVentaId.get(v.id) ?? null,
+  }));
 };
