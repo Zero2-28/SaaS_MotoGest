@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { gmailTransporter } from "../config/nodemailer";
 
 // ============================================================================
 // SETUP
@@ -16,6 +17,43 @@ const getResend = (): Resend => {
 const FROM = "MOTOGEST PRO <onboarding@resend.dev>";
 const ROJO = "#CC0000";
 const NARANJA = "#FF6B00";
+
+// ============================================================================
+// EMAIL HELPER — Resend primero, Gmail SMTP como fallback
+// ============================================================================
+
+interface EmailPayload {
+  to: string;
+  subject: string;
+  html: string;
+}
+
+// Intenta Resend; si falla por cualquier causa, usa Gmail SMTP. No lanza al caller.
+async function sendEmail(payload: EmailPayload): Promise<void> {
+  try {
+    const resend = getResend();
+    await resend.emails.send({
+      from: FROM,
+      to: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+    });
+    return;
+  } catch (resendError) {
+    console.warn("[email] Resend falló, usando Gmail SMTP:", resendError);
+  }
+
+  try {
+    await gmailTransporter.sendMail({
+      from: `MOTOGEST PRO <${process.env.GMAIL_USER ?? ""}>`,
+      to: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+    });
+  } catch (gmailError) {
+    console.error("[email] Gmail SMTP también falló:", gmailError);
+  }
+}
 
 // ============================================================================
 // LAYOUT HTML
@@ -69,7 +107,6 @@ export const enviarBienvenidaCliente = async (cliente: {
   nombre: string;
   email: string;
 }): Promise<void> => {
-  const resend = getResend();
   const contenido = `
     <p style="color:#444;font-size:15px;line-height:1.6;">
       Hola <strong>${cliente.nombre}</strong>,
@@ -86,8 +123,7 @@ export const enviarBienvenidaCliente = async (cliente: {
     </div>
     <p style="color:#888;font-size:13px;">Si no creaste esta cuenta, ignora este correo.</p>
   `;
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: cliente.email,
     subject: "¡Bienvenido a MOTOGEST PRO!",
     html: wrapHtml("¡Tu cuenta está lista!", contenido),
@@ -103,7 +139,6 @@ export const enviarConfirmacionPedido = async (
   },
   cliente: { nombre: string; email: string }
 ): Promise<void> => {
-  const resend = getResend();
   const contenido = `
     <p style="color:#444;font-size:15px;line-height:1.6;">
       Hola <strong>${cliente.nombre}</strong>,
@@ -135,8 +170,7 @@ export const enviarConfirmacionPedido = async (
       <strong style="color:${ROJO};">${pedido.codigoPedido}</strong> en nuestra plataforma.
     </p>
   `;
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: cliente.email,
     subject: `Pedido confirmado: ${pedido.codigoPedido}`,
     html: wrapHtml("Pedido recibido", contenido),
@@ -148,7 +182,6 @@ export const enviarCambioEstadoPedido = async (
   cliente: { nombre: string; email: string },
   estadoAnterior: string
 ): Promise<void> => {
-  const resend = getResend();
   const frontendUrl = process.env.FRONTEND_URL ?? "https://motogest.pro";
 
   const etiquetas: Record<string, string> = {
@@ -233,8 +266,7 @@ export const enviarCambioEstadoPedido = async (
     </p>
   `;
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: cliente.email,
     subject: `Tu pedido ${pedido.codigoPedido} está: ${estadoLabel}`,
     html: wrapHtml("Actualización de pedido", contenido),
@@ -257,7 +289,6 @@ export const enviarCompraCompletadaCliente = async (
   codigoPedido: string | null,
   direccionEntrega: string | null
 ): Promise<void> => {
-  const resend = getResend();
   const frontendUrl = process.env.FRONTEND_URL ?? "https://motogest.pro";
 
   const filas = venta.detalles
@@ -345,8 +376,7 @@ export const enviarCompraCompletadaCliente = async (
     </p>
   `;
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: cliente.email,
     subject: `Compra confirmada${codigoPedido ? ` — ${codigoPedido}` : ""} — MOTOGEST PRO`,
     html: wrapHtml("¡Tu compra fue exitosa!", contenido),
@@ -370,7 +400,6 @@ export const enviarComprobanteVenta = async (
   },
   cliente: { nombre: string; email: string }
 ): Promise<void> => {
-  const resend = getResend();
 
   const filas = venta.detalles
     .map(
@@ -436,8 +465,7 @@ export const enviarComprobanteVenta = async (
       Método de pago: <strong>${venta.metodoPago ?? "efectivo"}</strong>
     </p>
   `;
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: cliente.email,
     subject: `Comprobante de venta ${venta.numeroVenta} - MOTOGEST PRO`,
     html: wrapHtml("Comprobante de venta", contenido),
