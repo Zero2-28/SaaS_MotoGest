@@ -30,28 +30,28 @@ interface EmailPayload {
 
 // Intenta Resend; si falla por cualquier causa, usa Gmail SMTP. No lanza al caller.
 async function sendEmail(payload: EmailPayload): Promise<void> {
+  const { to, subject, html } = payload;
+
+  console.warn("[EMAIL] Intentando Resend a:", to);
   try {
     const resend = getResend();
-    await resend.emails.send({
-      from: FROM,
-      to: payload.to,
-      subject: payload.subject,
-      html: payload.html,
-    });
+    await resend.emails.send({ from: FROM, to, subject, html });
     return;
-  } catch (resendError) {
-    console.warn("[email] Resend falló, usando Gmail SMTP:", resendError);
+  } catch (err) {
+    console.warn("[EMAIL] Resend fallo:", err instanceof Error ? err.message : String(err));
   }
 
+  console.warn("[EMAIL] Intentando Gmail SMTP a:", to);
   try {
     await gmailTransporter.sendMail({
       from: `MOTOGEST PRO <${process.env.GMAIL_USER ?? ""}>`,
-      to: payload.to,
-      subject: payload.subject,
-      html: payload.html,
+      to,
+      subject,
+      html,
     });
-  } catch (gmailError) {
-    console.error("[email] Gmail SMTP también falló:", gmailError);
+    console.warn("[EMAIL] Gmail enviado exitosamente a:", to);
+  } catch (err) {
+    console.error("[EMAIL] Ambos fallaron para:", to, err instanceof Error ? err.message : String(err));
   }
 }
 
