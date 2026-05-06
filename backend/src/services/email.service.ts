@@ -1,5 +1,4 @@
 import { Resend } from "resend";
-import { gmailTransporter } from "../config/nodemailer";
 
 // ============================================================================
 // SETUP
@@ -10,7 +9,7 @@ const ROJO = "#CC0000";
 const NARANJA = "#FF6B00";
 
 // ============================================================================
-// EMAIL HELPER — Resend primero, Gmail SMTP como fallback
+// EMAIL HELPER — Resend primero, SendGrid como fallback
 // ============================================================================
 
 interface EmailAttachment {
@@ -30,7 +29,7 @@ const errMsg = (err: unknown): string =>
 
 // Resend SDK v3 devuelve { data, error } en lugar de lanzar en error 403.
 // Por eso se verifica result.error explícitamente antes de considerar éxito.
-// Si Resend falla, se intenta Gmail SMTP como fallback.
+// Si Resend falla, se intenta SendGrid como fallback.
 async function sendEmail(payload: EmailPayload): Promise<void> {
   // Intento 1 — Resend
   console.warn("[EMAIL] Intentando Resend a:", payload.to);
@@ -49,23 +48,30 @@ async function sendEmail(payload: EmailPayload): Promise<void> {
     }
     console.warn("[EMAIL] Resend exitoso");
     return;
-  } catch (err) {
-    console.warn("[EMAIL] Resend fallo, intentando Gmail:", errMsg(err));
+  } catch (err: unknown) {
+    console.warn("[EMAIL] Resend fallo, intentando SendGrid:", errMsg(err));
   }
 
-  // Intento 2 — Gmail SMTP
-  console.warn("[EMAIL] Intentando Gmail SMTP a:", payload.to);
+  // NOTA: Gmail SMTP fue reemplazado por SendGrid (API REST).
+    // Render bloquea conexiones SMTP salientes (puerto 587) en el plan gratuito,
+    // lo que causaba "Connection timeout" al intentar enviar via Nodemailer.
+    // SendGrid usa HTTPS (puerto 443) que Render sí permite.
+
+  // Intento 2 — SendGrid
+  console.warn("[EMAIL] Intentando SendGrid a:", payload.to);
   try {
-    await gmailTransporter.sendMail({
-      from: `MOTOGEST PRO <${process.env.GMAIL_USER ?? ""}>`,
+    const sgMail: typeof import("@sendgrid/mail") = require("@sendgrid/mail");
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+    await sgMail.send({
+      from: process.env.SENDGRID_FROM ?? "calletuning.ayacucho@gmail.com",
       to: payload.to,
       subject: payload.subject,
       html: payload.html,
-      attachments: payload.attachments,
     });
-    console.warn("[EMAIL] Gmail exitoso");
-  } catch (err) {
-    console.error("[EMAIL] Gmail fallo:", errMsg(err));
+    console.warn("[EMAIL] SendGrid exitoso");
+    return;
+  } catch (err: unknown) {
+    console.error("[EMAIL] SendGrid fallo:", errMsg(err));
   }
 }
 

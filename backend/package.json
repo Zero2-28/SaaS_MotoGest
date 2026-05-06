@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.8.0",
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.103.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
