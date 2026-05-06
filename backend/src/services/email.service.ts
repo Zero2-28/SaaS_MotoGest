@@ -5,15 +5,6 @@ import { gmailTransporter } from "../config/nodemailer";
 // SETUP
 // ============================================================================
 
-// Instancia Resend bajo demanda para evitar error si la key no está configurada
-const getResend = (): Resend => {
-  const key = process.env.RESEND_API_KEY;
-  if (!key || key === "re_your_resend_api_key_here") {
-    throw new Error("RESEND_API_KEY no configurado");
-  }
-  return new Resend(key);
-};
-
 const FROM = "MOTOGEST PRO <onboarding@resend.dev>";
 const ROJO = "#CC0000";
 const NARANJA = "#FF6B00";
@@ -22,36 +13,59 @@ const NARANJA = "#FF6B00";
 // EMAIL HELPER — Resend primero, Gmail SMTP como fallback
 // ============================================================================
 
+interface EmailAttachment {
+  filename: string;
+  content: Buffer | string;
+}
+
 interface EmailPayload {
   to: string;
   subject: string;
   html: string;
+  attachments?: EmailAttachment[];
 }
 
-// Intenta Resend; si falla por cualquier causa, usa Gmail SMTP. No lanza al caller.
-async function sendEmail(payload: EmailPayload): Promise<void> {
-  const { to, subject, html } = payload;
+const errMsg = (err: unknown): string =>
+  err instanceof Error ? err.message : String(err);
 
-  console.warn("[EMAIL] Intentando Resend a:", to);
+// Resend SDK v3 devuelve { data, error } en lugar de lanzar en error 403.
+// Por eso se verifica result.error explícitamente antes de considerar éxito.
+// Si Resend falla, se intenta Gmail SMTP como fallback.
+async function sendEmail(payload: EmailPayload): Promise<void> {
+  // Intento 1 — Resend
+  console.warn("[EMAIL] Intentando Resend a:", payload.to);
   try {
-    const resend = getResend();
-    await resend.emails.send({ from: FROM, to, subject, html });
+    const resendClient = new Resend(process.env.RESEND_API_KEY);
+    const result = await resendClient.emails.send({
+      from: FROM,
+      to: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+      attachments: payload.attachments,
+    });
+    if (result.error) {
+      console.warn("[EMAIL] Resend error:", result.error.message);
+      throw new Error(result.error.message);
+    }
+    console.warn("[EMAIL] Resend exitoso");
     return;
   } catch (err) {
-    console.warn("[EMAIL] Resend fallo:", err instanceof Error ? err.message : String(err));
+    console.warn("[EMAIL] Resend fallo, intentando Gmail:", errMsg(err));
   }
 
-  console.warn("[EMAIL] Intentando Gmail SMTP a:", to);
+  // Intento 2 — Gmail SMTP
+  console.warn("[EMAIL] Intentando Gmail SMTP a:", payload.to);
   try {
     await gmailTransporter.sendMail({
       from: `MOTOGEST PRO <${process.env.GMAIL_USER ?? ""}>`,
-      to,
-      subject,
-      html,
+      to: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+      attachments: payload.attachments,
     });
-    console.warn("[EMAIL] Gmail enviado exitosamente a:", to);
+    console.warn("[EMAIL] Gmail exitoso");
   } catch (err) {
-    console.error("[EMAIL] Ambos fallaron para:", to, err instanceof Error ? err.message : String(err));
+    console.error("[EMAIL] Gmail fallo:", errMsg(err));
   }
 }
 
