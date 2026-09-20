@@ -2,13 +2,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Eye, EyeOff, CheckCircle } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle, ShieldCheck, Store, UserCog, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import axios from 'axios'
 import { loginCliente } from '@/services/auth.service'
 import { useAuthClienteStore } from '@/stores/auth.store'
 import { assets } from '@/config/assets'
 import { GoogleIcon } from '@/components/GoogleIcon'
+import {
+  Dialog, DialogContent, DialogTitle, DialogDescription,
+} from '@/components/ui/dialog'
 
 const schema = z.object({
   email:    z.string().email('Email inválido'),
@@ -19,6 +22,7 @@ type FormData = z.infer<typeof schema>
 
 export default function LoginClientePage() {
   const [showPass, setShowPass] = useState(false)
+  const [equipoOpen, setEquipoOpen] = useState(false)
   const [apiError, setApiError] = useState<string | null>(null)
   const { setCliente } = useAuthClienteStore()
   const navigate = useNavigate()
@@ -179,26 +183,103 @@ export default function LoginClientePage() {
             Continuar con Google
           </button>
 
+          {/* Acceso al panel interno — pregunta el rol antes de redirigir */}
+          <button
+            type="button"
+            onClick={() => setEquipoOpen(true)}
+            className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-brand-200 bg-brand-50 text-sm font-semibold text-brand-800 transition-colors hover:border-brand-400 hover:bg-brand-100"
+          >
+            <ShieldCheck className="h-4 w-4" aria-hidden />
+            Soy del equipo — ir al panel
+          </button>
+
           <p className="mt-6 text-center text-sm text-chrome-600">
             ¿No tienes cuenta?{' '}
             <Link to="/register" className="font-semibold text-brand hover:underline">
               Registrarte
             </Link>
           </p>
-
-          <div className="mt-6 border-t border-chrome-100 pt-5">
-            <p className="text-center text-xs text-chrome-400">
-              ¿Eres del equipo?{' '}
-              <Link
-                to="/admin/login"
-                className="text-chrome-400 underline transition-colors hover:text-chrome-600"
-              >
-                Acceso administrativo
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
+
+      {/* ── Diálogo: ¿con qué rol entras al panel? ───────────────────────── */}
+      <Dialog open={equipoOpen} onOpenChange={setEquipoOpen}>
+        <DialogContent className="max-w-lg overflow-hidden p-0 [&>button]:top-5 [&>button]:text-brand-300 [&>button]:hover:bg-white/10 [&>button]:hover:text-white">
+
+          {/* Cabecera metalizada con el logo */}
+          <div className="edge-chrome bg-brand-950 px-8 py-8 text-center">
+            <img
+              src={assets.logo}
+              alt="RE MOTOS"
+              className="mx-auto h-12 w-auto rounded-md"
+            />
+            <DialogTitle className="mt-5 text-2xl text-white">
+              ¿Cómo vas a ingresar?
+            </DialogTitle>
+            <DialogDescription className="mx-auto mt-2 max-w-sm text-sm text-brand-200">
+              El panel interno es solo para el personal de la tienda.
+              Elige tu rol para continuar.
+            </DialogDescription>
+          </div>
+
+          {/* Opciones de rol */}
+          <div className="flex flex-col gap-3 px-8 py-7">
+            <button
+              type="button"
+              onClick={() => navigate('/admin/login?rol=admin')}
+              className="group flex items-center gap-4 rounded-xl border border-chrome-200 bg-white p-4 text-left shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-card-md"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-metal-btn text-white shadow-metal">
+                <UserCog className="h-6 w-6" aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-base font-semibold text-ink">Administrador</span>
+                <span className="block text-sm text-chrome-500">
+                  Acceso completo: reportes, empleados y configuración
+                </span>
+              </span>
+              <ChevronRight
+                className="h-5 w-5 shrink-0 text-chrome-300 transition-all group-hover:translate-x-0.5 group-hover:text-brand-600"
+                aria-hidden
+              />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate('/admin/login?rol=vendedor')}
+              className="group flex items-center gap-4 rounded-xl border border-chrome-200 bg-white p-4 text-left shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-turbo-300 hover:shadow-card-md"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-turbo text-white shadow-turbo">
+                <Store className="h-6 w-6" aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-base font-semibold text-ink">Vendedor</span>
+                <span className="block text-sm text-chrome-500">
+                  Punto de venta, inventario y pedidos
+                </span>
+              </span>
+              <ChevronRight
+                className="h-5 w-5 shrink-0 text-chrome-300 transition-all group-hover:translate-x-0.5 group-hover:text-turbo-600"
+                aria-hidden
+              />
+            </button>
+          </div>
+
+          {/* Pie */}
+          <div className="border-t border-chrome-100 bg-mist px-8 py-4">
+            <p className="text-center text-xs text-chrome-500">
+              ¿Eres cliente?{' '}
+              <button
+                type="button"
+                onClick={() => setEquipoOpen(false)}
+                className="font-semibold text-brand-600 underline-offset-4 hover:underline"
+              >
+                Volver al inicio de sesión
+              </button>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
