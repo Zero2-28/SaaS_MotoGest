@@ -96,11 +96,11 @@ function PedidoCard({
   const repartidores     = Object.values(repartidoresById)
 
   return (
-    <article className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+    <article className="rounded-lg border border-chrome-200 bg-white p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-sm font-bold text-[#111111]">{pedido.codigoPedido}</span>
+            <span className="font-mono text-sm font-bold text-ink">{pedido.codigoPedido}</span>
             <Badge variant={BADGE_VARIANT[pedido.estado]}>
               {ESTADOS_OPCIONES.find((e) => e.value === pedido.estado)?.label}
             </Badge>
@@ -113,7 +113,7 @@ function PedidoCard({
               : '—'}
           </p>
         </div>
-        <span className="tabular-nums font-bold text-[#111111] text-sm shrink-0">
+        <span className="tabular-nums font-bold text-ink text-sm shrink-0">
           {formatPrecio(pedido.total)}
         </span>
       </div>
@@ -121,7 +121,7 @@ function PedidoCard({
       <div className="text-sm space-y-1">
         <p>
           <span className="text-muted-foreground">Cliente: </span>
-          <span className="text-[#111111]">{pedido.cliente.nombre}</span>
+          <span className="text-ink">{pedido.cliente.nombre}</span>
         </p>
         {pedido.direccionEntrega && (
           <p className="text-xs">
@@ -129,8 +129,8 @@ function PedidoCard({
             <span
               className={
                 pedido.direccionEntrega === 'Por confirmar'
-                  ? 'font-medium text-[#FF6B00]'
-                  : 'text-[#111111]'
+                  ? 'font-medium text-turbo'
+                  : 'text-ink'
               }
             >
               {pedido.direccionEntrega}
@@ -142,7 +142,7 @@ function PedidoCard({
           return tel ? (
             <p className="text-xs">
               <span className="text-muted-foreground">Teléfono: </span>
-              <span className="text-[#111111] font-medium">{tel}</span>
+              <span className="text-ink font-medium">{tel}</span>
             </p>
           ) : null
         })()}
@@ -154,7 +154,7 @@ function PedidoCard({
       </div>
 
       {/* Repartidor asignado */}
-      <div className="rounded-md bg-gray-50 border border-gray-100 px-3 py-2 text-xs space-y-1.5">
+      <div className="rounded-md bg-chrome-50 border border-chrome-100 px-3 py-2 text-xs space-y-1.5">
         <span className="text-muted-foreground">Repartidor</span>
         {esAdmin ? (
           <>
@@ -163,7 +163,7 @@ function PedidoCard({
               onValueChange={handleAsignar}
               disabled={asignando}
             >
-              <SelectTrigger className="min-w-[180px] w-full bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] h-8 text-xs">
+              <SelectTrigger className="min-w-[180px] w-full bg-mist border border-chrome-200 text-ink h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -176,12 +176,12 @@ function PedidoCard({
               </SelectContent>
             </Select>
             {asignarError && (
-              <p className="text-xs text-red-500">{asignarError}</p>
+              <p className="text-xs text-danger">{asignarError}</p>
             )}
           </>
         ) : (
-          <span className="font-medium text-[#111111]">
-            {repartidorActual?.nombre ?? <span className="text-[#9CA3AF]">Sin asignar</span>}
+          <span className="font-medium text-ink">
+            {repartidorActual?.nombre ?? <span className="text-chrome-400">Sin asignar</span>}
           </span>
         )}
       </div>
@@ -203,7 +203,7 @@ function PedidoCard({
             </SelectContent>
           </Select>
           {cambiando && (
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#9CA3AF] border-t-transparent shrink-0" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-chrome-400 border-t-transparent shrink-0" />
           )}
         </div>
       )}
@@ -212,7 +212,7 @@ function PedidoCard({
       {pedido.ventaId && (
         <button
           onClick={() => void verComprobante(pedido.ventaId!, false)}
-          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[#111111] transition-colors"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-ink transition-colors"
           aria-label="Ver comprobante PDF"
         >
           <FileText className="h-3.5 w-3.5" aria-hidden />
@@ -275,7 +275,7 @@ export default function PedidosPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display text-display-sm text-[#111111]">PEDIDOS</h1>
+        <h1 className="font-display text-display-sm text-ink">PEDIDOS</h1>
         <p className="text-sm text-muted-foreground mt-1">{pedidos.length} pedidos en total</p>
       </div>
 
@@ -285,20 +285,20 @@ export default function PedidosPage() {
           type="date"
           value={desde}
           onChange={(e) => setDesde(e.target.value)}
-          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
+          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
           aria-label="Desde"
         />
         <input
           type="date"
           value={hasta}
           onChange={(e) => setHasta(e.target.value)}
-          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
+          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
           aria-label="Hasta"
         />
         {(desde || hasta) && (
           <button
             onClick={() => { setDesde(''); setHasta('') }}
-            className="text-sm text-[#666666] hover:text-[#111111] px-3 py-2 rounded-lg border border-[#D1D5DB] bg-[#F9FAFB]"
+            className="text-sm text-chrome-600 hover:text-ink px-3 py-2 rounded-lg border border-chrome-200 bg-mist"
           >
             Limpiar fechas
           </button>

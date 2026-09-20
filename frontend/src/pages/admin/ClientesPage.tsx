@@ -45,7 +45,7 @@ export default function ClientesPage() {
             nombre={info.getValue()}
             size="sm"
           />
-          <span className="text-sm font-medium text-[#111111]">{info.getValue()}</span>
+          <span className="text-sm font-medium text-ink">{info.getValue()}</span>
         </div>
       ),
     }),
@@ -54,7 +54,7 @@ export default function ClientesPage() {
       cell: (info) => (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Mail className="h-3 w-3 shrink-0" aria-hidden />
-          <a href={`mailto:${info.getValue()}`} className="hover:text-[#CC0000] transition-colors">
+          <a href={`mailto:${info.getValue()}`} className="hover:text-brand transition-colors">
             {info.getValue()}
           </a>
         </div>
@@ -90,13 +90,13 @@ export default function ClientesPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-[#111111]">CLIENTES</h1>
+          <h1 className="font-display text-display-sm text-ink">CLIENTES</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {clientes.length} clientes registrados
           </p>
         </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-racing/15">
-          <Users className="h-5 w-5 text-racing" aria-hidden />
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand/15">
+          <Users className="h-5 w-5 text-brand" aria-hidden />
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export default function ClientesPage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden />
         <Input
           placeholder="Buscar por nombre, email…"
-          className="pl-9 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+          className="pl-9 bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           aria-label="Buscar clientes"
@@ -113,7 +113,7 @@ export default function ClientesPage() {
       </div>
 
       {/* Tabla */}
-      <Card className="bg-white border-gray-200">
+      <Card className="bg-white border-chrome-200">
         <CardContent className="p-0">
           {cargando ? (
             <div className="p-6 space-y-3">
@@ -126,11 +126,11 @@ export default function ClientesPage() {
               <table className="w-full text-sm">
                 <thead>
                   {table.getHeaderGroups().map((hg) => (
-                    <tr key={hg.id} className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
+                    <tr key={hg.id} className="border-b border-chrome-100 bg-mist">
                       {hg.headers.map((h) => (
                         <th
                           key={h.id}
-                          className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider"
+                          className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider"
                         >
                           {flexRender(h.column.columnDef.header, h.getContext())}
                         </th>
@@ -147,7 +147,7 @@ export default function ClientesPage() {
                     </tr>
                   ) : (
                     table.getRowModel().rows.map((row) => (
-                      <tr key={row.id} className="border-b border-gray-200 hover:bg-[#F9FAFB] transition-colors">
+                      <tr key={row.id} className="border-b border-chrome-200 hover:bg-mist transition-colors">
                         {row.getVisibleCells().map((cell) => (
                           <td key={cell.id} className="px-4 py-3">
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -62,12 +62,12 @@ export default function OAuthClienteCallbackPage() {
   }, [])
 
   return (
-    <div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-carbon-950">
+    <div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-brand-950">
       <div className="flex flex-col items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-racing">
+        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-brand">
           <Bike className="h-6 w-6 text-white" />
         </div>
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-carbon-700 border-t-racing" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-700 border-t-brand" />
         <p className="text-sm text-muted-foreground">Iniciando sesión con Google…</p>
       </div>
     </div>

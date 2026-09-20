@@ -291,12 +291,12 @@ export default function ProductosPage() {
               className="h-10 w-10 rounded object-cover shrink-0"
             />
           ) : (
-            <div className="h-10 w-10 rounded bg-gray-100 flex items-center justify-center shrink-0">
-              <ImageIcon className="h-4 w-4 text-gray-400" />
+            <div className="h-10 w-10 rounded bg-chrome-100 flex items-center justify-center shrink-0">
+              <ImageIcon className="h-4 w-4 text-chrome-400" />
             </div>
           )}
           <div>
-            <p className="text-sm font-medium text-[#111111]">{info.getValue()}</p>
+            <p className="text-sm font-medium text-ink">{info.getValue()}</p>
             <p className="text-xs text-muted-foreground">{info.row.original.codigo}</p>
           </div>
         </div>
@@ -308,7 +308,7 @@ export default function ProductosPage() {
     }),
     col.accessor('precioVenta', {
       header: 'Precio',
-      cell: (info) => <span className="tabular-nums font-medium text-[#111111]">{formatPrecio(info.getValue())}</span>,
+      cell: (info) => <span className="tabular-nums font-medium text-ink">{formatPrecio(info.getValue())}</span>,
     }),
     col.accessor('activo', {
       header: 'Estado',
@@ -325,7 +325,7 @@ export default function ProductosPage() {
         <div className="flex gap-1">
           <Button
             variant="ghost" size="icon"
-            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#F9FAFB]"
+            className="text-chrome-700 hover:text-brand hover:bg-mist"
             onClick={() => abrirEditar(row.original)}
             aria-label={`Editar ${row.original.nombre}`}
           >
@@ -333,7 +333,7 @@ export default function ProductosPage() {
           </Button>
           <Button
             variant="ghost" size="icon"
-            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#FEE2E2]"
+            className="text-chrome-700 hover:text-brand hover:bg-danger-100"
             onClick={() => setConfirmDelete(row.original)}
             aria-label={`Eliminar ${row.original.nombre}`}
           >
@@ -357,7 +357,7 @@ export default function ProductosPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-[#111111]">PRODUCTOS</h1>
+          <h1 className="font-display text-display-sm text-ink">PRODUCTOS</h1>
           <p className="text-sm text-muted-foreground mt-1">{productos.length} productos en el catálogo</p>
         </div>
         <div className="flex gap-2">
@@ -376,7 +376,7 @@ export default function ProductosPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden />
           <Input
             placeholder="Buscar por nombre o código…"
-            className="pl-9 w-56 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+            className="pl-9 w-56 bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar productos"
@@ -387,7 +387,7 @@ export default function ProductosPage() {
           value={filtroCat !== undefined ? String(filtroCat) : 'todas'}
           onValueChange={(v) => setFiltroCat(v === 'todas' ? undefined : Number(v))}
         >
-          <SelectTrigger className="w-44 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-label="Filtrar por categoría">
+          <SelectTrigger className="w-44 bg-mist border-chrome-200 text-ink" aria-label="Filtrar por categoría">
             <SelectValue placeholder="Todas las categorías" />
           </SelectTrigger>
           <SelectContent>
@@ -402,7 +402,7 @@ export default function ProductosPage() {
           value={filtroActivo !== undefined ? String(filtroActivo) : 'todos'}
           onValueChange={(v) => setFiltroActivo(v === 'todos' ? undefined : v === 'true')}
         >
-          <SelectTrigger className="w-36 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-label="Filtrar por estado">
+          <SelectTrigger className="w-36 bg-mist border-chrome-200 text-ink" aria-label="Filtrar por estado">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
           <SelectContent>
@@ -414,7 +414,7 @@ export default function ProductosPage() {
       </div>
 
       {/* Tabla */}
-      <Card className="bg-white border-gray-200">
+      <Card className="bg-white border-chrome-200">
         <CardContent className="p-0">
           {cargando ? (
             <div className="p-6 space-y-3">
@@ -427,11 +427,11 @@ export default function ProductosPage() {
               <table className="w-full text-sm">
                 <thead>
                   {table.getHeaderGroups().map((hg) => (
-                    <tr key={hg.id} className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
+                    <tr key={hg.id} className="border-b border-chrome-100 bg-mist">
                       {hg.headers.map((h) => (
                         <th
                           key={h.id}
-                          className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider"
+                          className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider"
                         >
                           {flexRender(h.column.columnDef.header, h.getContext())}
                         </th>
@@ -448,7 +448,7 @@ export default function ProductosPage() {
                     </tr>
                   ) : (
                     table.getRowModel().rows.map((row) => (
-                      <tr key={row.id} className="border-b border-gray-200 hover:bg-[#F9FAFB] transition-colors">
+                      <tr key={row.id} className="border-b border-chrome-200 hover:bg-mist transition-colors">
                         {row.getVisibleCells().map((cell) => (
                           <td key={cell.id} className="px-4 py-3">
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -466,7 +466,7 @@ export default function ProductosPage() {
 
       {/* ── Modal crear/editar producto ──────────────────────────────────────── */}
       <Dialog open={modalOpen} onOpenChange={(open) => { if (!open) cerrarModal() }}>
-        <DialogContent className="bg-white text-[#111111]">
+        <DialogContent className="bg-white text-ink">
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar producto' : 'Nuevo producto'}</DialogTitle>
             <DialogDescription>
@@ -476,32 +476,32 @@ export default function ProductosPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="p-nombre">Nombre <span className="text-racing" aria-hidden>*</span></Label>
-                <Input id="p-nombre" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('nombre')} aria-invalid={!!errors.nombre} />
-                {errors.nombre && <p role="alert" className="text-xs text-red-400">{errors.nombre.message}</p>}
+                <Label htmlFor="p-nombre">Nombre <span className="text-brand" aria-hidden>*</span></Label>
+                <Input id="p-nombre" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('nombre')} aria-invalid={!!errors.nombre} />
+                {errors.nombre && <p role="alert" className="text-xs text-danger">{errors.nombre.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="p-codigo">Código <span className="text-racing" aria-hidden>*</span></Label>
-                <Input id="p-codigo" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('codigo')} aria-invalid={!!errors.codigo} />
-                {errors.codigo && <p role="alert" className="text-xs text-red-400">{errors.codigo.message}</p>}
+                <Label htmlFor="p-codigo">Código <span className="text-brand" aria-hidden>*</span></Label>
+                <Input id="p-codigo" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('codigo')} aria-invalid={!!errors.codigo} />
+                {errors.codigo && <p role="alert" className="text-xs text-danger">{errors.codigo.message}</p>}
               </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="p-pventa">Precio venta (S/.) <span className="text-racing" aria-hidden>*</span></Label>
-                <Input id="p-pventa" type="number" step="0.01" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('precioVenta')} aria-invalid={!!errors.precioVenta} />
-                {errors.precioVenta && <p role="alert" className="text-xs text-red-400">{errors.precioVenta.message}</p>}
+                <Label htmlFor="p-pventa">Precio venta (S/.) <span className="text-brand" aria-hidden>*</span></Label>
+                <Input id="p-pventa" type="number" step="0.01" className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20" {...register('precioVenta')} aria-invalid={!!errors.precioVenta} />
+                {errors.precioVenta && <p role="alert" className="text-xs text-danger">{errors.precioVenta.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="p-pcompra">Precio compra (S/.) <span className="text-racing" aria-hidden>*</span></Label>
-                <Input id="p-pcompra" type="number" step="0.01" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('precioCompra')} aria-invalid={!!errors.precioCompra} />
-                {errors.precioCompra && <p role="alert" className="text-xs text-red-400">{errors.precioCompra.message}</p>}
+                <Label htmlFor="p-pcompra">Precio compra (S/.) <span className="text-brand" aria-hidden>*</span></Label>
+                <Input id="p-pcompra" type="number" step="0.01" className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20" {...register('precioCompra')} aria-invalid={!!errors.precioCompra} />
+                {errors.precioCompra && <p role="alert" className="text-xs text-danger">{errors.precioCompra.message}</p>}
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="p-cat">
-                Categoría <span className="text-racing" aria-hidden>*</span>
+                Categoría <span className="text-brand" aria-hidden>*</span>
               </Label>
               <Controller
                 name="categoriaId"
@@ -511,7 +511,7 @@ export default function ProductosPage() {
                     value={field.value ? String(field.value) : ''}
                     onValueChange={(v) => field.onChange(Number(v))}
                   >
-                    <SelectTrigger id="p-cat" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-invalid={!!errors.categoriaId}>
+                    <SelectTrigger id="p-cat" className="bg-mist border-chrome-200 text-ink" aria-invalid={!!errors.categoriaId}>
                       <SelectValue placeholder="Selecciona una categoría…" />
                     </SelectTrigger>
                     <SelectContent>
@@ -531,7 +531,7 @@ export default function ProductosPage() {
                 )}
               />
               {errors.categoriaId && (
-                <p role="alert" className="text-xs text-red-400">{errors.categoriaId.message}</p>
+                <p role="alert" className="text-xs text-danger">{errors.categoriaId.message}</p>
               )}
             </div>
 
@@ -541,7 +541,7 @@ export default function ProductosPage() {
                 id="p-desc"
                 {...register('descripcion')}
                 rows={3}
-                className="flex w-full rounded-lg border border-[#D1D5DB] bg-[#F9FAFB] px-3 py-2 text-sm text-[#111111] placeholder:text-[#9CA3AF] focus-visible:outline-none focus-visible:border-[#CC0000] focus-visible:ring-1 focus-visible:ring-[#CC0000]/20 resize-y"
+                className="flex w-full rounded-lg border border-chrome-200 bg-mist px-3 py-2 text-sm text-ink placeholder:text-chrome-400 focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/20/20 resize-y"
                 placeholder="Descripción opcional del producto…"
               />
             </div>
@@ -555,20 +555,20 @@ export default function ProductosPage() {
                     <img
                       src={imagenPreview}
                       alt="Vista previa"
-                      className="h-16 w-16 rounded object-cover border border-gray-200"
+                      className="h-16 w-16 rounded object-cover border border-chrome-200"
                     />
                     <button
                       type="button"
                       onClick={limpiarImagen}
-                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-gray-400 flex items-center justify-center hover:bg-red-500 transition-colors"
+                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-chrome-400 flex items-center justify-center hover:bg-danger transition-colors"
                       aria-label="Quitar imagen"
                     >
                       <X className="h-2.5 w-2.5 text-white" />
                     </button>
                   </div>
                 ) : (
-                  <div className="h-16 w-16 rounded border border-dashed border-gray-300 flex items-center justify-center shrink-0">
-                    <ImageIcon className="h-6 w-6 text-gray-400" />
+                  <div className="h-16 w-16 rounded border border-dashed border-chrome-300 flex items-center justify-center shrink-0">
+                    <ImageIcon className="h-6 w-6 text-chrome-400" />
                   </div>
                 )}
                 <div className="flex flex-col gap-1">
@@ -601,7 +601,7 @@ export default function ProductosPage() {
                   type="number"
                   min={0}
                   placeholder="0"
-                  className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+                  className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20"
                   {...register('stockInicial')}
                   aria-describedby="p-stock-hint"
                 />
@@ -628,7 +628,7 @@ export default function ProductosPage() {
 
       {/* ── Modal gestión de categorías ──────────────────────────────────────── */}
       <Dialog open={catModalOpen} onOpenChange={setCatModalOpen}>
-        <DialogContent className="bg-white text-[#111111]">
+        <DialogContent className="bg-white text-ink">
           <DialogHeader>
             <DialogTitle>Gestionar categorías</DialogTitle>
             <DialogDescription>
@@ -636,7 +636,7 @@ export default function ProductosPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="max-h-48 overflow-y-auto space-y-1 rounded-md border border-gray-200 p-2">
+          <div className="max-h-48 overflow-y-auto space-y-1 rounded-md border border-chrome-200 p-2">
             {categorias.length === 0 ? (
               <p className="py-4 text-center text-xs text-muted-foreground">
                 Aún no hay categorías.
@@ -645,24 +645,24 @@ export default function ProductosPage() {
               categorias.map((c) => (
                 <div
                   key={c.id}
-                  className="flex items-center justify-between rounded px-3 py-2 text-sm hover:bg-[#F9FAFB]"
+                  className="flex items-center justify-between rounded px-3 py-2 text-sm hover:bg-mist"
                 >
                   <div>
-                    <span className="text-[#111111] font-medium">{c.nombre}</span>
+                    <span className="text-ink font-medium">{c.nombre}</span>
                     {c.descripcion && (
                       <span className="ml-2 text-xs text-muted-foreground">{c.descripcion}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-1">
                     <Button
-                      type="button" variant="ghost" size="icon" className="h-7 w-7 text-[#374151] hover:text-[#CC0000] hover:bg-[#F9FAFB]"
+                      type="button" variant="ghost" size="icon" className="h-7 w-7 text-chrome-700 hover:text-brand hover:bg-mist"
                       onClick={() => iniciarEditarCat(c)}
                       aria-label={`Editar ${c.nombre}`}
                     >
                       <Pencil className="h-3 w-3" />
                     </Button>
                     <Button
-                      type="button" variant="ghost" size="icon" className="h-7 w-7 text-[#374151] hover:text-[#CC0000] hover:bg-[#FEE2E2]"
+                      type="button" variant="ghost" size="icon" className="h-7 w-7 text-chrome-700 hover:text-brand hover:bg-danger-100"
                       onClick={() => setConfirmDeleteCat(c)}
                       aria-label={`Eliminar ${c.nombre}`}
                     >
@@ -677,29 +677,29 @@ export default function ProductosPage() {
           <form
             onSubmit={handleCat(editandoCat ? onEditarCategoria : onCrearCategoria)}
             noValidate
-            className="grid gap-3 border-t border-gray-200 pt-4"
+            className="grid gap-3 border-t border-chrome-200 pt-4"
           >
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               {editandoCat ? `Editando: ${editandoCat.nombre}` : 'Nueva categoría'}
             </p>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="cat-nombre">
-                Nombre <span className="text-racing" aria-hidden>*</span>
+                Nombre <span className="text-brand" aria-hidden>*</span>
               </Label>
               <Input
                 id="cat-nombre"
                 placeholder="Ej: Cascos, Frenos, Luces…"
-                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+                className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
                 {...regCat('nombre')}
                 aria-invalid={!!catErrors.nombre}
               />
               {catErrors.nombre && (
-                <p role="alert" className="text-xs text-red-400">{catErrors.nombre.message}</p>
+                <p role="alert" className="text-xs text-danger">{catErrors.nombre.message}</p>
               )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="cat-desc">Descripción</Label>
-              <Input id="cat-desc" placeholder="Opcional" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...regCat('descripcion')} />
+              <Input id="cat-desc" placeholder="Opcional" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...regCat('descripcion')} />
             </div>
             <DialogFooter>
               {editandoCat ? (
@@ -734,11 +734,11 @@ export default function ProductosPage() {
 
       {/* ── Confirmar eliminar categoría ─────────────────────────────────────── */}
       <Dialog open={!!confirmDeleteCat} onOpenChange={() => setConfirmDeleteCat(null)}>
-        <DialogContent className="bg-white text-[#111111]">
+        <DialogContent className="bg-white text-ink">
           <DialogHeader>
             <DialogTitle>Eliminar categoría</DialogTitle>
             <DialogDescription>
-              ¿Eliminar <strong className="text-[#111111]">{confirmDeleteCat?.nombre}</strong>?
+              ¿Eliminar <strong className="text-ink">{confirmDeleteCat?.nombre}</strong>?
               Los productos asociados perderán su categoría.
             </DialogDescription>
           </DialogHeader>
@@ -760,11 +760,11 @@ export default function ProductosPage() {
 
       {/* ── Confirmar desactivación ──────────────────────────────────────────── */}
       <Dialog open={!!confirmDelete} onOpenChange={() => setConfirmDelete(null)}>
-        <DialogContent className="bg-white text-[#111111]">
+        <DialogContent className="bg-white text-ink">
           <DialogHeader>
             <DialogTitle>Desactivar producto</DialogTitle>
             <DialogDescription>
-              ¿Desactivar <strong className="text-[#111111]">{confirmDelete?.nombre}</strong>?
+              ¿Desactivar <strong className="text-ink">{confirmDelete?.nombre}</strong>?
               Ya no aparecerá en el catálogo público.
             </DialogDescription>
           </DialogHeader>

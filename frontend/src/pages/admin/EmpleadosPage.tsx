@@ -29,13 +29,13 @@ const ROL_OPTIONS = [
 ]
 
 const ROL_BADGE: Record<string, string> = {
-  admin:      'bg-red-100 text-[#CC0000]',
-  vendedor:   'bg-orange-100 text-[#FF6B00]',
-  repartidor: 'bg-blue-100 text-[#3B82F6]',
+  admin:      'bg-danger-100 text-brand',
+  vendedor:   'bg-turbo-100 text-turbo',
+  repartidor: 'bg-info-100 text-info',
 }
 
 const ROL_AVATAR_BG: Record<string, string> = {
-  admin:      '#CC0000',
+  admin:      '#0F3341',
   vendedor:   '#FF6B00',
   repartidor: '#3B82F6',
 }
@@ -51,7 +51,7 @@ const empleadoSchema = z.object({
 type EmpleadoForm = z.infer<typeof empleadoSchema>
 
 function AvatarInitial({ nombre, rolName }: { nombre: string; rolName: string }) {
-  const bg = ROL_AVATAR_BG[rolName] ?? '#6B7280'
+  const bg = ROL_AVATAR_BG[rolName] ?? '#64798C'
   return (
     <span
       className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
@@ -177,7 +177,7 @@ export default function EmpleadosPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-[#111111]">EMPLEADOS</h1>
+          <h1 className="font-display text-display-sm text-ink">EMPLEADOS</h1>
           <p className="text-sm text-muted-foreground mt-1">Gestión del personal del sistema</p>
         </div>
         <Button onClick={abrirCrear}>
@@ -186,46 +186,46 @@ export default function EmpleadosPage() {
       </div>
 
       {/* Tabla */}
-      <div className="rounded-lg border border-gray-200 bg-white overflow-x-auto">
+      <div className="rounded-lg border border-chrome-200 bg-white overflow-x-auto">
         {cargando ? (
           <div className="p-6 space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="bg-gray-200 animate-pulse h-12 w-full rounded" />
+              <div key={i} className="bg-chrome-200 animate-pulse h-12 w-full rounded" />
             ))}
           </div>
         ) : empleados.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-[#666666] text-sm">No hay empleados registrados.</p>
+            <p className="text-chrome-600 text-sm">No hay empleados registrados.</p>
           </div>
         ) : (
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-200 bg-gray-50">
+            <thead className="border-b border-chrome-200 bg-chrome-50">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-medium text-[#374151] uppercase tracking-wide">Empleado</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-[#374151] uppercase tracking-wide">Email</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-[#374151] uppercase tracking-wide">Rol</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-[#374151] uppercase tracking-wide">Sucursal</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-[#374151] uppercase tracking-wide">Estado</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-chrome-700 uppercase tracking-wide">Empleado</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-chrome-700 uppercase tracking-wide">Email</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-chrome-700 uppercase tracking-wide">Rol</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-chrome-700 uppercase tracking-wide">Sucursal</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-chrome-700 uppercase tracking-wide">Estado</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-chrome-100">
               {empleados.filter((e) => e && e.rol && e.id !== usuarioActual?.id).map((emp) => (
-                <tr key={emp.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={emp.id} className="hover:bg-chrome-50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <AvatarInitial nombre={emp.nombre} rolName={emp.rol?.name ?? 'sin rol'} />
-                      <span className="font-medium text-[#111111]">{emp.nombre}</span>
+                      <span className="font-medium text-ink">{emp.nombre}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#374151]">{emp.email}</td>
+                  <td className="px-4 py-3 text-chrome-700">{emp.email}</td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${ROL_BADGE[emp.rol?.name ?? ''] ?? 'bg-gray-100 text-[#374151]'}`}>
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${ROL_BADGE[emp.rol?.name ?? ''] ?? 'bg-chrome-100 text-chrome-700'}`}>
                       {emp.rol?.name ?? 'sin rol'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-[#374151]">
-                    {emp.sucursal?.nombre ?? <span className="text-[#9CA3AF]">—</span>}
+                  <td className="px-4 py-3 text-chrome-700">
+                    {emp.sucursal?.nombre ?? <span className="text-chrome-400">—</span>}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant={emp.activo ? 'stock-ok' : 'stock-critico'}>
@@ -237,7 +237,7 @@ export default function EmpleadosPage() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-[#374151] hover:text-[#CC0000] hover:bg-[#F9FAFB] rounded-lg p-2"
+                        className="text-chrome-700 hover:text-brand hover:bg-mist rounded-lg p-2"
                         onClick={() => abrirEditar(emp)}
                         aria-label={`Editar ${emp.nombre}`}
                       >
@@ -247,7 +247,7 @@ export default function EmpleadosPage() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg p-2"
+                          className="text-danger hover:text-danger-600 hover:bg-danger-50 rounded-lg p-2"
                           onClick={() => setConfirmDes(emp)}
                           aria-label={`Desactivar ${emp.nombre}`}
                         >
@@ -265,12 +265,12 @@ export default function EmpleadosPage() {
 
       {/* Modal crear / editar */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="bg-white text-[#111111]">
+        <DialogContent className="bg-white text-ink">
           <DialogHeader>
-            <DialogTitle className="text-[#111111]">
+            <DialogTitle className="text-ink">
               {editando ? 'Editar empleado' : 'Nuevo empleado'}
             </DialogTitle>
-            <DialogDescription className="text-[#666666]">
+            <DialogDescription className="text-chrome-600">
               {editando
                 ? 'Modifica los datos del empleado. Deja la contraseña vacía para no cambiarla.'
                 : 'Completa los datos para crear un nuevo empleado.'}
@@ -280,49 +280,49 @@ export default function EmpleadosPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="emp-nombre">Nombre <span className="text-racing" aria-hidden>*</span></Label>
+                <Label htmlFor="emp-nombre">Nombre <span className="text-brand" aria-hidden>*</span></Label>
                 <Input
                   id="emp-nombre"
-                  className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF]"
+                  className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400"
                   {...register('nombre')}
                   aria-invalid={!!errors.nombre}
                 />
-                {errors.nombre && <p role="alert" className="text-xs text-red-500">{errors.nombre.message}</p>}
+                {errors.nombre && <p role="alert" className="text-xs text-danger">{errors.nombre.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="emp-email">Email <span className="text-racing" aria-hidden>*</span></Label>
+                <Label htmlFor="emp-email">Email <span className="text-brand" aria-hidden>*</span></Label>
                 <Input
                   id="emp-email"
                   type="email"
-                  className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF]"
+                  className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400"
                   {...register('email')}
                   aria-invalid={!!errors.email}
                 />
-                {errors.email && <p role="alert" className="text-xs text-red-500">{errors.email.message}</p>}
+                {errors.email && <p role="alert" className="text-xs text-danger">{errors.email.message}</p>}
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="emp-pwd">
                 Contraseña
-                {!editando && <span className="text-racing ml-1" aria-hidden>*</span>}
-                {editando && <span className="text-xs text-[#9CA3AF] ml-1">(vacío = sin cambios)</span>}
+                {!editando && <span className="text-brand ml-1" aria-hidden>*</span>}
+                {editando && <span className="text-xs text-chrome-400 ml-1">(vacío = sin cambios)</span>}
               </Label>
               <Input
                 id="emp-pwd"
                 type="password"
-                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]"
+                className="bg-mist border-chrome-200 text-ink"
                 {...register('password')}
                 aria-invalid={!!errors.password || !!pwdError}
               />
-              {errors.password && <p role="alert" className="text-xs text-red-500">{errors.password.message}</p>}
-              {pwdError && <p role="alert" className="text-xs text-red-500">{pwdError}</p>}
+              {errors.password && <p role="alert" className="text-xs text-danger">{errors.password.message}</p>}
+              {pwdError && <p role="alert" className="text-xs text-danger">{pwdError}</p>}
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <Label>Rol <span className="text-racing" aria-hidden>*</span></Label>
+                <Label>Rol <span className="text-brand" aria-hidden>*</span></Label>
                 <Controller
                   name="rolId"
                   control={control}
@@ -331,7 +331,7 @@ export default function EmpleadosPage() {
                       value={field.value ? String(field.value) : ''}
                       onValueChange={(v) => field.onChange(Number(v))}
                     >
-                      <SelectTrigger className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-invalid={!!errors.rolId}>
+                      <SelectTrigger className="bg-mist border-chrome-200 text-ink" aria-invalid={!!errors.rolId}>
                         <SelectValue placeholder="Selecciona un rol…" />
                       </SelectTrigger>
                       <SelectContent>
@@ -342,7 +342,7 @@ export default function EmpleadosPage() {
                     </Select>
                   )}
                 />
-                {errors.rolId && <p role="alert" className="text-xs text-red-500">{errors.rolId.message}</p>}
+                {errors.rolId && <p role="alert" className="text-xs text-danger">{errors.rolId.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -355,7 +355,7 @@ export default function EmpleadosPage() {
                       value={field.value ? String(field.value) : 'ninguna'}
                       onValueChange={(v) => field.onChange(v === 'ninguna' ? undefined : Number(v))}
                     >
-                      <SelectTrigger className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]">
+                      <SelectTrigger className="bg-mist border-chrome-200 text-ink">
                         <SelectValue placeholder="Sin sucursal" />
                       </SelectTrigger>
                       <SelectContent>
@@ -375,7 +375,7 @@ export default function EmpleadosPage() {
                 type="button"
                 variant="secondary"
                 onClick={() => setModalOpen(false)}
-                className="bg-white border border-[#D1D5DB] text-[#374151] hover:bg-gray-50"
+                className="bg-white border border-chrome-200 text-chrome-700 hover:bg-chrome-50"
               >
                 Cancelar
               </Button>
@@ -392,12 +392,12 @@ export default function EmpleadosPage() {
 
       {/* Dialog de confirmación para desactivar */}
       <Dialog open={!!confirmDes} onOpenChange={() => setConfirmDes(null)}>
-        <DialogContent className="bg-white text-[#111111] max-w-sm">
+        <DialogContent className="bg-white text-ink max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-[#111111]">Desactivar empleado</DialogTitle>
-            <DialogDescription className="text-[#666666]">
+            <DialogTitle className="text-ink">Desactivar empleado</DialogTitle>
+            <DialogDescription className="text-chrome-600">
               ¿Confirmas desactivar a{' '}
-              <strong className="text-[#111111]">{confirmDes?.nombre}</strong>?
+              <strong className="text-ink">{confirmDes?.nombre}</strong>?
               {' '}El empleado no podrá iniciar sesión hasta ser reactivado.
             </DialogDescription>
           </DialogHeader>
@@ -406,13 +406,13 @@ export default function EmpleadosPage() {
               type="button"
               variant="secondary"
               onClick={() => setConfirmDes(null)}
-              className="bg-white border border-[#D1D5DB] text-[#374151] hover:bg-gray-50"
+              className="bg-white border border-chrome-200 text-chrome-700 hover:bg-chrome-50"
             >
               Cancelar
             </Button>
             <Button
               type="button"
-              className="bg-[#CC0000] hover:bg-[#AA0000] text-white"
+              className="bg-brand hover:bg-brand-900 text-white"
               disabled={desactivando}
               onClick={confirmarDesactivar}
             >

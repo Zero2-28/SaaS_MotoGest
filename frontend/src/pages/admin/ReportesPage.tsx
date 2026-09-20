@@ -11,7 +11,8 @@ import type { ReporteVentas } from '@/types'
 import { formatPrecio, formatFechaCorta } from '@/utils/format'
 
 // Paleta accesible para gráfico de dona — no solo depende de color
-const COLORES_METODO = ['#CC0000', '#FF6B00', '#3B82F6', '#10B981', '#8B5CF6']
+// Paleta de series: azul metalizado en degradado + acento cálido
+const COLORES_METODO = ['#0F3341', '#26688C', '#3D87AC', '#FF6B00', '#94A6B8']
 
 // Datos mock de métodos de pago (en prod viene de /pagos/metodos)
 const MOCK_METODOS = [
@@ -26,15 +27,15 @@ function MetricaCard({
   title, value, icon: Icon, positivo,
 }: { title: string; value: string; icon: React.ElementType; positivo?: boolean }) {
   return (
-    <Card className="bg-white border-gray-200">
+    <Card className="bg-white border-chrome-200">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
-        <CardTitle className="text-xs text-[#374151] uppercase tracking-wide">{title}</CardTitle>
-        <div className={`flex h-8 w-8 items-center justify-center rounded-md ${positivo === false ? 'bg-red-100' : 'bg-[#FEF2F2]'}`}>
-          <Icon className={`h-4 w-4 ${positivo === false ? 'text-red-500' : 'text-[#CC0000]'}`} aria-hidden />
+        <CardTitle className="text-xs text-chrome-700 uppercase tracking-wide">{title}</CardTitle>
+        <div className={`flex h-8 w-8 items-center justify-center rounded-md ${positivo === false ? 'bg-danger-100' : 'bg-danger-50'}`}>
+          <Icon className={`h-4 w-4 ${positivo === false ? 'text-danger' : 'text-brand'}`} aria-hidden />
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold text-[#111111] tabular-nums">{value}</p>
+        <p className="text-2xl font-bold text-ink tabular-nums">{value}</p>
       </CardContent>
     </Card>
   )
@@ -44,10 +45,10 @@ function MetricaCard({
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number; name: string }[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-md border border-gray-200 bg-white px-3 py-2 text-sm shadow-xl">
-      {label && <p className="text-[#666666] mb-1">{label}</p>}
+    <div className="rounded-md border border-chrome-200 bg-white px-3 py-2 text-sm shadow-card-lg">
+      {label && <p className="text-chrome-600 mb-1">{label}</p>}
       {payload.map((p, i) => (
-        <p key={i} className="font-bold text-[#111111]">{p.name}: {formatPrecio(p.value)}</p>
+        <p key={i} className="font-bold text-ink">{p.name}: {formatPrecio(p.value)}</p>
       ))}
     </div>
   )
@@ -56,8 +57,8 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 function PieTooltip({ active, payload }: { active?: boolean; payload?: { name: string; value: number }[] }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-md border border-gray-200 bg-white px-3 py-2 text-sm shadow-xl">
-      <p className="text-[#111111]">{payload[0].name}: <strong>{payload[0].value}%</strong></p>
+    <div className="rounded-md border border-chrome-200 bg-white px-3 py-2 text-sm shadow-card-lg">
+      <p className="text-ink">{payload[0].name}: <strong>{payload[0].value}%</strong></p>
     </div>
   )
 }
@@ -100,7 +101,7 @@ export default function ReportesPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display text-display-sm text-[#111111]">REPORTES</h1>
+        <h1 className="font-display text-display-sm text-ink">REPORTES</h1>
         <p className="text-sm text-muted-foreground mt-1">Análisis de ventas y rendimiento</p>
       </div>
 
@@ -108,7 +109,7 @@ export default function ReportesPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cargando ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="bg-white border border-gray-100"><CardContent className="pt-6"><div className="bg-gray-200 animate-pulse h-16 w-full rounded" /></CardContent></Card>
+            <Card key={i} className="bg-white border border-chrome-100"><CardContent className="pt-6"><div className="bg-chrome-200 animate-pulse h-16 w-full rounded" /></CardContent></Card>
           ))
         ) : (
           <>
@@ -126,33 +127,33 @@ export default function ReportesPage() {
       {/* Gráficos fila 1 */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Línea — ventas diarias */}
-        <Card className="bg-white border-gray-200">
+        <Card className="bg-white border-chrome-200">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-[#374151]">Ventas diarias (últimos 30 días)</CardTitle>
+            <CardTitle className="text-sm font-medium text-chrome-700">Ventas diarias (últimos 30 días)</CardTitle>
           </CardHeader>
           <CardContent>
             {cargando ? (
-              <div className="bg-gray-200 animate-pulse h-56 w-full rounded" />
+              <div className="bg-chrome-200 animate-pulse h-56 w-full rounded" />
             ) : (
               <ResponsiveContainer width="100%" height={224}>
                 <LineChart data={reporte?.mes.porDia ?? []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E3EAF1" vertical={false} />
                   <XAxis
                     dataKey="fecha"
-                    tick={{ fill: '#6B7280', fontSize: 10 }}
+                    tick={{ fill: '#64798C', fontSize: 10 }}
                     tickFormatter={(v: string) => formatFechaCorta(v)}
                     axisLine={false} tickLine={false}
                   />
                   <YAxis
-                    tick={{ fill: '#6B7280', fontSize: 10 }}
+                    tick={{ fill: '#64798C', fontSize: 10 }}
                     tickFormatter={(v: number) => `S/.${(v / 1000).toFixed(0)}k`}
                     axisLine={false} tickLine={false}
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <Line
                     type="monotone" dataKey="monto" name="Total"
-                    stroke="#CC0000" strokeWidth={2} dot={false}
-                    activeDot={{ r: 4, fill: '#CC0000' }}
+                    stroke="#1C5372" strokeWidth={2.5} dot={false}
+                    activeDot={{ r: 4, fill: '#0F3341' }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -161,25 +162,32 @@ export default function ReportesPage() {
         </Card>
 
         {/* Barras — ventas por semana */}
-        <Card className="bg-white border-gray-200">
+        <Card className="bg-white border-chrome-200">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-[#374151]">Ventas por semana</CardTitle>
+            <CardTitle className="text-sm font-medium text-chrome-700">Ventas por semana</CardTitle>
           </CardHeader>
           <CardContent>
             {cargando ? (
-              <div className="bg-gray-200 animate-pulse h-56 w-full rounded" />
+              <div className="bg-chrome-200 animate-pulse h-56 w-full rounded" />
             ) : (
               <ResponsiveContainer width="100%" height={224}>
                 <BarChart data={ventasPorSemana}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
-                  <XAxis dataKey="semana" tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <defs>
+                    {/* Degradado metalizado para las barras */}
+                    <linearGradient id="gradBarBrand" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#26688C" />
+                      <stop offset="100%" stopColor="#0F3341" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E3EAF1" vertical={false} />
+                  <XAxis dataKey="semana" tick={{ fill: '#64798C', fontSize: 11 }} axisLine={false} tickLine={false} />
                   <YAxis
-                    tick={{ fill: '#6B7280', fontSize: 11 }}
+                    tick={{ fill: '#64798C', fontSize: 11 }}
                     tickFormatter={(v: number) => `S/.${(v / 1000).toFixed(0)}k`}
                     axisLine={false} tickLine={false}
                   />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="monto" name="Total" fill="#CC0000" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="monto" name="Total" fill="url(#gradBarBrand)" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -190,7 +198,7 @@ export default function ReportesPage() {
       {/* Gráfico dona — métodos de pago */}
       <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-[#111111]">Distribución por método de pago</CardTitle>
+          <CardTitle className="text-sm font-medium text-ink">Distribución por método de pago</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row items-center gap-8">
@@ -213,7 +221,7 @@ export default function ReportesPage() {
                 <Legend
                   iconType="circle"
                   iconSize={10}
-                  formatter={(v) => <span style={{ color: '#374151', fontSize: 12 }}>{v}</span>}
+                  formatter={(v) => <span style={{ color: '#33485C', fontSize: 12 }}>{v}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -223,8 +231,8 @@ export default function ReportesPage() {
                 <caption className="sr-only">Distribución de ventas por método de pago</caption>
                 <thead>
                   <tr>
-                    <th className="text-left text-xs text-[#374151] pb-2">Método</th>
-                    <th className="text-right text-xs text-[#374151] pb-2">%</th>
+                    <th className="text-left text-xs text-chrome-700 pb-2">Método</th>
+                    <th className="text-right text-xs text-chrome-700 pb-2">%</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -236,9 +244,9 @@ export default function ReportesPage() {
                           style={{ background: COLORES_METODO[i % COLORES_METODO.length] }}
                           aria-hidden
                         />
-                        <span className="text-[#111111]">{m.name}</span>
+                        <span className="text-ink">{m.name}</span>
                       </td>
-                      <td className="text-right tabular-nums text-[#111111]">{m.value}%</td>
+                      <td className="text-right tabular-nums text-ink">{m.value}%</td>
                     </tr>
                   ))}
                 </tbody>

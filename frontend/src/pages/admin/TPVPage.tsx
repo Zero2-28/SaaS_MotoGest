@@ -33,13 +33,13 @@ const METODOS: { value: MetodoPago; label: string }[] = [
 const CARD_OPTIONS = {
   style: {
     base: {
-      color: '#111111',
+      color: '#0E1B2A',
       fontFamily: '"Inter", system-ui, sans-serif',
       fontSize: '14px',
       fontSmoothing: 'antialiased',
-      '::placeholder': { color: '#9CA3AF' },
+      '::placeholder': { color: '#94A6B8' },
     },
-    invalid: { color: '#CC0000', iconColor: '#CC0000' },
+    invalid: { color: '#DC2626', iconColor: '#DC2626' },
   },
 }
 
@@ -84,18 +84,18 @@ function TPVStripeForm({ clientSecret, venta, onSuccess, onClose }: TPVStripeFor
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-xs text-[#666666]">
-        Orden: <span className="font-mono text-[#111111]">{venta.numeroVenta}</span>
+      <p className="text-xs text-chrome-600">
+        Orden: <span className="font-mono text-ink">{venta.numeroVenta}</span>
         {' · '}
-        <span className="text-[#111111] tabular-nums font-bold">{formatPrecio(venta.total)}</span>
+        <span className="text-ink tabular-nums font-bold">{formatPrecio(venta.total)}</span>
       </p>
 
-      <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-3">
+      <div className="rounded-md border border-chrome-200 bg-chrome-50 px-4 py-3">
         <CardElement options={CARD_OPTIONS} />
       </div>
 
       {cardError && (
-        <p className="flex items-center gap-1.5 text-xs text-red-400">
+        <p className="flex items-center gap-1.5 text-xs text-danger">
           <AlertCircle className="h-3 w-3 shrink-0" />
           {cardError}
         </p>
@@ -169,7 +169,7 @@ function BuscadorProductos({ stockMap }: { stockMap: Record<number, number> }) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden />
           <Input
             placeholder="Buscar por nombre o código…"
-            className="pl-9 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+            className="pl-9 bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar producto para agregar al carrito"
@@ -180,7 +180,7 @@ function BuscadorProductos({ stockMap }: { stockMap: Record<number, number> }) {
             value={categFilter !== undefined ? String(categFilter) : 'todas'}
             onValueChange={(v) => setCategFilter(v === 'todas' ? undefined : Number(v))}
           >
-            <SelectTrigger className="w-40 shrink-0 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-label="Filtrar por categoría">
+            <SelectTrigger className="w-40 shrink-0 bg-mist border-chrome-200 text-ink" aria-label="Filtrar por categoría">
               <SelectValue placeholder="Categoría" />
             </SelectTrigger>
             <SelectContent>
@@ -193,7 +193,7 @@ function BuscadorProductos({ stockMap }: { stockMap: Record<number, number> }) {
         )}
       </div>
       {(resultados.length > 0 || buscando) && (
-        <div className="rounded-md border border-gray-200 bg-white shadow-xl max-h-56 overflow-y-auto">
+        <div className="rounded-md border border-chrome-200 bg-white shadow-card-lg max-h-56 overflow-y-auto">
           {buscando ? (
             <div className="p-4 text-center text-sm text-muted-foreground">Buscando…</div>
           ) : (
@@ -204,7 +204,7 @@ function BuscadorProductos({ stockMap }: { stockMap: Record<number, number> }) {
                 return (
                   <li key={p.id}>
                     <button
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-chrome-50 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={() => { agregarItem(p); setBusqueda(''); setResultados([]) }}
                       disabled={sinStock}
                       aria-label={`Agregar ${p.nombre} al carrito`}
@@ -220,11 +220,11 @@ function BuscadorProductos({ stockMap }: { stockMap: Record<number, number> }) {
                         loading="lazy"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-[#111111] truncate">{p.nombre}</p>
+                        <p className="font-medium text-ink truncate">{p.nombre}</p>
                         <p className="text-xs text-muted-foreground">{p.codigo}</p>
                       </div>
                       <div className="flex flex-col items-end gap-1 shrink-0">
-                        <span className="tabular-nums text-[#111111]">{formatPrecio(p.precioVenta)}</span>
+                        <span className="tabular-nums text-ink">{formatPrecio(p.precioVenta)}</span>
                         <Badge variant={stock === 0 ? 'stock-critico' : stock <= 3 ? 'stock-bajo' : 'stock-ok'} className="text-[10px] py-0 h-4">
                           {stock === 0 ? 'Sin stock' : `${stock} disp.`}
                         </Badge>
@@ -322,9 +322,9 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
   if (ventaExito) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-12 animate-fade-in text-center">
-        <CheckCircle className="h-16 w-16 text-green-400" />
+        <CheckCircle className="h-16 w-16 text-success" />
         <div>
-          <p className="text-xl font-bold text-[#111111]">¡Venta registrada!</p>
+          <p className="text-xl font-bold text-ink">¡Venta registrada!</p>
           <p className="text-xs font-mono text-muted-foreground mt-1">{ventaExito.numeroVenta}</p>
         </div>
 
@@ -364,7 +364,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
       <div className="flex flex-col gap-4 h-full">
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-            <ShoppingCart className="h-12 w-12 text-carbon-600" />
+            <ShoppingCart className="h-12 w-12 text-brand-600" />
             <p className="text-sm text-muted-foreground">Busca y agrega productos al carrito</p>
           </div>
         ) : (
@@ -372,9 +372,9 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
             {/* Items */}
             <ul className="flex-1 space-y-2 overflow-y-auto max-h-72" aria-label="Productos en el carrito">
               {items.map(({ producto, cantidad, precioUnitario }) => (
-                <li key={producto.id} className="flex items-center gap-3 rounded-md bg-gray-50 border border-gray-100 p-3">
+                <li key={producto.id} className="flex items-center gap-3 rounded-md bg-chrome-50 border border-chrome-100 p-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#111111] truncate">{producto.nombre}</p>
+                    <p className="text-sm font-medium text-ink truncate">{producto.nombre}</p>
                     <p className="text-xs text-muted-foreground tabular-nums">
                       {formatPrecio(precioUnitario)} c/u
                     </p>
@@ -382,7 +382,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
                   <div className="flex items-center gap-1">
                     <Button
                       size="icon" variant="ghost"
-                      className="h-7 w-7 bg-[#F3F4F6] text-[#374151] hover:text-[#CC0000] hover:bg-[#F3F4F6]"
+                      className="h-7 w-7 bg-chrome-50 text-chrome-700 hover:text-brand hover:bg-chrome-50"
                       onClick={() => cambiarCantidad(producto.id, cantidad - 1)}
                       aria-label="Reducir"
                     >
@@ -391,19 +391,19 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
                     <span className="w-6 text-center text-sm tabular-nums">{cantidad}</span>
                     <Button
                       size="icon" variant="ghost"
-                      className="h-7 w-7 bg-[#F3F4F6] text-[#374151] hover:text-[#CC0000] hover:bg-[#F3F4F6]"
+                      className="h-7 w-7 bg-chrome-50 text-chrome-700 hover:text-brand hover:bg-chrome-50"
                       onClick={() => cambiarCantidad(producto.id, cantidad + 1)}
                       aria-label="Aumentar"
                     >
                       <Plus className="h-3 w-3" />
                     </Button>
                   </div>
-                  <span className="tabular-nums text-sm text-[#111111] w-20 text-right">
+                  <span className="tabular-nums text-sm text-ink w-20 text-right">
                     {formatPrecio(precioUnitario * cantidad)}
                   </span>
                   <Button
                     size="icon" variant="ghost"
-                    className="h-7 w-7 bg-[#F3F4F6] text-[#374151] hover:text-[#CC0000] hover:bg-[#FEE2E2] shrink-0"
+                    className="h-7 w-7 bg-chrome-50 text-chrome-700 hover:text-brand hover:bg-danger-100 shrink-0"
                     onClick={() => quitarItem(producto.id)}
                     aria-label={`Quitar ${producto.nombre}`}
                   >
@@ -417,7 +417,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
 
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">{totalItems()} productos</span>
-              <span className="text-xl font-bold text-[#111111] tabular-nums">{formatPrecio(totalMonto())}</span>
+              <span className="text-xl font-bold text-ink tabular-nums">{formatPrecio(totalMonto())}</span>
             </div>
 
             {/* Método de pago */}
@@ -430,8 +430,8 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
                     onClick={() => setMetodoPago(value)}
                     className={`rounded-md border px-2 py-2 text-xs font-medium transition-colors ${
                       metodoPago === value
-                        ? 'border-[#CC0000] bg-[#FEF2F2] text-[#CC0000]'
-                        : 'border-gray-200 text-[#666666] hover:border-gray-400'
+                        ? 'border-brand bg-danger-50 text-brand'
+                        : 'border-chrome-200 text-chrome-600 hover:border-chrome-400'
                     }`}
                     aria-pressed={metodoPago === value}
                   >
@@ -442,7 +442,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
             </div>
 
             {stockError && (
-              <p className="flex items-center gap-1.5 text-xs text-red-600 rounded-md bg-red-50 border border-red-200 px-3 py-2">
+              <p className="flex items-center gap-1.5 text-xs text-danger-600 rounded-md bg-danger-50 border border-danger-100 px-3 py-2">
                 <AlertCircle className="h-3 w-3 shrink-0" />
                 {stockError}
               </p>
@@ -463,7 +463,7 @@ function Carrito({ onVentaCompleta, stockMap }: { onVentaCompleta: () => void; s
 
             <Button
               variant="ghost" size="sm"
-              className="text-muted-foreground hover:text-red-400"
+              className="text-muted-foreground hover:text-danger"
               onClick={vaciarCarrito}
             >
               Vaciar carrito
@@ -526,7 +526,7 @@ export default function TPVPage() {
     <div className="space-y-4 animate-fade-in h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-[#111111]">PUNTO DE VENTA</h1>
+          <h1 className="font-display text-display-sm text-ink">PUNTO DE VENTA</h1>
           <p className="text-sm text-muted-foreground mt-1">Registra ventas en tiempo real</p>
         </div>
         <Badge variant="secondary">{totalItems()} en carrito</Badge>
@@ -534,9 +534,9 @@ export default function TPVPage() {
 
       <div className="grid gap-6 lg:grid-cols-2 h-[calc(100vh-12rem)]">
         {/* Panel búsqueda */}
-        <Card className="flex flex-col overflow-hidden bg-white border-gray-200">
+        <Card className="flex flex-col overflow-hidden bg-white border-chrome-200">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-[#374151]">Agregar productos</CardTitle>
+            <CardTitle className="text-sm font-medium text-chrome-700">Agregar productos</CardTitle>
           </CardHeader>
           <CardContent className="flex-1">
             <BuscadorProductos key={refresh} stockMap={stockMap} />
@@ -544,9 +544,9 @@ export default function TPVPage() {
         </Card>
 
         {/* Panel carrito */}
-        <Card className="flex flex-col overflow-hidden bg-white border-gray-200">
+        <Card className="flex flex-col overflow-hidden bg-white border-chrome-200">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-[#374151]">Carrito de venta</CardTitle>
+            <CardTitle className="text-sm font-medium text-chrome-700">Carrito de venta</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col">
             <Carrito onVentaCompleta={() => setRefresh((r) => r + 1)} stockMap={stockMap} />

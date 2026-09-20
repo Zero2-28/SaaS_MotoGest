@@ -5,24 +5,41 @@ import { cn } from '@/utils/cn'
 
 const buttonVariants = cva(
   // Base — todos los botones
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        // Rojo Ducati — acción principal
-        default:     'bg-racing text-white hover:bg-racing-700 active:scale-[0.98]',
-        // Borde rojo — acción secundaria
-        outline:     'border border-racing text-racing bg-transparent hover:bg-racing/10 active:scale-[0.98]',
-        // Superficie carbono — acción neutra
-        secondary:   'bg-carbon-700 text-white hover:bg-carbon-600 active:scale-[0.98]',
+        /**
+         * Azul metalizado — acción principal.
+         * El degradado vertical + el filo interior claro (shadow-metal) son
+         * lo que da la lectura de chapa pulida en vez de color plano.
+         */
+        default:
+          'bg-metal-btn text-white shadow-metal hover:bg-metal-btn-hv hover:shadow-brand active:scale-[0.98] active:shadow-none',
+        // Borde de marca — acción secundaria sobre fondo claro
+        outline:
+          'border border-brand-200 bg-white text-brand-800 hover:border-brand-400 hover:bg-brand-50 active:scale-[0.98]',
+        // Neutra — "Cancelar", acciones de bajo peso sobre fondo claro
+        secondary:
+          'bg-chrome-100 text-chrome-700 hover:bg-chrome-200 active:scale-[0.98]',
+        // Superficie acero — acción neutra sobre fondo oscuro
+        steel:
+          'bg-brand-700 text-white shadow-metal hover:bg-brand-600 active:scale-[0.98]',
         // Sin fondo — acción terciaria
-        ghost:       'text-white hover:bg-carbon-700 active:scale-[0.98]',
-        // Naranja Honda — acento/alerta positiva
-        accent:      'bg-turbo text-white hover:bg-turbo-600 active:scale-[0.98]',
-        // Rojo destructivo para eliminar
-        destructive: 'bg-destructive text-white hover:bg-destructive/90 active:scale-[0.98]',
+        ghost:
+          'text-brand-800 hover:bg-brand-50 active:scale-[0.98]',
+        // Ghost para superficies oscuras
+        'ghost-dark':
+          'text-brand-100 hover:bg-white/10 active:scale-[0.98]',
+        // Naranja — acento cálido (ofertas, confirmaciones destacadas)
+        accent:
+          'bg-turbo text-white shadow-turbo hover:bg-turbo-600 active:scale-[0.98]',
+        // Rojo — acción destructiva
+        destructive:
+          'bg-danger text-white hover:bg-danger-700 active:scale-[0.98]',
         // Texto puro
-        link:        'text-racing underline-offset-4 hover:underline p-0 h-auto',
+        link:
+          'text-brand-600 underline-offset-4 hover:text-brand-800 hover:underline p-0 h-auto',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -3,19 +3,19 @@ export const STORAGE_URL = import.meta.env.VITE_STORAGE_URL as string
 const b = (bucket: string, file: string) => `${STORAGE_URL}/${bucket}/${file}`
 
 // Logo principal
-const logo = b('motogest-logo', 'RphFp.svg')
+// v2 — lockup horizontal (850x300 ≈ 2.83:1)
+const logo = b('motogest-logo', 'remotos_v2.svg')
 
-// Carrusel hero — 9 imágenes
+/** Relación de aspecto del lockup: ancho = alto * LOGO_RATIO */
+export const LOGO_RATIO = 850 / 300
+
+// Carrusel hero — 5 imágenes (v2)
 const carousel = [
-  b('motogest-carousel', 'pexels-jarod-13548637.webp'),
-  b('motogest-carousel', 'pexels-rodolfoclix-1161996.webp'),
-  b('motogest-carousel', 'pexels-chimango-hara-215507114-3-36818349.webp'),
-  b('motogest-carousel', 'pexels-rccbtn-8063429.webp'),
-  b('motogest-carousel', 'V2FaR.webp'),
-  b('motogest-carousel', 'pexels-jannisr-30866489.webp'),
-  b('motogest-carousel', 'pexels-luisbecerrafotografo-12993740.webp'),
-  b('motogest-carousel', 'lubirrr.webp'),
-  b('motogest-carousel', 'LLANTA-WEB.webp'),
+  b('motogest-carousel', 'RE1.jpg'),
+  b('motogest-carousel', 'RE2.jpg'),
+  b('motogest-carousel', 'RE3.jpg'),
+  b('motogest-carousel', 'RE4.jpg'),
+  b('motogest-carousel', 'RE5.jpg'),
 ]
 
 // Categorías — 22 imágenes

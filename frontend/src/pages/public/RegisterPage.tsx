@@ -31,16 +31,16 @@ function evaluarFortaleza(pwd: string): { nivel: 0 | 1 | 2 | 3; label: string } 
 }
 
 function barColor(nivel: 0 | 1 | 2 | 3, bar: 1 | 2 | 3): string {
-  if (nivel < bar) return 'bg-gray-200'
-  if (nivel === 1) return 'bg-red-500'
-  if (nivel === 2) return 'bg-orange-400'
-  return 'bg-green-500'
+  if (nivel < bar) return 'bg-chrome-200'
+  if (nivel === 1) return 'bg-danger'
+  if (nivel === 2) return 'bg-turbo-400'
+  return 'bg-success'
 }
 
 function labelColor(nivel: 0 | 1 | 2 | 3): string {
-  if (nivel === 1) return 'text-red-500'
-  if (nivel === 2) return 'text-orange-400'
-  if (nivel === 3) return 'text-green-600'
+  if (nivel === 1) return 'text-danger'
+  if (nivel === 2) return 'text-turbo-400'
+  if (nivel === 3) return 'text-success-600'
   return ''
 }
 
@@ -89,16 +89,16 @@ export default function RegisterPage() {
           className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-[#CC0000]/80" />
+        <div className="absolute inset-0 bg-brand/80" />
         <div className="relative flex h-full flex-col items-center justify-center gap-5 px-12 text-center">
           <img
             src={assets.logo}
             alt=""
             className="h-16 w-auto"
-            style={{ filter: 'brightness(0) invert(1)' }}
+            style={{ borderRadius: 10 }}
           />
           <h2 className="text-3xl font-bold text-white leading-tight">
-            Únete a CALLE TUNING
+            Únete a RE MOTOS
           </h2>
           <p className="text-base text-white/80">
             Accede a los mejores accesorios para tu moto
@@ -110,14 +110,14 @@ export default function RegisterPage() {
         <div className="w-full max-w-sm">
 
           <div className="mb-8 flex justify-center lg:hidden">
-            <img src={assets.logo} alt="CALLE TUNING" className="h-10 w-auto" />
+            <img src={assets.logo} alt="RE MOTOS" className="h-11 w-auto rounded-md" />
           </div>
 
-          <h1 className="text-2xl font-bold text-[#111111] mb-1">Crear cuenta</h1>
-          <p className="text-sm text-[#666666] mb-8">Completa tus datos</p>
+          <h1 className="text-2xl font-bold text-ink mb-1">Crear cuenta</h1>
+          <p className="text-sm text-chrome-600 mb-8">Completa tus datos</p>
 
           {apiError && (
-            <div role="alert" className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            <div role="alert" className="mb-5 rounded-lg border border-danger-100 bg-danger-50 px-4 py-3 text-sm text-danger-600">
               {apiError}
             </div>
           )}
@@ -125,8 +125,8 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
             {/* Nombre */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="nombre" className="text-sm font-medium text-[#111111]">
-                Nombre completo <span aria-hidden className="text-[#CC0000]">*</span>
+              <label htmlFor="nombre" className="text-sm font-medium text-ink">
+                Nombre completo <span aria-hidden className="text-brand">*</span>
               </label>
               <input
                 id="nombre"
@@ -135,17 +135,17 @@ export default function RegisterPage() {
                 {...register('nombre')}
                 aria-invalid={!!errors.nombre}
                 aria-describedby={errors.nombre ? 'nombre-error' : undefined}
-                className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 text-sm text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20 aria-[invalid=true]:border-red-400"
+                className="h-12 w-full rounded-lg border border-chrome-200 bg-white px-4 text-sm text-ink placeholder:text-chrome-400 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 aria-[invalid=true]:border-danger"
               />
               {errors.nombre && (
-                <p id="nombre-error" role="alert" className="text-xs text-red-500">{errors.nombre.message}</p>
+                <p id="nombre-error" role="alert" className="text-xs text-danger">{errors.nombre.message}</p>
               )}
             </div>
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-sm font-medium text-[#111111]">
-                Correo electrónico <span aria-hidden className="text-[#CC0000]">*</span>
+              <label htmlFor="email" className="text-sm font-medium text-ink">
+                Correo electrónico <span aria-hidden className="text-brand">*</span>
               </label>
               <input
                 id="email"
@@ -155,17 +155,17 @@ export default function RegisterPage() {
                 {...register('email')}
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
-                className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 text-sm text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20 aria-[invalid=true]:border-red-400"
+                className="h-12 w-full rounded-lg border border-chrome-200 bg-white px-4 text-sm text-ink placeholder:text-chrome-400 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 aria-[invalid=true]:border-danger"
               />
               {errors.email && (
-                <p id="email-error" role="alert" className="text-xs text-red-500">{errors.email.message}</p>
+                <p id="email-error" role="alert" className="text-xs text-danger">{errors.email.message}</p>
               )}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="telefono" className="text-sm font-medium text-[#111111]">
+              <label htmlFor="telefono" className="text-sm font-medium text-ink">
                 Teléfono{' '}
-                <span className="font-normal text-[#666666]">(opcional)</span>
+                <span className="font-normal text-chrome-600">(opcional)</span>
               </label>
               <input
                 id="telefono"
@@ -174,13 +174,13 @@ export default function RegisterPage() {
                 inputMode="numeric"
                 placeholder="+51 999 999 999"
                 {...register('telefono')}
-                className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 text-sm text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20"
+                className="h-12 w-full rounded-lg border border-chrome-200 bg-white px-4 text-sm text-ink placeholder:text-chrome-400 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-sm font-medium text-[#111111]">
-                Contraseña <span aria-hidden className="text-[#CC0000]">*</span>
+              <label htmlFor="password" className="text-sm font-medium text-ink">
+                Contraseña <span aria-hidden className="text-brand">*</span>
               </label>
               <div className="relative">
                 <input
@@ -194,11 +194,11 @@ export default function RegisterPage() {
                   }}
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'pass-error' : 'pass-strength'}
-                  className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 pr-11 text-sm text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20 aria-[invalid=true]:border-red-400"
+                  className="h-12 w-full rounded-lg border border-chrome-200 bg-white px-4 pr-11 text-sm text-ink placeholder:text-chrome-400 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 aria-[invalid=true]:border-danger"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-chrome-400 hover:text-chrome-700 transition-colors"
                   onClick={() => setShowPass((s) => !s)}
                   aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                 >
@@ -221,14 +221,14 @@ export default function RegisterPage() {
               )}
 
               {errors.password && (
-                <p id="pass-error" role="alert" className="text-xs text-red-500">{errors.password.message}</p>
+                <p id="pass-error" role="alert" className="text-xs text-danger">{errors.password.message}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-1 flex h-12 w-full items-center justify-center rounded-lg bg-[#CC0000] text-sm font-semibold text-white transition-colors hover:bg-[#AA0000] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="mt-1 flex h-12 w-full items-center justify-center rounded-lg bg-brand text-sm font-semibold text-white transition-colors hover:bg-brand-900 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -239,23 +239,23 @@ export default function RegisterPage() {
           </form>
 
           <div className="my-6 flex items-center gap-4">
-            <div className="flex-1 border-t border-[#D1D5DB]" />
-            <span className="text-xs text-[#999999]">o regístrate con</span>
-            <div className="flex-1 border-t border-[#D1D5DB]" />
+            <div className="flex-1 border-t border-chrome-200" />
+            <span className="text-xs text-chrome-400">o regístrate con</span>
+            <div className="flex-1 border-t border-chrome-200" />
           </div>
 
           <button
             type="button"
             onClick={() => { window.location.href = `${import.meta.env.VITE_API_URL}/auth/google/cliente` }}
-            className="flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-[#D1D5DB] bg-white text-sm font-medium text-[#111111] transition-colors hover:bg-gray-50"
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-chrome-200 bg-white text-sm font-medium text-ink transition-colors hover:bg-chrome-50"
           >
             <GoogleIcon />
             Registrarse con Google
           </button>
 
-          <p className="mt-6 text-center text-sm text-[#666666]">
+          <p className="mt-6 text-center text-sm text-chrome-600">
             ¿Ya tienes cuenta?{' '}
-            <Link to="/login" className="font-semibold text-[#CC0000] hover:underline">
+            <Link to="/login" className="font-semibold text-brand hover:underline">
               Iniciar sesión
             </Link>
           </p>

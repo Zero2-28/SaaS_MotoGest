@@ -34,16 +34,16 @@ function StockIndicador({ activo, stock }: { activo: boolean; stock?: number }) 
   if (stock !== undefined) {
     if (stock === 0) {
       return (
-        <span className="flex items-center gap-1.5 text-sm font-medium text-[#CC0000]">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#CC0000]" aria-hidden />
+        <span className="flex items-center gap-1.5 text-sm font-medium text-brand">
+          <span className="h-2.5 w-2.5 rounded-full bg-brand" aria-hidden />
           Agotado
         </span>
       )
     }
     if (stock <= 5) {
       return (
-        <span className="flex items-center gap-1.5 text-sm font-medium text-[#FF6B00]">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#FF6B00] animate-pulse" aria-hidden />
+        <span className="flex items-center gap-1.5 text-sm font-medium text-turbo">
+          <span className="h-2.5 w-2.5 rounded-full bg-turbo animate-pulse" aria-hidden />
           Solo quedan {stock} unidad{stock === 1 ? '' : 'es'}
         </span>
       )
@@ -51,29 +51,29 @@ function StockIndicador({ activo, stock }: { activo: boolean; stock?: number }) 
     if (stock <= 10) {
       return (
         <span className="flex items-center gap-1.5 text-sm">
-          <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
-          <span className="font-medium text-green-600">En stock</span>
-          <span className="font-medium text-[#FF6B00]">· pocas unidades</span>
+          <span className="h-2.5 w-2.5 rounded-full bg-success" aria-hidden />
+          <span className="font-medium text-success-600">En stock</span>
+          <span className="font-medium text-turbo">· pocas unidades</span>
         </span>
       )
     }
     return (
-      <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">
-        <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
+      <span className="flex items-center gap-1.5 text-sm font-medium text-success-600">
+        <span className="h-2.5 w-2.5 rounded-full bg-success" aria-hidden />
         En stock
       </span>
     )
   }
   return activo
     ? (
-      <span className="flex items-center gap-1.5 text-sm font-medium text-green-600">
-        <span className="h-2.5 w-2.5 rounded-full bg-green-500" aria-hidden />
+      <span className="flex items-center gap-1.5 text-sm font-medium text-success-600">
+        <span className="h-2.5 w-2.5 rounded-full bg-success" aria-hidden />
         En stock
       </span>
     )
     : (
-      <span className="flex items-center gap-1.5 text-sm font-medium text-[#CC0000]">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#CC0000]" aria-hidden />
+      <span className="flex items-center gap-1.5 text-sm font-medium text-brand">
+        <span className="h-2.5 w-2.5 rounded-full bg-brand" aria-hidden />
         Agotado
       </span>
     )
@@ -81,7 +81,7 @@ function StockIndicador({ activo, stock }: { activo: boolean; stock?: number }) 
 
 function RelacionadoCardSkeleton() {
   return (
-    <div className="rounded-xl border border-gray-100 bg-white overflow-hidden flex flex-col">
+    <div className="rounded-xl border border-chrome-100 bg-white overflow-hidden flex flex-col">
       <div className="skeleton h-36 w-full" />
       <div className="p-3 flex flex-col gap-2 flex-1">
         <div className="skeleton h-3 w-1/3 rounded" />
@@ -100,13 +100,13 @@ function RelacionadoCard({ producto }: { producto: Producto }) {
   const [imgSrc, setImgSrc] = useState(() => getProductImage(producto))
 
   return (
-    <article className="group rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md overflow-hidden transition-all duration-200 hover:-translate-y-1 flex flex-col">
+    <article className="group rounded-xl border border-chrome-100 bg-white shadow-card hover:shadow-card-md overflow-hidden transition-all duration-200 hover:-translate-y-1 flex flex-col">
       <Link to={`/catalogo/${producto.id}`} className="block relative overflow-hidden">
         <img
           src={imgSrc}
           alt={producto.nombre}
           onError={() => setImgSrc(PRODUCTO_PLACEHOLDER)}
-          className="h-36 w-full object-cover bg-gray-50 transition-transform duration-300 group-hover:scale-105"
+          className="h-36 w-full object-cover bg-chrome-50 transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
           width={300}
           height={144}
@@ -118,21 +118,21 @@ function RelacionadoCard({ producto }: { producto: Producto }) {
         )}
       </Link>
       <div className="p-3 flex flex-col gap-2 flex-1">
-        <span className="w-fit rounded-full bg-racing px-2 py-0.5 text-[10px] font-semibold text-white">
+        <span className="w-fit rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-white">
           {producto.categoria.nombre}
         </span>
         <Link to={`/catalogo/${producto.id}`}>
-          <h3 className="text-xs font-semibold text-carbon-900 line-clamp-2 hover:text-racing transition-colors leading-snug">
+          <h3 className="text-xs font-semibold text-brand-900 line-clamp-2 hover:text-brand transition-colors leading-snug">
             {producto.nombre}
           </h3>
         </Link>
-        <div className="mt-auto flex flex-col gap-1.5 pt-2 border-t border-gray-100">
-          <span className="text-base font-bold text-[#111111] tabular-nums">
+        <div className="mt-auto flex flex-col gap-1.5 pt-2 border-t border-chrome-100">
+          <span className="text-base font-bold text-ink tabular-nums">
             {formatPrecio(producto.precioVenta)}
           </span>
           <Link
             to={`/catalogo/${producto.id}`}
-            className="flex w-full items-center justify-center gap-1.5 rounded-md bg-racing py-2 text-xs font-semibold text-white hover:bg-racing-700 transition-colors"
+            className="flex w-full items-center justify-center gap-1.5 rounded-md bg-brand py-2 text-xs font-semibold text-white hover:bg-brand-700 transition-colors"
           >
             Ver producto
           </Link>
@@ -169,9 +169,9 @@ function ProductosRelacionados({
   // Mostrar skeletons mientras carga
   if (cargando) {
     return (
-      <section className="mt-16 border-t border-gray-100 pt-10">
-        <h2 className="font-display text-xl text-carbon-900 mb-1">También te puede interesar</h2>
-        <p className="text-sm text-gray-500 mb-6">Más productos de la misma categoría</p>
+      <section className="mt-16 border-t border-chrome-100 pt-10">
+        <h2 className="font-display text-xl text-brand-900 mb-1">También te puede interesar</h2>
+        <p className="text-sm text-chrome-500 mb-6">Más productos de la misma categoría</p>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <RelacionadoCardSkeleton key={i} />
@@ -184,11 +184,11 @@ function ProductosRelacionados({
   if (relacionados.length === 0) return null
 
   return (
-    <section className="mt-16 border-t border-gray-100 pt-10">
-      <h2 className="font-display text-xl text-carbon-900 mb-1">
+    <section className="mt-16 border-t border-chrome-100 pt-10">
+      <h2 className="font-display text-xl text-brand-900 mb-1">
         También te puede interesar
       </h2>
-      <p className="text-sm text-gray-500 mb-6">Más productos de la misma categoría</p>
+      <p className="text-sm text-chrome-500 mb-6">Más productos de la misma categoría</p>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {relacionados.map((p) => (
           <RelacionadoCard key={p.id} producto={p} />
@@ -227,9 +227,9 @@ function ExplorarProductos({
 
   if (cargando) {
     return (
-      <section className="mt-12 pt-10 border-t border-gray-100">
-        <h2 className="font-display text-xl text-carbon-900 mb-1">Explorar más productos</h2>
-        <p className="text-sm text-gray-500 mb-6">Descubre otros accesorios para tu moto</p>
+      <section className="mt-12 pt-10 border-t border-chrome-100">
+        <h2 className="font-display text-xl text-brand-900 mb-1">Explorar más productos</h2>
+        <p className="text-sm text-chrome-500 mb-6">Descubre otros accesorios para tu moto</p>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <RelacionadoCardSkeleton key={i} />
@@ -243,9 +243,9 @@ function ExplorarProductos({
   if (explorar.length < 2) return null
 
   return (
-    <section className="mt-12 pt-10 border-t border-gray-100">
-      <h2 className="font-display text-xl text-carbon-900 mb-1">Explorar más productos</h2>
-      <p className="text-sm text-gray-500 mb-6">Descubre otros accesorios para tu moto</p>
+    <section className="mt-12 pt-10 border-t border-chrome-100">
+      <h2 className="font-display text-xl text-brand-900 mb-1">Explorar más productos</h2>
+      <p className="text-sm text-chrome-500 mb-6">Descubre otros accesorios para tu moto</p>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {explorar.map((p) => (
           <RelacionadoCard key={p.id} producto={p} />
@@ -294,11 +294,11 @@ export default function ProductoPage() {
     return (
       <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-24 text-center">
-          <Package className="h-16 w-16 mx-auto text-gray-300 mb-4" aria-hidden />
-          <h1 className="text-xl font-semibold text-carbon-900 mb-2">Producto no encontrado</h1>
+          <Package className="h-16 w-16 mx-auto text-chrome-300 mb-4" aria-hidden />
+          <h1 className="text-xl font-semibold text-brand-900 mb-2">Producto no encontrado</h1>
           <Link
             to="/catalogo"
-            className="mt-4 inline-flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-carbon-900 hover:border-racing hover:text-racing transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-md border border-chrome-200 px-4 py-2 text-sm font-medium text-brand-900 hover:border-brand hover:text-brand transition-colors"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Volver al catálogo
@@ -315,24 +315,24 @@ export default function ProductoPage() {
       <div className="container mx-auto px-4 py-8">
 
         {/* Breadcrumb: Inicio / [Categoría] / [Nombre] */}
-        <nav aria-label="Ruta de navegación" className="mb-6 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-racing transition-colors">Inicio</Link>
-          <span className="text-gray-300">/</span>
+        <nav aria-label="Ruta de navegación" className="mb-6 flex items-center gap-2 text-sm text-chrome-500">
+          <Link to="/" className="hover:text-brand transition-colors">Inicio</Link>
+          <span className="text-chrome-300">/</span>
           <Link
             to={`/catalogo?categoriaId=${producto.categoriaId}`}
-            className="hover:text-racing transition-colors"
+            className="hover:text-brand transition-colors"
           >
             {producto.categoria.nombre}
           </Link>
-          <span className="text-gray-300">/</span>
-          <span className="text-carbon-900 font-medium line-clamp-1 max-w-[200px]">
+          <span className="text-chrome-300">/</span>
+          <span className="text-brand-900 font-medium line-clamp-1 max-w-[200px]">
             {producto.nombre}
           </span>
         </nav>
 
         <div className="grid gap-10 md:grid-cols-2">
 
-            <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+            <div className="rounded-xl overflow-hidden border border-chrome-200 bg-chrome-50">
             <img
               src={imgSrc}
               alt={producto.nombre}
@@ -347,17 +347,17 @@ export default function ProductoPage() {
           <div className="flex flex-col gap-5">
 
             <div>
-              <span className="inline-block rounded-full bg-racing px-3 py-0.5 text-xs font-semibold text-white mb-3">
+              <span className="inline-block rounded-full bg-brand px-3 py-0.5 text-xs font-semibold text-white mb-3">
                 {producto.categoria.nombre}
               </span>
-              <h1 className="text-2xl md:text-3xl font-bold text-carbon-900 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-bold text-brand-900 leading-tight">
                 {producto.nombre}
               </h1>
-              <p className="mt-1 text-xs text-gray-400">Cód: {producto.codigo}</p>
+              <p className="mt-1 text-xs text-chrome-400">Cód: {producto.codigo}</p>
             </div>
 
             {producto.descripcion && (
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-chrome-500 leading-relaxed">
                 {producto.descripcion}
               </p>
             )}
@@ -365,30 +365,30 @@ export default function ProductoPage() {
             <StockIndicador activo={producto.activo} stock={producto.stock} />
 
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-carbon-900 tabular-nums">
+              <span className="text-3xl font-bold text-brand-900 tabular-nums">
                 {formatPrecio(producto.precioVenta)}
               </span>
-              <span className="text-sm text-gray-500">Soles</span>
+              <span className="text-sm text-chrome-500">Soles</span>
             </div>
 
             {hayStock && (
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">Cantidad:</span>
-                <div className="flex items-center border border-gray-200 rounded-md overflow-hidden">
+                <span className="text-sm text-chrome-500">Cantidad:</span>
+                <div className="flex items-center border border-chrome-200 rounded-md overflow-hidden">
                   <button
                     onClick={() => setCantidad((c) => Math.max(1, c - 1))}
                     aria-label="Reducir cantidad"
-                    className="px-3 py-2 text-carbon-900 hover:bg-gray-100 transition-colors"
+                    className="px-3 py-2 text-brand-900 hover:bg-chrome-100 transition-colors"
                   >
                     −
                   </button>
-                  <span className="px-4 py-2 text-carbon-900 tabular-nums min-w-[3rem] text-center text-sm font-medium">
+                  <span className="px-4 py-2 text-brand-900 tabular-nums min-w-[3rem] text-center text-sm font-medium">
                     {cantidad}
                   </span>
                   <button
                     onClick={() => setCantidad((c) => c + 1)}
                     aria-label="Aumentar cantidad"
-                    className="px-3 py-2 text-carbon-900 hover:bg-gray-100 transition-colors"
+                    className="px-3 py-2 text-brand-900 hover:bg-chrome-100 transition-colors"
                   >
                     +
                   </button>
@@ -403,10 +403,10 @@ export default function ProductoPage() {
               className={cn(
                 'mt-2 flex w-full items-center justify-center gap-2 rounded-md py-3 text-sm font-semibold text-white transition-colors',
                 hayStock && !agregado
-                  ? 'bg-turbo hover:bg-[#E55F00]'
+                  ? 'bg-turbo hover:bg-turbo-600'
                   : !hayStock
-                    ? 'bg-gray-300 cursor-not-allowed'
-                    : 'bg-green-500 cursor-not-allowed'
+                    ? 'bg-chrome-300 cursor-not-allowed'
+                    : 'bg-success cursor-not-allowed'
               )}
             >
               {!hayStock ? (
@@ -426,7 +426,7 @@ export default function ProductoPage() {
 
             <Link
               to="/catalogo"
-              className="flex w-fit items-center gap-2 text-sm text-gray-400 hover:text-racing transition-colors"
+              className="flex w-fit items-center gap-2 text-sm text-chrome-400 hover:text-brand transition-colors"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden />
               Volver al catálogo

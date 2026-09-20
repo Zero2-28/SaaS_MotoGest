@@ -177,7 +177,7 @@ export default function DevolucionesPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-[#111111]">DEVOLUCIONES</h1>
+          <h1 className="font-display text-display-sm text-ink">DEVOLUCIONES</h1>
           <p className="text-sm text-muted-foreground mt-1">{devoluciones.length} devoluciones registradas</p>
         </div>
         <Button onClick={abrirCrear}>
@@ -191,20 +191,20 @@ export default function DevolucionesPage() {
           type="date"
           value={desde}
           onChange={(e) => setDesde(e.target.value)}
-          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
+          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
           aria-label="Desde"
         />
         <input
           type="date"
           value={hasta}
           onChange={(e) => setHasta(e.target.value)}
-          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
+          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
           aria-label="Hasta"
         />
         {(desde || hasta) && (
           <button
             onClick={() => { setDesde(''); setHasta('') }}
-            className="text-sm text-[#666666] hover:text-[#111111] px-3 py-2 rounded-lg border border-[#D1D5DB] bg-[#F9FAFB]"
+            className="text-sm text-chrome-600 hover:text-ink px-3 py-2 rounded-lg border border-chrome-200 bg-mist"
           >
             Limpiar fechas
           </button>
@@ -220,18 +220,18 @@ export default function DevolucionesPage() {
         </div>
       ) : devolucionesFiltradas.length === 0 ? (
         <Card className="bg-white">
-          <CardContent className="py-16 text-center text-[#111111] text-sm">
-            <RotateCcw className="h-10 w-10 mx-auto mb-3 text-gray-400" />
+          <CardContent className="py-16 text-center text-ink text-sm">
+            <RotateCcw className="h-10 w-10 mx-auto mb-3 text-chrome-400" />
             {devoluciones.length === 0 ? 'No hay devoluciones registradas.' : 'Sin resultados para el rango de fechas.'}
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {devolucionesFiltradas.map((dev) => (
-            <article key={dev.id} className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+            <article key={dev.id} className="rounded-lg border border-chrome-200 bg-white p-4 space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="font-mono text-sm font-bold text-[#111111]">{dev.numeroDevolucion}</p>
+                  <p className="font-mono text-sm font-bold text-ink">{dev.numeroDevolucion}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {dev.createdAt ? formatFecha(dev.createdAt) : '—'}
                   </p>
@@ -242,13 +242,13 @@ export default function DevolucionesPage() {
               <div className="text-sm space-y-1">
                 <p>
                   <span className="text-muted-foreground">Venta: </span>
-                  <span className="text-[#111111] font-mono">{dev.venta.numeroVenta}</span>
+                  <span className="text-ink font-mono">{dev.venta.numeroVenta}</span>
                 </p>
                 <p>
                   <span className="text-muted-foreground">Motivo: </span>
-                  <span className="text-[#111111]">{dev.motivo}</span>
+                  <span className="text-ink">{dev.motivo}</span>
                 </p>
-                <p className="font-bold text-[#111111]">{formatPrecio(dev.total)}</p>
+                <p className="font-bold text-ink">{formatPrecio(dev.total)}</p>
               </div>
 
               {/* Aprobar / Rechazar — solo para admin, solo en pendiente */}
@@ -257,19 +257,19 @@ export default function DevolucionesPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 text-xs text-green-600 border-green-500 hover:bg-green-50 hover:text-green-700"
+                    className="flex-1 text-xs text-success-600 border-success hover:bg-success-50 hover:text-success-700"
                     disabled={cambiandoId === dev.id}
                     onClick={() => handleCambiarEstado(dev, 'aprobada')}
                   >
                     {cambiandoId === dev.id
-                      ? <span className="h-3 w-3 animate-spin rounded-full border border-green-500 border-t-transparent" />
+                      ? <span className="h-3 w-3 animate-spin rounded-full border border-success border-t-transparent" />
                       : <><CheckCircle2 className="h-3 w-3 mr-1" />Aprobar</>
                     }
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 text-xs text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+                    className="flex-1 text-xs text-danger-600 border-danger hover:bg-danger-50 hover:text-danger-700"
                     disabled={cambiandoId === dev.id}
                     onClick={() => handleCambiarEstado(dev, 'rechazada')}
                   >
@@ -284,7 +284,7 @@ export default function DevolucionesPage() {
 
       {/* ── Modal nueva devolución ────────────────────────────────────────────── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-lg bg-white text-[#111111]">
+        <DialogContent className="max-w-lg bg-white text-ink">
           <DialogHeader>
             <DialogTitle>Nueva devolución</DialogTitle>
             <DialogDescription>
@@ -295,7 +295,7 @@ export default function DevolucionesPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             {/* Venta */}
             <div className="flex flex-col gap-1.5">
-              <Label>Venta de origen <span className="text-racing" aria-hidden>*</span></Label>
+              <Label>Venta de origen <span className="text-brand" aria-hidden>*</span></Label>
               <Controller
                 name="ventaId"
                 control={control}
@@ -304,7 +304,7 @@ export default function DevolucionesPage() {
                     value={field.value ? String(field.value) : ''}
                     onValueChange={(v) => field.onChange(Number(v))}
                   >
-                    <SelectTrigger className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-invalid={!!errors.ventaId}>
+                    <SelectTrigger className="bg-mist border-chrome-200 text-ink" aria-invalid={!!errors.ventaId}>
                       <SelectValue placeholder="Selecciona una venta…" />
                     </SelectTrigger>
                     <SelectContent>
@@ -318,41 +318,41 @@ export default function DevolucionesPage() {
                 )}
               />
               {errors.ventaId && (
-                <p role="alert" className="text-xs text-red-400">{errors.ventaId.message}</p>
+                <p role="alert" className="text-xs text-danger">{errors.ventaId.message}</p>
               )}
             </div>
 
             {/* Motivo */}
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="dev-motivo">Motivo <span className="text-racing" aria-hidden>*</span></Label>
+              <Label htmlFor="dev-motivo">Motivo <span className="text-brand" aria-hidden>*</span></Label>
               <Input
                 id="dev-motivo"
                 placeholder="Producto defectuoso, error de pedido…"
-                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
+                className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
                 {...register('motivo')}
                 aria-invalid={!!errors.motivo}
               />
               {errors.motivo && (
-                <p role="alert" className="text-xs text-red-400">{errors.motivo.message}</p>
+                <p role="alert" className="text-xs text-danger">{errors.motivo.message}</p>
               )}
             </div>
 
             {/* Productos de la venta — cantidad a devolver */}
             {itemsRetorno.length > 0 && (
               <div className="flex flex-col gap-2">
-                <Label>Productos a devolver <span className="text-racing" aria-hidden>*</span></Label>
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-1 rounded-md border border-gray-200 p-2">
+                <Label>Productos a devolver <span className="text-brand" aria-hidden>*</span></Label>
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-1 rounded-md border border-chrome-200 p-2">
                   {itemsRetorno.map((item) => (
                     <div key={item.productoId} className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-[#111111] truncate">{item.nombre}</p>
+                        <p className="text-sm text-ink truncate">{item.nombre}</p>
                         <p className="text-xs text-muted-foreground">Máx. {item.maxCantidad} un.</p>
                       </div>
                       <Input
                         type="number"
                         min={0}
                         max={item.maxCantidad}
-                        className="w-20 h-8 text-xs text-right tabular-nums bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]"
+                        className="w-20 h-8 text-xs text-right tabular-nums bg-mist border-chrome-200 text-ink"
                         value={item.cantidad}
                         onChange={(e) => setCantidad(item.productoId, Number(e.target.value))}
                         aria-label={`Cantidad a devolver de ${item.nombre}`}
@@ -361,7 +361,7 @@ export default function DevolucionesPage() {
                   ))}
                 </div>
                 {errorForm && (
-                  <p role="alert" className="text-xs text-red-400">{errorForm}</p>
+                  <p role="alert" className="text-xs text-danger">{errorForm}</p>
                 )}
               </div>
             )}
@@ -369,7 +369,7 @@ export default function DevolucionesPage() {
             {/* Observaciones */}
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="dev-obs">Observaciones</Label>
-              <Input id="dev-obs" placeholder="Opcional" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('observaciones')} />
+              <Input id="dev-obs" placeholder="Opcional" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('observaciones')} />
             </div>
 
             <DialogFooter>
