@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate, Navigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { loginEmpleado } from '@/services/auth.service'
@@ -21,13 +21,6 @@ export default function AdminLoginPage() {
   const [apiError, setApiError] = useState<string | null>(null)
   const { setEmpleado, isAuthenticated } = useAuthEmpleadoStore()
   const navigate = useNavigate()
-  // Rol elegido en el diálogo del login de clientes — solo informativo:
-  // el backend decide los permisos reales a partir del usuario.
-  const [searchParams] = useSearchParams()
-  const rolSugerido = searchParams.get('rol')
-  const etiquetaRol =
-    rolSugerido === 'admin' ? 'Administrador' :
-    rolSugerido === 'vendedor' ? 'Vendedor' : null
 
   const {
     register,
@@ -83,12 +76,6 @@ export default function AdminLoginPage() {
           <div className="mb-8 flex justify-center lg:hidden">
             <img src={assets.logo} alt="RE MOTOS" className="h-11 w-auto rounded-md" />
           </div>
-
-          {etiquetaRol && (
-            <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-800">
-              Ingreso como {etiquetaRol}
-            </span>
-          )}
 
           <h1 className="text-2xl font-bold text-ink mb-1">Iniciar sesión</h1>
           <p className="text-sm text-chrome-600 mb-8">Accede al panel de administración</p>

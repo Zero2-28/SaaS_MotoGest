@@ -60,15 +60,8 @@ api.interceptors.response.use(
   async (error: AxiosError<ApiError>) => {
     const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
-    // Un 401 en los endpoints de autenticación significa credenciales inválidas,
-    // no sesión expirada. Si entrara al flujo de refresh acabaría en
-    // window.location.href, que recarga la página y borra el formulario antes
-    // de que este pueda mostrar el error al usuario.
-    const ENDPOINTS_AUTH = ['/auth/login', '/clientes/login', '/auth/refresh', '/clientes/refresh']
-    const esEndpointAuth = ENDPOINTS_AUTH.some((ruta) => original?.url?.includes(ruta))
-
     // Solo intentar refresh en 401, y solo una vez por request
-    if (error.response?.status === 401 && !original._retry && !esEndpointAuth) {
+    if (error.response?.status === 401 && !original._retry) {
       if (isRefreshing) {
         // Encolar mientras se está renovando.
         // FIX: marcar _retry en el config encolado para que el reintento no
