@@ -19,13 +19,13 @@ import { assets } from '@/config/assets'
 // ── Estado de pedidos ─────────────────────────────────────────────────────────
 
 const ESTADO_META: Record<string, { label: string; bg: string; color: string }> = {
-  pendiente:   { label: 'Pendiente',      bg: '#F1F5F9', color: '#33485C' },
+  pendiente:   { label: 'Pendiente',      bg: '#F3F4F6', color: '#374151' },
   confirmado:  { label: 'Confirmado',     bg: '#EFF6FF', color: '#3B82F6' },
   preparando:  { label: 'En preparación', bg: '#FFF7ED', color: '#FF6B00' },
   listo:       { label: 'Listo',          bg: '#FEFCE8', color: '#EAB308' },
   en_transito: { label: 'En tránsito',    bg: '#EFF6FF', color: '#1D4ED8' },
   entregado:   { label: 'Entregado',      bg: '#F0FDF4', color: '#22C55E' },
-  cancelado:   { label: 'Cancelado',      bg: '#FEF2F2', color: '#DC2626' },
+  cancelado:   { label: 'Cancelado',      bg: '#FEF2F2', color: '#CC0000' },
 }
 
 function EstadoBadge({ estado }: { estado: string }) {
@@ -45,9 +45,9 @@ function EstadoBadge({ estado }: { estado: string }) {
 function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-lg border border-chrome-100 bg-white px-3 py-2 text-sm shadow-card-md">
-      <p className="text-chrome-600 mb-1">{label}</p>
-      <p className="font-bold text-ink">{formatPrecio(payload[0].value)}</p>
+    <div className="rounded-lg border border-[#E5E7EB] bg-white px-3 py-2 text-sm shadow-lg">
+      <p className="text-[#666666] mb-1">{label}</p>
+      <p className="font-bold text-[#111111]">{formatPrecio(payload[0].value)}</p>
     </div>
   )
 }
@@ -64,19 +64,19 @@ interface MetricCardProps {
   change?: number
 }
 
-function MetricCard({ title, value, icon: Icon, iconBg, iconColor, valueColor = '#0E1B2A', change }: MetricCardProps) {
+function MetricCard({ title, value, icon: Icon, iconBg, iconColor, valueColor = '#111111', change }: MetricCardProps) {
   const isPositive = (change ?? 0) >= 0
   return (
-    <div className="bg-white rounded-xl shadow-card p-5">
+    <div className="bg-white rounded-xl shadow-sm p-5">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-chrome-600">{title}</span>
+        <span className="text-sm text-[#666666]">{title}</span>
         <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: iconBg }}>
           <Icon className="h-5 w-5" style={{ color: iconColor }} aria-hidden />
         </div>
       </div>
       <p className="text-2xl font-bold tabular-nums" style={{ color: valueColor }}>{value}</p>
       {change !== undefined && (
-        <div className={`flex items-center gap-1 mt-1 text-xs ${isPositive ? 'text-success-600' : 'text-danger'}`}>
+        <div className={`flex items-center gap-1 mt-1 text-xs ${isPositive ? 'text-[#22C55E]' : 'text-[#CC0000]'}`}>
           {isPositive ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
           <span>{Math.abs(change)}% vs mes anterior</span>
         </div>
@@ -87,7 +87,7 @@ function MetricCard({ title, value, icon: Icon, iconBg, iconColor, valueColor = 
 
 function MetricSkeleton() {
   return (
-    <div className="bg-white rounded-xl shadow-card p-5">
+    <div className="bg-white rounded-xl shadow-sm p-5">
       <div className="skeleton h-4 w-24 rounded mb-3" />
       <div className="skeleton h-8 w-32 rounded" />
     </div>
@@ -149,8 +149,8 @@ function AdminDashboard() {
               title="Ventas hoy"
               value={formatPrecio(reporte?.hoy.montoTotal ?? 0)}
               icon={ShoppingBag}
-              iconBg="#EEF5F9"
-              iconColor="#0F3341"
+              iconBg="#FEF2F2"
+              iconColor="#CC0000"
               change={12}
             />
             <MetricCard
@@ -165,8 +165,8 @@ function AdminDashboard() {
               value={alertas.length}
               icon={AlertTriangle}
               iconBg="#FEF2F2"
-              iconColor="#DC2626"
-              valueColor={alertas.length > 0 ? '#DC2626' : '#0E1B2A'}
+              iconColor="#CC0000"
+              valueColor={alertas.length > 0 ? '#CC0000' : '#111111'}
             />
             <MetricCard
               title="Órdenes hoy"
@@ -180,39 +180,32 @@ function AdminDashboard() {
       </div>
 
       {/* Isla 2 — Gráfico de ventas semanal */}
-      <div className="bg-white rounded-xl shadow-card p-6">
+      <div className="bg-white rounded-xl shadow-sm p-6">
         <div className="mb-4">
-          <h2 className="font-semibold text-ink">Ventas de la semana</h2>
-          <p className="text-sm text-chrome-600">Últimos 7 días</p>
+          <h2 className="font-semibold text-[#111111]">Ventas de la semana</h2>
+          <p className="text-sm text-[#666666]">Últimos 7 días</p>
         </div>
         {cargando ? (
           <div className="skeleton h-56 w-full rounded" />
         ) : (
           <ResponsiveContainer width="100%" height={224}>
             <BarChart data={reporte?.semana.porDia ?? []} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-              <defs>
-                {/* Degradado metalizado para las barras */}
-                <linearGradient id="gradBarBrand" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#26688C" />
-                  <stop offset="100%" stopColor="#0F3341" />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E3EAF1" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
               <XAxis
                 dataKey="fecha"
-                tick={{ fill: '#4F6375', fontSize: 11 }}
+                tick={{ fill: '#666666', fontSize: 11 }}
                 tickFormatter={(v: string) => formatFechaCorta(v)}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: '#4F6375', fontSize: 11 }}
+                tick={{ fill: '#666666', fontSize: 11 }}
                 tickFormatter={(v: number) => `S/.${(v / 1000).toFixed(0)}k`}
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: '#F1F5F9' }} />
-              <Bar dataKey="monto" fill="url(#gradBarBrand)" radius={[6, 6, 0, 0]} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: '#F3F4F6' }} />
+              <Bar dataKey="monto" fill="#CC0000" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -222,11 +215,11 @@ function AdminDashboard() {
       <div className="grid gap-6 lg:grid-cols-[3fr_2fr]">
 
         {/* Columna izquierda — Últimas ventas */}
-        <div className="bg-white rounded-xl shadow-card p-6">
+        <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-ink">Últimas ventas</h2>
+            <h2 className="font-semibold text-[#111111]">Últimas ventas</h2>
             {ultimasVentas.length > 0 && (
-              <span className="rounded-full bg-danger-50 px-2.5 py-0.5 text-xs font-semibold text-brand">
+              <span className="rounded-full bg-[#FEF2F2] px-2.5 py-0.5 text-xs font-semibold text-[#CC0000]">
                 {ultimasVentas.length}
               </span>
             )}
@@ -238,7 +231,7 @@ function AdminDashboard() {
               ))}
             </div>
           ) : ultimasVentas.length === 0 ? (
-            <div className="py-10 text-center text-sm text-chrome-600">
+            <div className="py-10 text-center text-sm text-[#666666]">
               No hay ventas registradas
             </div>
           ) : (
@@ -247,20 +240,20 @@ function AdminDashboard() {
                 const inicial = (v.cliente?.nombre ?? '?').charAt(0).toUpperCase()
                 return (
                   <li key={v.id} className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#CC0000] text-sm font-bold text-white">
                       {inicial}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-ink truncate">
+                      <p className="text-sm font-medium text-[#111111] truncate">
                         {v.cliente?.nombre ?? 'Cliente'}
                       </p>
-                      <p className="text-xs text-chrome-600">
+                      <p className="text-xs text-[#666666]">
                         {v.numeroVenta}
                         {v.fechaVenta ? ` · ${formatFecha(v.fechaVenta)}` : ''}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-bold text-ink tabular-nums">
+                      <p className="text-sm font-bold text-[#111111] tabular-nums">
                         {formatPrecio(v.total)}
                       </p>
                       <EstadoBadge estado={v.estado} />
@@ -273,14 +266,14 @@ function AdminDashboard() {
         </div>
 
         {/* Columna derecha — Stock crítico */}
-        <div className="bg-white rounded-xl shadow-card p-6 border-l-4 border-l-brand">
+        <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-l-[#CC0000]">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-brand flex items-center gap-2">
+            <h2 className="font-semibold text-[#CC0000] flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" aria-hidden />
               Stock crítico
             </h2>
             {alertas.length > 0 && (
-              <span className="rounded-full bg-danger-50 px-2 py-0.5 text-xs font-bold text-brand">
+              <span className="rounded-full bg-[#FEF2F2] px-2 py-0.5 text-xs font-bold text-[#CC0000]">
                 {alertas.length}
               </span>
             )}
@@ -293,30 +286,30 @@ function AdminDashboard() {
             </div>
           ) : alertas.length === 0 ? (
             <div className="py-8 text-center">
-              <Package className="h-10 w-10 mx-auto text-success mb-2" />
-              <p className="text-sm text-chrome-600">Stock OK en todos los productos</p>
+              <Package className="h-10 w-10 mx-auto text-[#22C55E] mb-2" />
+              <p className="text-sm text-[#666666]">Stock OK en todos los productos</p>
             </div>
           ) : (
             <ul className="space-y-2" aria-label="Productos con stock bajo">
               {alertas.slice(0, 6).map((a) => (
                 <li
                   key={`${a.productoId}-${a.sucursalId}`}
-                  className="flex items-center gap-2 rounded-lg bg-mist px-3 py-2"
+                  className="flex items-center gap-2 rounded-lg bg-[#F9FAFB] px-3 py-2"
                 >
                   <img
                     src={a.producto.imagen_url ?? assets.categorias.repuestos}
                     alt=""
-                    className="h-8 w-8 rounded object-cover shrink-0 bg-chrome-50"
+                    className="h-8 w-8 rounded object-cover shrink-0 bg-[#F3F4F6]"
                     onError={(e) => { ;(e.currentTarget as HTMLImageElement).src = assets.categorias.repuestos }}
                     aria-hidden
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-ink truncate">{a.producto.nombre}</p>
-                    <p className="text-xs text-chrome-600">
+                    <p className="text-xs font-medium text-[#111111] truncate">{a.producto.nombre}</p>
+                    <p className="text-xs text-[#666666]">
                       Mín: {a.stockMinimo} un.
                     </p>
                   </div>
-                  <span className="text-sm font-bold text-brand tabular-nums shrink-0">
+                  <span className="text-sm font-bold text-[#CC0000] tabular-nums shrink-0">
                     {a.cantidad}
                   </span>
                 </li>
@@ -328,16 +321,16 @@ function AdminDashboard() {
 
       {/* Isla 5 — Accesos rápidos (solo admin) */}
       <div>
-        <h3 className="text-sm font-semibold text-ink mb-3">Accesos rápidos</h3>
+        <h3 className="text-sm font-semibold text-[#111111] mb-3">Accesos rápidos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {ACCESOS_RAPIDOS.map(({ label, to, icon: Icon }) => (
             <Link
               key={to}
               to={to}
-              className="group flex flex-col items-center gap-2 rounded-xl bg-white p-4 text-center shadow-card transition-all hover:-translate-y-0.5 hover:bg-metal-btn hover:shadow-metal"
+              className="group bg-white rounded-xl shadow-sm p-4 flex flex-col items-center gap-2 text-center hover:bg-[#CC0000] transition-colors"
             >
-              <Icon className="h-5 w-5 text-brand group-hover:text-white transition-colors" aria-hidden />
-              <span className="text-xs font-medium text-ink group-hover:text-white transition-colors">
+              <Icon className="h-5 w-5 text-[#CC0000] group-hover:text-white transition-colors" aria-hidden />
+              <span className="text-xs font-medium text-[#111111] group-hover:text-white transition-colors">
                 {label}
               </span>
             </Link>
@@ -353,14 +346,14 @@ function AdminDashboard() {
 type TabFiltro = 'todos' | 'pendientes' | 'en_proceso' | 'entregados'
 
 const ACCIONES_VENDEDOR: Partial<Record<EstadoPedido, { label: string; next: EstadoPedido; className: string }>> = {
-  pendiente:  { label: 'Confirmar',  next: 'confirmado', className: 'bg-info hover:bg-info-600 text-white' },
-  confirmado: { label: 'Preparando', next: 'preparando', className: 'bg-turbo hover:bg-turbo-600 text-white' },
-  preparando: { label: 'Listo',      next: 'listo',      className: 'bg-warning hover:bg-warning-600 text-white' },
+  pendiente:  { label: 'Confirmar',  next: 'confirmado', className: 'bg-[#3B82F6] hover:bg-[#2563EB] text-white' },
+  confirmado: { label: 'Preparando', next: 'preparando', className: 'bg-[#FF6B00] hover:bg-[#E55F00] text-white' },
+  preparando: { label: 'Listo',      next: 'listo',      className: 'bg-[#EAB308] hover:bg-[#CA8A04] text-white' },
 }
 
 const ACCIONES_REPARTIDOR: Partial<Record<EstadoPedido, { label: string; next: EstadoPedido; className: string }>> = {
-  listo:       { label: 'En tránsito', next: 'en_transito', className: 'bg-info-700 hover:bg-info-700 text-white' },
-  en_transito: { label: 'Entregado',   next: 'entregado',   className: 'bg-success hover:bg-success-600 text-white' },
+  listo:       { label: 'En tránsito', next: 'en_transito', className: 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white' },
+  en_transito: { label: 'Entregado',   next: 'entregado',   className: 'bg-[#22C55E] hover:bg-[#16A34A] text-white' },
 }
 
 function PedidoCardEmpleado({
@@ -390,31 +383,31 @@ function PedidoCardEmpleado({
   }
 
   return (
-    <article className="rounded-xl border border-chrome-100 bg-white p-4 space-y-3 shadow-card">
+    <article className="rounded-xl border border-[#E5E7EB] bg-white p-4 space-y-3 shadow-sm">
       <div className="flex items-start justify-between gap-2">
         <div>
           <div className="flex items-center gap-2 flex-wrap mb-0.5">
-            <span className="font-mono text-sm font-bold text-ink">{pedido.codigoPedido}</span>
+            <span className="font-mono text-sm font-bold text-[#111111]">{pedido.codigoPedido}</span>
             <EstadoBadge estado={pedido.estado} />
           </div>
-          <p className="text-xs text-chrome-600">
+          <p className="text-xs text-[#666666]">
             {pedido.fechaPedido ? formatFecha(pedido.fechaPedido) : '—'}
           </p>
         </div>
-        <span className="text-sm font-bold text-ink tabular-nums shrink-0">
+        <span className="text-sm font-bold text-[#111111] tabular-nums shrink-0">
           {formatPrecio(pedido.total)}
         </span>
       </div>
 
       <div className="text-xs space-y-1">
         <p>
-          <span className="text-chrome-600">Cliente: </span>
-          <span className="text-ink">{pedido.cliente.nombre}</span>
+          <span className="text-[#666666]">Cliente: </span>
+          <span className="text-[#111111]">{pedido.cliente.nombre}</span>
         </p>
         {(pedido as Pedido & { repartidor?: { nombre: string } | null }).repartidor?.nombre && (
           <p>
-            <span className="text-chrome-600">Repartidor: </span>
-            <span className="text-ink">
+            <span className="text-[#666666]">Repartidor: </span>
+            <span className="text-[#111111]">
               {(pedido as Pedido & { repartidor?: { nombre: string } | null }).repartidor!.nombre}
             </span>
           </p>
@@ -490,10 +483,10 @@ function PedidosEmpleado({ rol }: { rol: 'vendedor' | 'repartidor' }) {
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-3">
-        <ClipboardList className="h-5 w-5 text-brand" aria-hidden />
-        <h2 className="text-lg font-semibold text-ink">Mis pedidos asignados</h2>
+        <ClipboardList className="h-5 w-5 text-[#CC0000]" aria-hidden />
+        <h2 className="text-lg font-semibold text-[#111111]">Mis pedidos asignados</h2>
         {activos > 0 && (
-          <span className="rounded-full bg-brand px-2.5 py-0.5 text-xs font-bold text-white">
+          <span className="rounded-full bg-[#CC0000] px-2.5 py-0.5 text-xs font-bold text-white">
             {activos}
           </span>
         )}
@@ -509,8 +502,8 @@ function PedidosEmpleado({ rol }: { rol: 'vendedor' | 'repartidor' }) {
             onClick={() => handleTab(key)}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               tab === key
-                ? 'bg-brand text-white'
-                : 'bg-chrome-50 text-chrome-600 hover:text-ink'
+                ? 'bg-[#CC0000] text-white'
+                : 'bg-[#F3F4F6] text-[#666666] hover:text-[#111111]'
             }`}
           >
             {label} ({
@@ -531,7 +524,7 @@ function PedidosEmpleado({ rol }: { rol: 'vendedor' | 'repartidor' }) {
           ))}
         </div>
       ) : paginados.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-card py-12 text-center text-sm text-chrome-600">
+        <div className="bg-white rounded-xl shadow-sm py-12 text-center text-sm text-[#666666]">
           No hay pedidos en esta categoría.
         </div>
       ) : (
@@ -552,17 +545,17 @@ function PedidosEmpleado({ rol }: { rol: 'vendedor' | 'repartidor' }) {
               <button
                 onClick={() => setPagina((n) => Math.max(1, n - 1))}
                 disabled={pagina === 1}
-                className="rounded-lg bg-chrome-50 px-3 py-1.5 text-xs text-ink disabled:opacity-40 hover:bg-chrome-100 transition-colors"
+                className="rounded-lg bg-[#F3F4F6] px-3 py-1.5 text-xs text-[#111111] disabled:opacity-40 hover:bg-[#E5E7EB] transition-colors"
               >
                 ← Anterior
               </button>
-              <span className="text-xs text-chrome-600">
+              <span className="text-xs text-[#666666]">
                 {pagina} / {totalPaginas}
               </span>
               <button
                 onClick={() => setPagina((n) => Math.min(totalPaginas, n + 1))}
                 disabled={pagina === totalPaginas}
-                className="rounded-lg bg-chrome-50 px-3 py-1.5 text-xs text-ink disabled:opacity-40 hover:bg-chrome-100 transition-colors"
+                className="rounded-lg bg-[#F3F4F6] px-3 py-1.5 text-xs text-[#111111] disabled:opacity-40 hover:bg-[#E5E7EB] transition-colors"
               >
                 Siguiente →
               </button>
@@ -585,10 +578,10 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-ink">
+        <h1 className="text-2xl font-bold text-[#111111]">
           Bienvenido{empleado ? `, ${empleado.nombre.split(' ')[0]}` : ''}
         </h1>
-        <p className="text-sm text-chrome-600 mt-1">
+        <p className="text-sm text-[#666666] mt-1">
           {new Date().toLocaleDateString('es-PE', {
             weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
           })}

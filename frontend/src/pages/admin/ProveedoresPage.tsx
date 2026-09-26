@@ -129,11 +129,11 @@ export default function ProveedoresPage() {
       header: 'Proveedor',
       cell: (info) => (
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded bg-chrome-100 flex items-center justify-center shrink-0">
-            <Truck className="h-4 w-4 text-chrome-400" />
+          <div className="h-9 w-9 rounded bg-gray-100 flex items-center justify-center shrink-0">
+            <Truck className="h-4 w-4 text-gray-400" />
           </div>
           <div>
-            <p className="text-sm font-medium text-ink">{info.getValue()}</p>
+            <p className="text-sm font-medium text-[#111111]">{info.getValue()}</p>
             {info.row.original.contacto && (
               <p className="text-xs text-muted-foreground">{info.row.original.contacto}</p>
             )}
@@ -156,13 +156,13 @@ export default function ProveedoresPage() {
     col.accessor('telefono', {
       header: 'Teléfono',
       cell: (info) => (
-        <span className="text-sm text-ink">{info.getValue() ?? <span className="text-muted-foreground italic">—</span>}</span>
+        <span className="text-sm text-[#111111]">{info.getValue() ?? <span className="text-muted-foreground italic">—</span>}</span>
       ),
     }),
     col.accessor('email', {
       header: 'Email',
       cell: (info) => (
-        <span className="text-sm text-ink">{info.getValue() ?? <span className="text-muted-foreground italic">—</span>}</span>
+        <span className="text-sm text-[#111111]">{info.getValue() ?? <span className="text-muted-foreground italic">—</span>}</span>
       ),
     }),
     col.display({
@@ -172,7 +172,7 @@ export default function ProveedoresPage() {
         <div className="flex gap-1">
           <Button
             variant="ghost" size="icon"
-            className="text-chrome-700 hover:text-brand hover:bg-mist"
+            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#F9FAFB]"
             onClick={() => abrirEditar(row.original)}
             aria-label={`Editar ${row.original.nombre}`}
           >
@@ -180,7 +180,7 @@ export default function ProveedoresPage() {
           </Button>
           <Button
             variant="ghost" size="icon"
-            className="text-chrome-700 hover:text-brand hover:bg-danger-100"
+            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#FEE2E2]"
             onClick={() => setConfirmDelete(row.original)}
             aria-label={`Eliminar ${row.original.nombre}`}
           >
@@ -209,7 +209,7 @@ export default function ProveedoresPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-ink">PROVEEDORES</h1>
+          <h1 className="font-display text-display-sm text-[#111111]">PROVEEDORES</h1>
           <p className="text-sm text-muted-foreground mt-1">{proveedores.length} proveedores registrados</p>
         </div>
         <Button onClick={abrirCrear}>
@@ -221,14 +221,14 @@ export default function ProveedoresPage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden />
         <Input
           placeholder="Buscar proveedor…"
-          className="pl-9 bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
+          className="pl-9 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           aria-label="Buscar proveedores"
         />
       </div>
 
-      <Card className="bg-white border-chrome-200">
+      <Card className="bg-white border-gray-200">
         <CardContent className="p-0">
           {cargando ? (
             <div className="p-6 space-y-3">
@@ -241,9 +241,9 @@ export default function ProveedoresPage() {
               <table className="w-full text-sm">
                 <thead>
                   {table.getHeaderGroups().map((hg) => (
-                    <tr key={hg.id} className="border-b border-chrome-100 bg-mist">
+                    <tr key={hg.id} className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
                       {hg.headers.map((h) => (
-                        <th key={h.id} className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">
+                        <th key={h.id} className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">
                           {flexRender(h.column.columnDef.header, h.getContext())}
                         </th>
                       ))}
@@ -259,7 +259,7 @@ export default function ProveedoresPage() {
                     </tr>
                   ) : (
                     table.getRowModel().rows.map((row) => (
-                      <tr key={row.id} className="border-b border-chrome-200 hover:bg-mist transition-colors">
+                      <tr key={row.id} className="border-b border-gray-200 hover:bg-[#F9FAFB] transition-colors">
                         {row.getVisibleCells().map((cell) => (
                           <td key={cell.id} className="px-4 py-3">
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -277,7 +277,7 @@ export default function ProveedoresPage() {
 
       {/* ── Modal crear/editar ────────────────────────────────────────────────── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar proveedor' : 'Nuevo proveedor'}</DialogTitle>
             <DialogDescription>
@@ -286,38 +286,38 @@ export default function ProveedoresPage() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="pv-nombre">Nombre <span className="text-brand" aria-hidden>*</span></Label>
-              <Input id="pv-nombre" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('nombre')} aria-invalid={!!errors.nombre} />
-              {errors.nombre && <p role="alert" className="text-xs text-danger">{errors.nombre.message}</p>}
+              <Label htmlFor="pv-nombre">Nombre <span className="text-racing" aria-hidden>*</span></Label>
+              <Input id="pv-nombre" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('nombre')} aria-invalid={!!errors.nombre} />
+              {errors.nombre && <p role="alert" className="text-xs text-red-400">{errors.nombre.message}</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="pv-tipo">Tipo documento</Label>
-                <Input id="pv-tipo" placeholder="RUC, DNI…" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('tipoDocumento')} />
+                <Input id="pv-tipo" placeholder="RUC, DNI…" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('tipoDocumento')} />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="pv-doc">Número documento</Label>
-                <Input id="pv-doc" placeholder="20123456789" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('numeroDocumento')} />
+                <Input id="pv-doc" placeholder="20123456789" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('numeroDocumento')} />
               </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="pv-tel">Teléfono</Label>
-                <Input id="pv-tel" type="tel" className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20" {...register('telefono')} />
+                <Input id="pv-tel" type="tel" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('telefono')} />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="pv-email">Email</Label>
-                <Input id="pv-email" type="email" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('email')} aria-invalid={!!errors.email} />
-                {errors.email && <p role="alert" className="text-xs text-danger">{errors.email.message}</p>}
+                <Input id="pv-email" type="email" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('email')} aria-invalid={!!errors.email} />
+                {errors.email && <p role="alert" className="text-xs text-red-400">{errors.email.message}</p>}
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="pv-contacto">Contacto</Label>
-              <Input id="pv-contacto" placeholder="Nombre de la persona de contacto" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('contacto')} />
+              <Input id="pv-contacto" placeholder="Nombre de la persona de contacto" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('contacto')} />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="pv-dir">Dirección</Label>
-              <Input id="pv-dir" className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20" {...register('direccion')} />
+              <Input id="pv-dir" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('direccion')} />
             </div>
             <DialogFooter>
               <Button type="button" variant="secondary" onClick={() => setModalOpen(false)}>Cancelar</Button>
@@ -334,11 +334,11 @@ export default function ProveedoresPage() {
 
       {/* ── Confirmar eliminar ────────────────────────────────────────────────── */}
       <Dialog open={!!confirmDelete} onOpenChange={() => setConfirmDelete(null)}>
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>Eliminar proveedor</DialogTitle>
             <DialogDescription>
-              ¿Eliminar a <strong className="text-ink">{confirmDelete?.nombre}</strong>?
+              ¿Eliminar a <strong className="text-[#111111]">{confirmDelete?.nombre}</strong>?
               Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>

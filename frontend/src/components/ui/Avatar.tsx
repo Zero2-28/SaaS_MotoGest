@@ -13,11 +13,11 @@ const SIZES: Record<AvatarSize, { cls: string; px: number }> = {
 
 // Color de fondo+texto para la inicial cuando no hay imagen
 const INITIALS_CLS: Record<AvatarRol, string> = {
-  admin:      'bg-brand-50 text-brand-800 ring-1 ring-brand-100',
-  vendedor:   'bg-turbo-50 text-turbo-700 ring-1 ring-turbo-100',
-  repartidor: 'bg-info-50 text-info-700 ring-1 ring-info-100',
-  cliente:    'bg-chrome-50 text-chrome-600 ring-1 ring-chrome-200',
-  default:    'bg-chrome-50 text-chrome-600 ring-1 ring-chrome-200',
+  admin:      'bg-racing/20 text-racing',
+  vendedor:   'bg-turbo/20 text-turbo',
+  repartidor: 'bg-blue-500/20 text-blue-600',
+  cliente:    'bg-gray-100 text-gray-600',
+  default:    'bg-gray-100 text-gray-600',
 }
 
 interface AvatarProps {

@@ -54,15 +54,15 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         aria-modal="true"
         className={cn(
           'fixed right-0 top-0 bottom-0 z-50 flex w-full flex-col md:w-[400px]',
-          'bg-white shadow-card-lg transition-transform duration-300 ease-in-out',
+          'bg-white shadow-2xl transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-chrome-100 px-5 py-4">
+        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
           <div className="flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5 text-brand-900" aria-hidden />
-            <h2 className="text-base font-semibold text-brand-900">Tu carrito</h2>
+            <ShoppingCart className="h-5 w-5 text-carbon-900" aria-hidden />
+            <h2 className="text-base font-semibold text-carbon-900">Tu carrito</h2>
             {count > 0 && (
               <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-turbo px-1 text-[10px] font-bold text-white tabular-nums">
                 {count > 99 ? '99+' : count}
@@ -72,7 +72,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <button
             onClick={onClose}
             aria-label="Cerrar carrito"
-            className="flex h-8 w-8 items-center justify-center rounded-md text-chrome-400 hover:bg-chrome-100 hover:text-brand-900 transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-carbon-900 transition-colors"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -82,9 +82,9 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         <div className="flex-1 overflow-y-auto">
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-8 py-12 text-center">
-              <ShoppingCart className="h-16 w-16 text-chrome-200" aria-hidden />
-              <p className="text-base font-semibold text-brand-900">Tu carrito está vacío</p>
-              <p className="text-sm text-chrome-500 leading-relaxed">
+              <ShoppingCart className="h-16 w-16 text-gray-200" aria-hidden />
+              <p className="text-base font-semibold text-carbon-900">Tu carrito está vacío</p>
+              <p className="text-sm text-gray-500 leading-relaxed">
                 Agrega productos desde el catálogo
               </p>
               <Button
@@ -96,7 +96,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
           ) : (
             <ul
-              className="divide-y divide-chrome-100 px-5 py-2"
+              className="divide-y divide-gray-100 px-5 py-2"
               aria-label="Productos en el carrito"
             >
               {items.map((item) => (
@@ -106,7 +106,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     src={item.producto.imagen_url ?? PLACEHOLDER}
                     alt={item.producto.nombre}
                     onError={(e) => { e.currentTarget.src = PLACEHOLDER }}
-                    className="h-[60px] w-[60px] flex-shrink-0 rounded-lg border border-chrome-100 object-cover bg-chrome-50"
+                    className="h-[60px] w-[60px] flex-shrink-0 rounded-lg border border-gray-100 object-cover bg-gray-50"
                     width={60}
                     height={60}
                     loading="lazy"
@@ -114,31 +114,31 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                   {/* Detalle */}
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium leading-tight text-brand-900 line-clamp-2">
+                    <p className="text-sm font-medium leading-tight text-carbon-900 line-clamp-2">
                       {item.producto.nombre}
                     </p>
-                    <p className="mt-0.5 text-xs text-chrome-500 tabular-nums">
+                    <p className="mt-0.5 text-xs text-gray-500 tabular-nums">
                       {formatPrecio(item.precioUnitario)} c/u
                     </p>
 
                     {/* Controles cantidad + eliminar */}
                     <div className="mt-2 flex items-center gap-2">
-                      <div className="flex items-center rounded-md border border-chrome-200">
+                      <div className="flex items-center rounded-md border border-gray-200">
                         <button
                           onClick={() => cambiarCantidad(item.producto.id, item.cantidad - 1)}
                           aria-label={`Reducir cantidad de ${item.producto.nombre}`}
                           disabled={item.cantidad <= 1}
-                          className="flex h-7 w-7 items-center justify-center text-chrome-500 hover:text-brand transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                          className="flex h-7 w-7 items-center justify-center text-gray-500 hover:text-racing transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <Minus className="h-3 w-3" aria-hidden />
                         </button>
-                        <span className="w-8 text-center text-sm font-medium text-brand-900 tabular-nums">
+                        <span className="w-8 text-center text-sm font-medium text-carbon-900 tabular-nums">
                           {item.cantidad}
                         </span>
                         <button
                           onClick={() => cambiarCantidad(item.producto.id, item.cantidad + 1)}
                           aria-label={`Aumentar cantidad de ${item.producto.nombre}`}
-                          className="flex h-7 w-7 items-center justify-center text-chrome-500 hover:text-brand transition-colors"
+                          className="flex h-7 w-7 items-center justify-center text-gray-500 hover:text-racing transition-colors"
                         >
                           <Plus className="h-3 w-3" aria-hidden />
                         </button>
@@ -147,7 +147,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <button
                         onClick={() => quitarItem(item.producto.id)}
                         aria-label={`Eliminar ${item.producto.nombre} del carrito`}
-                        className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-chrome-400 hover:bg-danger-50 hover:text-danger transition-colors"
+                        className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-gray-400 hover:bg-red-50 hover:text-racing transition-colors"
                       >
                         <Trash2 className="h-3.5 w-3.5" aria-hidden />
                       </button>
@@ -155,7 +155,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
 
                   {/* Subtotal del item */}
-                  <p className="flex-shrink-0 text-sm font-semibold text-brand-900 tabular-nums">
+                  <p className="flex-shrink-0 text-sm font-semibold text-carbon-900 tabular-nums">
                     {formatPrecio(item.cantidad * item.precioUnitario)}
                   </p>
                 </li>
@@ -166,10 +166,10 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
         {/* Footer sticky */}
         {items.length > 0 && (
-          <div className="space-y-3 border-t border-chrome-100 px-5 py-4">
+          <div className="space-y-3 border-t border-gray-100 px-5 py-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-chrome-600">Subtotal</span>
-              <span className="text-lg font-bold text-brand-900 tabular-nums">
+              <span className="text-sm text-gray-600">Subtotal</span>
+              <span className="text-lg font-bold text-carbon-900 tabular-nums">
                 {formatPrecio(monto)}
               </span>
             </div>

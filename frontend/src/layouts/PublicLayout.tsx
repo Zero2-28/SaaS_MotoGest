@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
 import { useCarritoStore } from '@/stores/carrito.store'
 import { useAuthClienteStore } from '@/stores/auth.store'
-import { assets, LOGO_RATIO } from '@/config/assets'
-import { tienda } from '@/config/tienda'
+import { assets } from '@/config/assets'
 import { CartDrawer } from '@/components/CartDrawer'
 import { Avatar } from '@/components/ui/Avatar'
 
@@ -39,12 +38,12 @@ function SearchBar({ className }: { className?: string }) {
         onChange={(e) => setQ(e.target.value)}
         placeholder="Buscar productos..."
         aria-label="Buscar productos"
-        className="w-full rounded-full border border-chrome-200 bg-chrome-50 py-2 pl-4 pr-10 text-sm text-brand-900 placeholder:text-chrome-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+        className="w-full rounded-full border border-gray-200 bg-gray-50 py-2 pl-4 pr-10 text-sm text-carbon-900 placeholder:text-gray-400 focus:border-racing focus:outline-none focus:ring-1 focus:ring-racing"
       />
       <button
         type="submit"
         aria-label="Buscar"
-        className="absolute right-3 text-chrome-400 hover:text-brand transition-colors"
+        className="absolute right-3 text-gray-400 hover:text-racing transition-colors"
       >
         <Search className="h-5 w-5" aria-hidden />
       </button>
@@ -70,7 +69,7 @@ function CategoriasDropdown() {
     <div ref={ref} className="relative flex-shrink-0">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 text-sm font-medium text-brand-900 hover:text-brand transition-colors"
+        className="flex items-center gap-1 text-sm font-medium text-carbon-900 hover:text-racing transition-colors"
         aria-expanded={open}
         aria-haspopup="listbox"
       >
@@ -84,7 +83,7 @@ function CategoriasDropdown() {
       {open && (
         <div
           role="listbox"
-          className="absolute left-0 top-full z-50 mt-2 w-48 rounded-lg border border-chrome-100 bg-white py-2 shadow-card-md animate-fade-in"
+          className="absolute left-0 top-full z-50 mt-2 w-48 rounded-lg border border-gray-100 bg-white py-2 shadow-lg animate-fade-in"
         >
           {CATEGORIAS.map(({ label, slug }) => (
             <Link
@@ -92,17 +91,17 @@ function CategoriasDropdown() {
               to={`/catalogo?categoria=${slug}`}
               role="option"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-brand-900 hover:bg-chrome-50 hover:text-brand transition-colors"
+              className="block px-4 py-2 text-sm text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
             >
               {label}
             </Link>
           ))}
-          <div className="my-1 border-t border-chrome-100" />
+          <div className="my-1 border-t border-gray-100" />
           <Link
             to="/catalogo"
             role="option"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm font-semibold text-brand hover:bg-chrome-50 transition-colors"
+            className="block px-4 py-2 text-sm font-semibold text-racing hover:bg-gray-50 transition-colors"
           >
             Ver todo el catálogo →
           </Link>
@@ -132,7 +131,7 @@ function MiCuentaDropdown({
   }, [open])
 
   return (
-    <div ref={ref} className="hidden md:block relative pl-2 border-l border-chrome-100">
+    <div ref={ref} className="hidden md:block relative pl-2 border-l border-gray-100">
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2"
@@ -144,13 +143,13 @@ function MiCuentaDropdown({
           nombre={cliente.nombre}
           size="sm"
           rol="cliente"
-          className="border border-chrome-200"
+          className="border border-gray-200"
         />
-        <span className="text-sm font-medium text-brand-900 max-w-[96px] truncate">
+        <span className="text-sm font-medium text-carbon-900 max-w-[96px] truncate">
           {cliente.nombre.split(' ')[0]}
         </span>
         <ChevronDown
-          className={cn('h-3.5 w-3.5 text-chrome-400 transition-transform duration-200', open && 'rotate-180')}
+          className={cn('h-3.5 w-3.5 text-gray-400 transition-transform duration-200', open && 'rotate-180')}
           aria-hidden
         />
       </button>
@@ -158,14 +157,14 @@ function MiCuentaDropdown({
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full mt-2 z-50 w-52 rounded-lg border border-chrome-100 bg-white py-1 shadow-card-md animate-fade-in"
+          className="absolute right-0 top-full mt-2 z-50 w-52 rounded-lg border border-gray-100 bg-white py-1 shadow-lg animate-fade-in"
         >
           {/* Ítem activo */}
           <Link
             to="/mi-cuenta/compras"
             role="menuitem"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-brand-900 hover:bg-chrome-50 hover:text-brand transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
           >
             <ShoppingBag className="h-4 w-4" aria-hidden />
             Mis compras
@@ -184,23 +183,23 @@ function MiCuentaDropdown({
               role="menuitem"
               disabled
               aria-disabled="true"
-              className="flex w-full items-center justify-between gap-2 px-4 py-2 text-sm text-chrome-300 cursor-not-allowed"
+              className="flex w-full items-center justify-between gap-2 px-4 py-2 text-sm text-gray-300 cursor-not-allowed"
             >
               <span className="flex items-center gap-2">
                 <Icon className="h-4 w-4" aria-hidden />
                 {label}
               </span>
-              <span className="text-[10px] font-semibold text-turbo bg-turbo-50 px-1.5 py-0.5 rounded-full leading-tight">
+              <span className="text-[10px] font-semibold text-[#FF6B00] bg-[#FFF7ED] px-1.5 py-0.5 rounded-full leading-tight">
                 Próximamente
               </span>
             </button>
           ))}
 
-          <div className="my-1 border-t border-chrome-100" />
+          <div className="my-1 border-t border-gray-100" />
           <button
             role="menuitem"
             onClick={() => { setOpen(false); onLogout() }}
-            className="flex w-full items-center gap-2 px-4 py-2 text-sm text-chrome-500 hover:bg-chrome-50 hover:text-brand transition-colors"
+            className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-racing transition-colors"
           >
             <LogOut className="h-4 w-4" aria-hidden />
             Cerrar sesión
@@ -226,23 +225,17 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-chrome-200 bg-white shadow-card">
-      {/* Filo metálico de marca */}
-      <div className="h-[3px] w-full bg-metal" aria-hidden />
+    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
 
         {/* Logo */}
-        <Link
-          to="/"
-          className="flex-shrink-0 rounded-md transition-opacity hover:opacity-90"
-          aria-label="RE MOTOS — Inicio"
-        >
+        <Link to="/" className="flex-shrink-0" aria-label="MotoGest — Inicio">
           <img
             src={assets.logo}
-            alt="RE MOTOS — Accesorios y equipamiento"
-            className="h-11 w-auto rounded-md"
-            width={Math.round(44 * LOGO_RATIO)}
-            height={44}
+            alt="MotoGest"
+            className="h-[45px] w-auto"
+            width={160}
+            height={45}
           />
         </Link>
 
@@ -261,7 +254,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
             className={({ isActive }) =>
               cn(
                 'hidden lg:flex items-center gap-1.5 text-sm font-medium transition-colors px-2',
-                isActive ? 'text-brand' : 'text-brand-900 hover:text-brand'
+                isActive ? 'text-racing' : 'text-carbon-900 hover:text-racing'
               )
             }
           >
@@ -284,7 +277,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
           {/* Carrito con badge naranja — abre el drawer */}
           <button
             onClick={onCartClick}
-            className="relative flex h-9 w-9 items-center justify-center rounded-md text-brand-900 hover:bg-chrome-50 hover:text-brand transition-colors"
+            className="relative flex h-9 w-9 items-center justify-center rounded-md text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
             aria-label={`Carrito${totalCarrito > 0 ? ` — ${totalCarrito} producto(s)` : ''}`}
           >
             <ShoppingCart className="h-5 w-5" aria-hidden />
@@ -300,7 +293,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
 
           {/* Hamburguesa — mobile */}
           <button
-            className="flex md:hidden h-9 w-9 items-center justify-center rounded-md text-brand-900 hover:bg-chrome-50 transition-colors"
+            className="flex md:hidden h-9 w-9 items-center justify-center rounded-md text-carbon-900 hover:bg-gray-50 transition-colors"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
@@ -312,7 +305,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
 
       {/* Menú mobile */}
       {menuOpen && (
-        <div className="md:hidden border-t border-chrome-100 bg-white px-4 py-4 animate-fade-in">
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 animate-fade-in">
           <SearchBar className="mb-4" />
 
           <nav className="flex flex-col gap-1" aria-label="Menú móvil">
@@ -322,7 +315,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
               className={({ isActive }) =>
                 cn(
                   'rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                  isActive ? 'bg-chrome-50 text-brand' : 'text-brand-900 hover:bg-chrome-50'
+                  isActive ? 'bg-gray-50 text-racing' : 'text-carbon-900 hover:bg-gray-50'
                 )
               }
             >
@@ -331,7 +324,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
 
             {/* Categorías en grid de 2 columnas */}
             <div className="px-3 py-2">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-chrome-400">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
                 Categorías
               </p>
               <div className="grid grid-cols-2 gap-1">
@@ -340,7 +333,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
                     key={slug}
                     to={`/catalogo?categoria=${slug}`}
                     onClick={() => setMenuOpen(false)}
-                    className="rounded px-2 py-1.5 text-sm text-brand-900 hover:bg-chrome-50 hover:text-brand transition-colors"
+                    className="rounded px-2 py-1.5 text-sm text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
                   >
                     {label}
                   </Link>
@@ -354,7 +347,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                  isActive ? 'bg-chrome-50 text-brand' : 'text-brand-900 hover:bg-chrome-50'
+                  isActive ? 'bg-gray-50 text-racing' : 'text-carbon-900 hover:bg-gray-50'
                 )
               }
             >
@@ -362,7 +355,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
               Sigue tu pedido
             </NavLink>
 
-            <div className="my-2 border-t border-chrome-100" />
+            <div className="my-2 border-t border-gray-100" />
 
             {isAuthenticated && cliente ? (
               <>
@@ -372,21 +365,21 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
                     nombre={cliente.nombre}
                     size="sm"
                     rol="cliente"
-                    className="border border-chrome-200"
+                    className="border border-gray-200"
                   />
-                  <span className="text-sm font-medium text-brand-900">{cliente.nombre}</span>
+                  <span className="text-sm font-medium text-carbon-900">{cliente.nombre}</span>
                 </div>
                 <Link
                   to="/mi-cuenta/compras"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-brand-900 hover:bg-chrome-50 hover:text-brand transition-colors"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-carbon-900 hover:bg-gray-50 hover:text-racing transition-colors"
                 >
                   <ShoppingBag className="h-5 w-5" aria-hidden />
                   Mis compras
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-chrome-500 hover:bg-chrome-50 hover:text-brand transition-colors text-left"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-racing transition-colors text-left"
                 >
                   <LogOut className="h-5 w-5" aria-hidden />
                   Cerrar sesión
@@ -396,7 +389,7 @@ function PublicNavbar({ onCartClick }: { onCartClick: () => void }) {
               <Link
                 to="/login"
                 onClick={() => setMenuOpen(false)}
-                className="mx-3 mt-1 flex items-center justify-center gap-2 rounded-md border border-brand py-2 text-sm font-semibold text-brand hover:bg-brand hover:text-white transition-colors"
+                className="mx-3 mt-1 flex items-center justify-center gap-2 rounded-md border border-racing py-2 text-sm font-semibold text-racing hover:bg-racing hover:text-white transition-colors"
               >
                 <User className="h-5 w-5" aria-hidden />
                 Ingresar
@@ -430,7 +423,7 @@ function PublicFooter() {
   return (
     <footer className="mt-auto">
       {/* Sección principal 4 columnas */}
-      <div className="edge-chrome bg-metal py-12">
+      <div className="bg-[#111111] py-12">
         <div className="container mx-auto px-4">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
@@ -438,19 +431,19 @@ function PublicFooter() {
             <div>
               <img
                 src={assets.logo}
-                alt="RE MOTOS"
-                className="mb-4 h-10 w-auto rounded-md"
-                width={Math.round(40 * LOGO_RATIO)}
-                height={40}
+                alt="MotoGest"
+                className="h-9 w-auto brightness-0 invert mb-4"
+                width={130}
+                height={36}
               />
-              <p className="text-sm text-brand-200 leading-relaxed">
-                Tu tienda de accesorios para motos en {tienda.ciudad}. Calidad garantizada en cada producto.
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Tu tienda de accesorios para motos en Ayacucho. Calidad garantizada en cada producto.
               </p>
             </div>
 
             {/* Col 2: Links rápidos */}
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-brand-300 mb-4">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">
                 Links rápidos
               </h3>
               <ul className="flex flex-col gap-2">
@@ -458,7 +451,7 @@ function PublicFooter() {
                   <li key={to}>
                     <Link
                       to={to}
-                      className="text-sm text-brand-200 hover:text-white transition-colors"
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
                       {label}
                     </Link>
@@ -469,41 +462,19 @@ function PublicFooter() {
 
             {/* Col 3: Contacto */}
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-brand-300 mb-4">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">
                 Contacto
               </h3>
-              <ul className="flex flex-col gap-2 text-sm text-brand-200">
-                <li>
-                  <a
-                    href={tienda.mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-white"
-                  >
-                    📍 {tienda.direccion}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={tienda.whatsapp.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-white"
-                  >
-                    📲 WhatsApp {tienda.whatsapp.display}
-                  </a>
-                </li>
-                <li>
-                  <a href={`mailto:${tienda.email}`} className="transition-colors hover:text-white">
-                    📧 {tienda.email}
-                  </a>
-                </li>
+              <ul className="flex flex-col gap-2 text-sm text-gray-400">
+                <li>📍 Av. San Francisco, Ayacucho</li>
+                <li>📞 +51 999 999 999</li>
+                <li>📧 GerenteCalleTuning@gmail.com</li>
               </ul>
             </div>
 
             {/* Col 4: Logos de marcas 3×2 */}
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-brand-300 mb-4">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">
                 Marcas
               </h3>
               <div className="grid grid-cols-3 gap-2">
@@ -530,12 +501,12 @@ function PublicFooter() {
       </div>
 
       {/* Franja inferior */}
-      <div className="border-t border-white/5 bg-brand-950 py-4">
-        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 px-4 text-xs text-brand-300">
-          <span>© {new Date().getFullYear()} {tienda.nombre} — {tienda.ciudad}, Perú</span>
+      <div className="bg-carbon-950 py-4">
+        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 px-4 text-xs text-gray-500">
+          <span>© {new Date().getFullYear()} CALLE TUNING — Ayacucho, Perú</span>
           <p>
             Rastrear pedido:{' '}
-            <Link to="/rastreo" className="font-medium text-brand-200 hover:text-white hover:underline">
+            <Link to="/rastreo" className="text-racing hover:underline">
               CT-2026-XXXX
             </Link>
           </p>
@@ -549,11 +520,11 @@ function PublicFooter() {
 function WhatsAppButton() {
   return (
     <a
-      href={tienda.whatsapp.url}
+      href="https://wa.me/51948911607"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Escríbenos por WhatsApp al ${tienda.whatsapp.display}`}
-      className="group fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-card-md transition-all duration-200 hover:scale-110 hover:shadow-card-lg"
+      aria-label="Contáctanos por WhatsApp"
+      className="group fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl"
     >
       <svg
         viewBox="0 0 24 24"
@@ -565,8 +536,8 @@ function WhatsAppButton() {
         <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.527 5.845L.057 23.885l6.19-1.444A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.376l-.36-.214-3.722.868.936-3.42-.235-.372A9.818 9.818 0 1112 21.818z" />
       </svg>
       {/* Tooltip a la derecha del botón */}
-      <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-xs text-white opacity-0 shadow-card-md transition-opacity duration-200 group-hover:opacity-100">
-        WhatsApp {tienda.whatsapp.display}
+      <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-[#111111] px-2.5 py-1 text-xs text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+        Contáctanos por WhatsApp
       </span>
     </a>
   )

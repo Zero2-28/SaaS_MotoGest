@@ -7,14 +7,19 @@ import type { Producto } from '@/types'
 import { formatPrecio } from '@/utils/format'
 import { useCarritoStore } from '@/stores/carrito.store'
 import { assets } from '@/config/assets'
-import { tienda } from '@/config/tienda'
 import { cn } from '@/utils/cn'
 import { getProductImage, getCategoriaImage, PRODUCTO_PLACEHOLDER } from '@/utils/productImage'
 import { getCategorias } from '@/services/categorias.service'
 import type { Categoria } from '@/types'
 
-// El hero muestra el carrusel completo (RE1–RE5)
-const HERO_SLIDES = assets.carousel
+// 5 slides seleccionados del array carousel
+const HERO_SLIDES = [
+  assets.carousel[0], // pexels-jarod
+  assets.carousel[1], // pexels-rodolfoclix
+  assets.carousel[4], // V2FaR
+  assets.carousel[5], // pexels-jannisr
+  assets.carousel[6], // pexels-luisbecerrafotografo
+]
 
 // ── Carrusel Hero ─────────────────────────────────────────────────────────────
 function HeroCarrusel() {
@@ -77,7 +82,7 @@ function HeroCarrusel() {
 
       {/* Contenido centrado */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
-        <h1 className="font-display text-display-md md:text-display-xl text-white mb-3 drop-shadow-md">
+        <h1 className="font-display text-display-md md:text-display-xl text-white mb-3 drop-shadow-lg">
           ACCESORIOS PARA TU MOTO
         </h1>
         <p className="text-base md:text-xl text-white/90 mb-8 max-w-xl drop-shadow">
@@ -85,7 +90,7 @@ function HeroCarrusel() {
         </p>
         <Link
           to="/catalogo"
-          className="sheen inline-flex items-center gap-2 rounded-md bg-metal-btn px-8 py-3 text-base font-semibold text-white shadow-metal transition-all hover:bg-metal-btn-hv hover:shadow-brand active:scale-[0.98]"
+          className="inline-flex items-center gap-2 rounded-md bg-racing px-8 py-3 text-base font-semibold text-white shadow-racing hover:bg-racing-700 transition-colors active:scale-[0.98]"
         >
           Ver catálogo
           <ArrowRight className="h-4 w-4" aria-hidden />
@@ -140,8 +145,8 @@ function MarcasCarrusel() {
   const doble = [...assets.marcas, ...assets.marcas]
 
   return (
-    <section className="bg-chrome-50 py-10 overflow-hidden" aria-label="Marcas que trabajamos">
-      <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-chrome-400 mb-8">
+    <section className="bg-gray-50 py-10 overflow-hidden" aria-label="Marcas que trabajamos">
+      <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400 mb-8">
         Marcas que trabajamos
       </h2>
 
@@ -183,10 +188,10 @@ function CategoriasSection() {
     <section className="pt-20 pb-4 bg-white" aria-label="Categorías de productos">
       <div className="container mx-auto px-4">
         <div className="mb-10 text-center">
-          <h2 className="font-display text-display-md text-gradient-brand">
+          <h2 className="font-display text-display-md text-carbon-900">
             EXPLORA POR CATEGORÍA
           </h2>
-          <p className="mt-2 text-sm text-chrome-500">
+          <p className="mt-2 text-sm text-gray-500">
             Encuentra exactamente lo que buscas
           </p>
         </div>
@@ -211,7 +216,7 @@ function CategoriasSection() {
               />
               <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/35" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-display text-display-sm text-white drop-shadow-md tracking-wide">
+                <span className="font-display text-display-sm text-white drop-shadow-lg tracking-wide">
                   {cat.nombre.toUpperCase()}
                 </span>
               </div>
@@ -228,12 +233,12 @@ function BannerPromocional() {
   return (
     <section
       className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 py-5 md:h-20 px-6"
-      style={{ background: 'linear-gradient(100deg, #15425A 0%, #0F3341 50%, #0B2041 100%)' }}
+      style={{ background: 'linear-gradient(to right, #CC0000, #AA0000)' }}
       aria-label="Beneficios"
     >
       <span className="flex items-center gap-2 text-[15px] font-bold text-white">
         <Truck size={18} aria-hidden />
-        Envíos en 24h dentro del Callao
+        Envíos en 24h dentro de Ayacucho
       </span>
       <span className="hidden md:block text-white/50 select-none text-lg font-light">|</span>
       <span className="flex items-center gap-2 text-[15px] font-bold text-white">
@@ -253,9 +258,12 @@ function BannerPromocional() {
 // ── Por qué elegirnos ─────────────────────────────────────────────────────────
 const PUNTOS_CLAVE = [
   'Productos certificados de calidad premium',
-  'Despacho en 24h dentro del Callao',
+  'Despacho en 24h dentro de Ayacucho',
   'Garantía real del fabricante',
 ]
+
+const MAPS_URL =
+  'https://www.google.com/maps/search/Av.+San+Francisco,+Ayacucho/@-13.1761141,-74.2147402,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D'
 
 function Features() {
   return (
@@ -263,7 +271,7 @@ function Features() {
       {/* Columna izquierda — imagen completa sobre fondo oscuro uniforme */}
       <div
         className="relative md:w-1/2 min-h-[500px] flex items-center justify-center overflow-hidden"
-        style={{ background: '#0F3341' }}
+        style={{ background: '#444444' }}
       >
         <img
           src={assets.banner.porQueElegirnos}
@@ -278,52 +286,34 @@ function Features() {
       </div>
 
       {/* Columna derecha — fondo oscuro, contenido centrado verticalmente */}
-      <div className="flex items-center bg-metal px-10 py-12 md:w-1/2 md:px-12 md:py-16">
+      <div className="bg-[#444444] md:w-1/2 flex items-center px-10 py-12 md:px-12 md:py-16">
         <div className="max-w-md">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-brand-300">
-            RE MOTOS
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#CC0000] mb-4">
+            CALLE TUNING
           </p>
           <h2 className="font-display text-3xl md:text-4xl text-white leading-tight mb-6">
             Por qué elegir<br />
             Nuestro{' '}
-            <span className="text-brand-300">Servicio</span>
+            <span className="text-[#CC0000]">Servicio</span>
             {' '}de Confianza.
           </h2>
-          <p className="mb-8 text-sm leading-relaxed text-brand-200">
-            En RE MOTOS, nuestra prioridad es satisfacer las necesidades de nuestros
+          <p className="text-sm text-[#A0A0A0] leading-relaxed mb-8">
+            En CALLE TUNING, nuestra prioridad es satisfacer las necesidades de nuestros
             clientes y brindarles la mayor comodidad y confianza en cada producto.
           </p>
           <ul className="flex flex-col gap-3 mb-8">
             {PUNTOS_CLAVE.map((punto) => (
               <li key={punto} className="flex items-center gap-3 text-sm text-white">
-                <span className="shrink-0 font-bold text-brand-300">✓</span>
+                <span className="text-[#CC0000] font-bold shrink-0">✓</span>
                 {punto}
               </li>
             ))}
           </ul>
-          {/* Dirección y WhatsApp — datos de contacto a la vista */}
-          <ul className="mb-8 flex flex-col gap-2 text-sm text-brand-200">
-            <li>
-              <span aria-hidden>📍</span> ¡Ubícanos en{' '}
-              <span className="font-semibold text-white">{tienda.direccion}</span>!
-            </li>
-            <li>
-              <span aria-hidden>📲</span> Escríbenos al WhatsApp{' '}
-              <a
-                href={tienda.whatsapp.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-white underline-offset-4 hover:underline"
-              >
-                {tienda.whatsapp.display}
-              </a>
-            </li>
-          </ul>
           <a
-            href={tienda.mapsUrl}
+            href={MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="sheen inline-block rounded-md bg-metal-btn px-8 py-3 text-sm font-semibold text-white shadow-metal transition-all hover:bg-metal-btn-hv hover:shadow-brand active:scale-[0.98]"
+            className="inline-block rounded-md bg-[#CC0000] px-8 py-3 text-sm font-semibold text-white hover:bg-[#aa0000] active:scale-[0.98] transition-colors"
           >
             Ubícanos en Google Maps
           </a>
@@ -339,13 +329,13 @@ function ProductoDestacadoCard({ producto }: { producto: Producto }) {
   const [imgSrc, setImgSrc] = useState(() => getProductImage(producto))
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-chrome-200 bg-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-card-md">
+    <article className="group rounded-xl border border-gray-100 bg-white shadow-md hover:shadow-lg overflow-hidden transition-shadow flex flex-col">
       <Link to={`/catalogo/${producto.id}`} className="block relative overflow-hidden">
         <img
           src={imgSrc}
           alt={producto.nombre}
           onError={() => setImgSrc(PRODUCTO_PLACEHOLDER)}
-          className="h-44 w-full object-cover bg-chrome-100 transition-transform duration-300 group-hover:scale-105"
+          className="h-44 w-full object-cover bg-gray-100 transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
           width={400}
           height={176}
@@ -359,24 +349,24 @@ function ProductoDestacadoCard({ producto }: { producto: Producto }) {
 
       <div className="p-4 flex flex-col gap-2 flex-1">
         {/* Badge de categoría rojo */}
-        <span className="inline-block w-fit rounded-full bg-brand px-2.5 py-0.5 text-[11px] font-semibold text-white">
+        <span className="inline-block w-fit rounded-full bg-racing px-2.5 py-0.5 text-[11px] font-semibold text-white">
           {producto.categoria.nombre}
         </span>
         <Link to={`/catalogo/${producto.id}`}>
-          <h3 className="text-sm font-semibold text-brand-900 line-clamp-2 hover:text-brand transition-colors">
+          <h3 className="text-sm font-semibold text-carbon-900 line-clamp-2 hover:text-racing transition-colors">
             {producto.nombre}
           </h3>
         </Link>
 
-        <div className="mt-auto flex items-center justify-between pt-3 border-t border-chrome-100">
-          <span className="text-lg font-bold text-brand tabular-nums">
+        <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-100">
+          <span className="text-lg font-bold text-racing tabular-nums">
             {formatPrecio(producto.precioVenta)}
           </span>
           <button
             onClick={() => agregarItem(producto)}
             disabled={!producto.activo}
             aria-label={`Agregar ${producto.nombre} al carrito`}
-            className="flex h-9 w-9 items-center justify-center rounded-md bg-metal-btn text-white shadow-metal transition-all hover:bg-metal-btn-hv disabled:opacity-40"
+            className="flex h-9 w-9 items-center justify-center rounded-md bg-racing text-white hover:bg-racing-700 disabled:opacity-40 transition-colors"
           >
             <ShoppingCart className="h-4 w-4" aria-hidden />
           </button>
@@ -388,7 +378,7 @@ function ProductoDestacadoCard({ producto }: { producto: Producto }) {
 
 function ProductoSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-chrome-200 bg-white shadow-card">
+    <div className="rounded-xl border border-gray-100 bg-white shadow-md overflow-hidden">
       <div className="skeleton h-44 w-full" />
       <div className="p-4 flex flex-col gap-2">
         <div className="skeleton h-3 w-1/3 rounded" />
@@ -417,12 +407,12 @@ function ProductosDestacados() {
       <div className="container mx-auto px-4">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <h2 className="font-display text-display-md text-gradient-brand">PRODUCTOS</h2>
-            <p className="text-chrome-500 text-sm mt-1">Lo más reciente en nuestro stock</p>
+            <h2 className="font-display text-display-md text-carbon-900">PRODUCTOS</h2>
+            <p className="text-gray-500 text-sm mt-1">Lo más reciente en nuestro stock</p>
           </div>
           <Link
             to="/catalogo"
-            className="flex items-center gap-1 text-sm font-medium text-chrome-500 hover:text-brand transition-colors"
+            className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-racing transition-colors"
           >
             Ver todos <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
@@ -442,9 +432,9 @@ function ProductosDestacados() {
 // ── CTA final ─────────────────────────────────────────────────────────────────
 function CTA() {
   return (
-    <section className="edge-chrome bg-metal py-20">
+    <section className="py-20 bg-racing">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="mb-4 font-display text-display-md text-gradient-chrome">
+        <h2 className="font-display text-display-md text-white mb-4">
           ¿LISTO PARA EQUIPAR TU MOTO?
         </h2>
         <p className="text-white/80 mb-8">
@@ -452,7 +442,7 @@ function CTA() {
         </p>
         <Link
           to="/catalogo"
-          className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-3 text-base font-semibold text-brand hover:bg-chrome-50 active:scale-[0.98] transition-colors"
+          className="inline-flex items-center gap-2 rounded-md bg-white px-8 py-3 text-base font-semibold text-racing hover:bg-gray-50 active:scale-[0.98] transition-colors"
         >
           Explorar ahora <ArrowRight className="h-5 w-5" aria-hidden />
         </Link>

@@ -140,7 +140,7 @@ export default function CategoriasPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-ink">CATEGORÍAS</h1>
+          <h1 className="font-display text-display-sm text-[#111111]">CATEGORÍAS</h1>
           <p className="text-sm text-muted-foreground mt-1">{categorias.length} categorías en el catálogo</p>
         </div>
         <Button onClick={abrirCrear}>
@@ -149,12 +149,12 @@ export default function CategoriasPage() {
       </div>
 
       {error && (
-        <div className="rounded-md border border-danger-100 bg-danger-50 p-3 text-sm text-danger-600">
+        <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
           {error} <button onClick={cargar} className="ml-2 underline hover:no-underline">Reintentar</button>
         </div>
       )}
 
-      <Card className="bg-white border-chrome-200">
+      <Card className="bg-white border-gray-200">
         <CardContent className="p-0">
           {cargando ? (
             <div className="p-6 space-y-3">
@@ -164,25 +164,25 @@ export default function CategoriasPage() {
             </div>
           ) : categorias.length === 0 ? (
             <div className="py-16 text-center text-muted-foreground text-sm">
-              <Tag className="h-10 w-10 mx-auto mb-3 text-chrome-400" />
+              <Tag className="h-10 w-10 mx-auto mb-3 text-gray-400" />
               No hay categorías. Crea la primera.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-chrome-100 bg-mist">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">Nombre</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">Descripción</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">Imagen</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">ID</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-chrome-700 uppercase tracking-wider">Acciones</th>
+                  <tr className="border-b border-[#E5E7EB] bg-[#F9FAFB]">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">Nombre</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">Descripción</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">Imagen</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">ID</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#374151] uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {categorias.map((cat) => (
-                    <tr key={cat.id} className="border-b border-chrome-200 hover:bg-mist transition-colors">
-                      <td className="px-4 py-3 font-medium text-ink">{cat.nombre}</td>
+                    <tr key={cat.id} className="border-b border-gray-200 hover:bg-[#F9FAFB] transition-colors">
+                      <td className="px-4 py-3 font-medium text-[#111111]">{cat.nombre}</td>
                       <td className="px-4 py-3 text-muted-foreground text-xs">
                         {cat.descripcion ?? <span className="italic">Sin descripción</span>}
                       </td>
@@ -195,8 +195,8 @@ export default function CategoriasPage() {
                             className="h-10 w-10 rounded object-cover"
                           />
                         ) : (
-                          <div className="h-10 w-10 rounded bg-chrome-100 flex items-center justify-center">
-                            <ImageIcon className="h-4 w-4 text-chrome-400" />
+                          <div className="h-10 w-10 rounded bg-gray-100 flex items-center justify-center">
+                            <ImageIcon className="h-4 w-4 text-gray-400" />
                           </div>
                         )}
                       </td>
@@ -207,7 +207,7 @@ export default function CategoriasPage() {
                         <div className="flex gap-1">
                           <Button
                             variant="ghost" size="icon"
-                            className="text-chrome-700 hover:text-brand hover:bg-mist"
+                            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#F9FAFB]"
                             onClick={() => abrirEditar(cat)}
                             aria-label={`Editar ${cat.nombre}`}
                           >
@@ -215,7 +215,7 @@ export default function CategoriasPage() {
                           </Button>
                           <Button
                             variant="ghost" size="icon"
-                            className="text-chrome-700 hover:text-brand hover:bg-danger-100"
+                            className="text-[#374151] hover:text-[#CC0000] hover:bg-[#FEE2E2]"
                             onClick={() => setConfirmDelete(cat)}
                             aria-label={`Eliminar ${cat.nombre}`}
                           >
@@ -234,7 +234,7 @@ export default function CategoriasPage() {
 
       {/* ── Modal crear/editar ────────────────────────────────────────────────── */}
       <Dialog open={modalOpen} onOpenChange={(open) => { if (!open) cerrarModal() }}>
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar categoría' : 'Nueva categoría'}</DialogTitle>
             <DialogDescription>
@@ -243,19 +243,19 @@ export default function CategoriasPage() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cat-nombre">Nombre <span className="text-brand" aria-hidden>*</span></Label>
+              <Label htmlFor="cat-nombre">Nombre <span className="text-racing" aria-hidden>*</span></Label>
               <Input
                 id="cat-nombre"
                 placeholder="Ej: Cascos, Frenos, Luces…"
-                className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
+                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
                 {...register('nombre')}
                 aria-invalid={!!errors.nombre}
               />
-              {errors.nombre && <p role="alert" className="text-xs text-danger">{errors.nombre.message}</p>}
+              {errors.nombre && <p role="alert" className="text-xs text-red-400">{errors.nombre.message}</p>}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="cat-desc">Descripción</Label>
-              <Input id="cat-desc" placeholder="Opcional" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('descripcion')} />
+              <Input id="cat-desc" placeholder="Opcional" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('descripcion')} />
             </div>
 
             {/* Upload de imagen */}
@@ -267,20 +267,20 @@ export default function CategoriasPage() {
                     <img
                       src={imagenPreview}
                       alt="Vista previa"
-                      className="h-16 w-16 rounded object-cover border border-chrome-200"
+                      className="h-16 w-16 rounded object-cover border border-gray-200"
                     />
                     <button
                       type="button"
                       onClick={limpiarImagen}
-                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-chrome-400 flex items-center justify-center hover:bg-danger transition-colors"
+                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-gray-400 flex items-center justify-center hover:bg-red-500 transition-colors"
                       aria-label="Quitar imagen"
                     >
                       <X className="h-2.5 w-2.5 text-white" />
                     </button>
                   </div>
                 ) : (
-                  <div className="h-16 w-16 rounded border border-dashed border-chrome-300 flex items-center justify-center shrink-0">
-                    <ImageIcon className="h-6 w-6 text-chrome-400" />
+                  <div className="h-16 w-16 rounded border border-dashed border-gray-300 flex items-center justify-center shrink-0">
+                    <ImageIcon className="h-6 w-6 text-gray-400" />
                   </div>
                 )}
                 <div className="flex flex-col gap-1">
@@ -320,11 +320,11 @@ export default function CategoriasPage() {
 
       {/* ── Confirmar eliminar ────────────────────────────────────────────────── */}
       <Dialog open={!!confirmDelete} onOpenChange={() => setConfirmDelete(null)}>
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>Eliminar categoría</DialogTitle>
             <DialogDescription>
-              ¿Eliminar <strong className="text-ink">{confirmDelete?.nombre}</strong>?
+              ¿Eliminar <strong className="text-[#111111]">{confirmDelete?.nombre}</strong>?
               Los productos asociados perderán su categoría.
             </DialogDescription>
           </DialogHeader>

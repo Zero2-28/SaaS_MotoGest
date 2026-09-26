@@ -2,48 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── CSS Variables — MotoGest Pro · Azul metalizado ────────────────── */
+/* ── CSS Variables — MotoGest Pro Dark Theme ───────────────────────── */
 @layer base {
   :root {
-    /* Fondo azul profundo (navy) */
-    --background:    215 65% 7%;    /* #060F1C */
+    /* Fondo carbono total */
+    --background:    0 0% 4%;       /* #0A0A0A */
     --foreground:    0 0% 100%;     /* #FFFFFF */
 
-    --card:          217 71% 15%;   /* #0B2041 */
+    --card:          0 0% 7%;       /* #111111 */
     --card-foreground: 0 0% 100%;
 
-    --popover:       197 63% 16%;   /* #0F3341 */
+    --popover:       0 0% 10%;      /* #1A1A1A */
     --popover-foreground: 0 0% 100%;
 
-    /* Azul metalizado como primario */
-    --primary:       197 63% 16%;   /* #0F3341 */
+    /* Rojo Ducati como primario */
+    --primary:       0 100% 40%;    /* #CC0000 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary:     201 62% 22%;   /* #15425A */
-    --secondary-foreground: 201 46% 75%; /* #A3C9DD */
+    --secondary:     0 0% 14%;      /* #242424 */
+    --secondary-foreground: 0 0% 63%;/* #A0A0A0 */
 
-    --muted:         217 71% 15%;   /* #0B2041 */
-    --muted-foreground: 201 46% 75%;/* #A3C9DD */
+    --muted:         0 0% 10%;
+    --muted-foreground: 0 0% 63%;   /* #A0A0A0 */
 
-    /* Naranja como acento cálido */
+    /* Naranja Honda como acento */
     --accent:        25 100% 50%;   /* #FF6B00 */
     --accent-foreground: 0 0% 100%;
 
-    --destructive:   0 72% 51%;     /* #DC2626 */
+    --destructive:   0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border:        201 62% 22%;   /* #15425A — líneas sutiles */
-    --input:         201 62% 22%;
-    --ring:          200 48% 46%;   /* foco: azul acero #3D87AC */
+    --border:        0 0% 18%;      /* líneas sutiles */
+    --input:         0 0% 14%;
+    --ring:          0 100% 40%;    /* foco: rojo */
 
-    --radius: 0.625rem;
-
-    /* Tokens crudos reutilizables desde CSS plano */
-    --brand-900: #0B2041;
-    --brand-800: #0F3341;
-    --brand-700: #15425A;
-    --brand-500: #26688C;
-    --brand-400: #3D87AC;
+    --radius: 0.5rem;
   }
 }
 
@@ -55,8 +48,8 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    /* Scrollbar azul acero */
-    scrollbar-color: #26688C #0B2041;
+    /* Scrollbar oscura para dark mode total */
+    scrollbar-color: #3A3A3A #111111;
     scrollbar-width: thin;
   }
 
@@ -66,123 +59,52 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-brand-900;
+    @apply bg-carbon-900;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-brand-500 rounded-full;
+    @apply bg-carbon-500 rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-brand-400;
+    @apply bg-carbon-600;
   }
 
   /* Títulos display con fuente agresiva */
   h1, h2 {
     @apply font-display tracking-wide;
   }
-
-  /* Foco visible coherente en todo el sistema */
-  :focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
-  }
-
-  /* Números tabulares en datos monetarios y contadores */
-  .tabular-nums {
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-/* ── Clases de componente reutilizables ────────────────────────────── */
-@layer components {
-  /* Campo de formulario para inputs nativos fuera de <Input /> */
-  .field {
-    @apply h-10 w-full rounded-md border border-chrome-200 bg-mist px-3 text-sm text-ink
-           placeholder:text-chrome-400 transition-colors duration-150
-           focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20;
-  }
 }
 
 /* ── Utilidades personalizadas ─────────────────────────────────────── */
 @layer utilities {
-  /* Gradiente de texto azul metalizado — títulos hero */
-  .text-gradient-brand {
-    background: linear-gradient(135deg, #3D87AC, #0F3341 60%, #0B2041);
+  /* Gradiente de texto rojo — para títulos hero */
+  .text-gradient-racing {
+    background: linear-gradient(135deg, #CC0000, #FF6B00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Variante clara para usar sobre fondo oscuro */
-  .text-gradient-chrome {
-    background: linear-gradient(135deg, #FFFFFF, #A3C9DD 55%, #6BA8C8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  /* Borde izquierdo rojo — indicador activo sidebar */
+  .border-l-racing {
+    border-left: 3px solid #CC0000;
   }
 
-  /* Borde izquierdo de marca — indicador activo del sidebar */
-  .border-l-brand {
-    border-left: 3px solid #0F3341;
-  }
-
-  /* Filo cromado superior de 1px — remata superficies oscuras */
-  .edge-chrome {
-    position: relative;
-  }
-  .edge-chrome::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(163, 201, 221, 0.55),
-      transparent
-    );
-  }
-
-  /* Barrido de brillo al pasar el cursor — superficies metálicas */
-  .sheen {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .sheen::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      105deg,
-      transparent 35%,
-      rgba(255, 255, 255, 0.14) 50%,
-      transparent 65%
-    );
-    transform: translateX(-120%);
-    pointer-events: none;
-  }
-  .sheen:hover::after {
-    animation: sheen 1.1s ease-out;
+  /* Glow rojo para hover de cards de producto */
+  .hover-glow-racing:hover {
+    box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+    transition: box-shadow 0.2s ease-out;
   }
 
   /* Skeleton shimmer para estados de carga */
   .skeleton {
     @apply relative overflow-hidden rounded;
-    background-color: #E3EAF1;
+    background-color: #d4d4d4;
   }
   .skeleton::after {
     content: '';
     @apply absolute inset-0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
     transform: translateX(-100%);
     animation: shimmer 2s infinite;
-  }
-
-  /* Respeta la preferencia de movimiento reducido */
-  @media (prefers-reduced-motion: reduce) {
-    .sheen:hover::after,
-    .skeleton::after {
-      animation: none;
-    }
   }
 }

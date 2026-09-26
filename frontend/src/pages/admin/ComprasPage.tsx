@@ -144,7 +144,7 @@ export default function ComprasPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-display-sm text-ink">TRACKING PEDIDOS</h1>
+          <h1 className="font-display text-display-sm text-[#111111]">TRACKING PEDIDOS</h1>
           <p className="text-sm text-muted-foreground mt-1">{compras.length} órdenes de compra</p>
         </div>
         <Button onClick={abrirCrear}>
@@ -158,20 +158,20 @@ export default function ComprasPage() {
           type="date"
           value={desde}
           onChange={(e) => setDesde(e.target.value)}
-          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
+          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
           aria-label="Desde"
         />
         <input
           type="date"
           value={hasta}
           onChange={(e) => setHasta(e.target.value)}
-          className="bg-mist border border-chrome-200 text-ink rounded-lg px-3 py-2 text-sm"
+          className="bg-[#F9FAFB] border border-[#D1D5DB] text-[#111111] rounded-lg px-3 py-2 text-sm"
           aria-label="Hasta"
         />
         {(desde || hasta) && (
           <button
             onClick={() => { setDesde(''); setHasta('') }}
-            className="text-sm text-chrome-600 hover:text-ink px-3 py-2 rounded-lg border border-chrome-200 bg-mist"
+            className="text-sm text-[#666666] hover:text-[#111111] px-3 py-2 rounded-lg border border-[#D1D5DB] bg-[#F9FAFB]"
           >
             Limpiar fechas
           </button>
@@ -188,17 +188,17 @@ export default function ComprasPage() {
       ) : comprasFiltradas.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground text-sm">
-            <ShoppingBag className="h-10 w-10 mx-auto mb-3 text-brand-600" />
+            <ShoppingBag className="h-10 w-10 mx-auto mb-3 text-carbon-600" />
             {compras.length === 0 ? 'No hay órdenes de compra. Crea la primera.' : 'Sin resultados para el rango de fechas.'}
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {comprasFiltradas.map((compra) => (
-            <article key={compra.id} className="rounded-lg border border-chrome-200 bg-white p-4 space-y-3">
+            <article key={compra.id} className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="font-mono text-sm font-bold text-ink">{compra.numeroCompra}</p>
+                  <p className="font-mono text-sm font-bold text-[#111111]">{compra.numeroCompra}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {compra.createdAt ? formatFecha(compra.createdAt) : '—'}
                   </p>
@@ -209,13 +209,13 @@ export default function ComprasPage() {
               <div className="text-sm space-y-1">
                 <p>
                   <span className="text-muted-foreground">Proveedor: </span>
-                  <span className="text-ink">{compra.proveedor?.nombre ?? 'Sin proveedor'}</span>
+                  <span className="text-[#111111]">{compra.proveedor?.nombre ?? 'Sin proveedor'}</span>
                 </p>
                 <p>
                   <span className="text-muted-foreground">Productos: </span>
-                  <span className="text-ink">{compra.detalles?.length ?? 0} ítem(s)</span>
+                  <span className="text-[#111111]">{compra.detalles?.length ?? 0} ítem(s)</span>
                 </p>
-                <p className="font-bold text-ink">{formatPrecio(compra.total)}</p>
+                <p className="font-bold text-[#111111]">{formatPrecio(compra.total)}</p>
               </div>
 
               {/* Cambiar estado — solo si no está cerrada */}
@@ -254,11 +254,11 @@ export default function ComprasPage() {
 
       {/* ── Modal nueva compra ────────────────────────────────────────────────── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-2xl bg-white text-ink">
+        <DialogContent className="max-w-2xl bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>Nueva orden de compra</DialogTitle>
             <DialogDescription>
-              Se creará en estado <strong className="text-ink">pendiente</strong>.
+              Se creará en estado <strong className="text-[#111111]">pendiente</strong>.
               El stock se incrementa al marcarla como recibida.
             </DialogDescription>
           </DialogHeader>
@@ -266,7 +266,7 @@ export default function ComprasPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
             {/* Proveedor */}
             <div className="flex flex-col gap-1.5">
-              <Label>Proveedor <span className="text-brand" aria-hidden>*</span></Label>
+              <Label>Proveedor <span className="text-racing" aria-hidden>*</span></Label>
               <Controller
                 name="proveedorId"
                 control={control}
@@ -275,7 +275,7 @@ export default function ComprasPage() {
                     value={field.value ? String(field.value) : ''}
                     onValueChange={(v) => field.onChange(Number(v))}
                   >
-                    <SelectTrigger className="bg-mist border-chrome-200 text-ink" aria-invalid={!!errors.proveedorId}>
+                    <SelectTrigger className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-invalid={!!errors.proveedorId}>
                       <SelectValue placeholder="Selecciona un proveedor…" />
                     </SelectTrigger>
                     <SelectContent>
@@ -287,14 +287,14 @@ export default function ComprasPage() {
                 )}
               />
               {errors.proveedorId && (
-                <p role="alert" className="text-xs text-danger">{errors.proveedorId.message}</p>
+                <p role="alert" className="text-xs text-red-400">{errors.proveedorId.message}</p>
               )}
             </div>
 
             {/* Productos */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <Label>Productos <span className="text-brand" aria-hidden>*</span></Label>
+                <Label>Productos <span className="text-racing" aria-hidden>*</span></Label>
                 <Button
                   type="button"
                   variant="outline"
@@ -305,7 +305,7 @@ export default function ComprasPage() {
                 </Button>
               </div>
               {errors.detalles && !Array.isArray(errors.detalles) && (
-                <p role="alert" className="text-xs text-danger">{errors.detalles.message}</p>
+                <p role="alert" className="text-xs text-red-400">{errors.detalles.message}</p>
               )}
               <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                 {fields.length === 0 && (
@@ -324,7 +324,7 @@ export default function ComprasPage() {
                           value={f.value ? String(f.value) : ''}
                           onValueChange={(v) => f.onChange(Number(v))}
                         >
-                          <SelectTrigger className="flex-1 text-xs h-8 bg-mist border-chrome-200 text-ink">
+                          <SelectTrigger className="flex-1 text-xs h-8 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]">
                             <SelectValue placeholder="Producto…" />
                           </SelectTrigger>
                           <SelectContent>
@@ -341,7 +341,7 @@ export default function ComprasPage() {
                     <Input
                       type="number"
                       min={1}
-                      className="w-20 h-8 text-xs bg-mist border-chrome-200 text-ink placeholder:text-chrome-400"
+                      className="w-20 h-8 text-xs bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF]"
                       placeholder="Cant."
                       {...register(`detalles.${index}.cantidad`)}
                     />
@@ -350,7 +350,7 @@ export default function ComprasPage() {
                       type="number"
                       min={0}
                       step="0.01"
-                      className="w-24 h-8 text-xs bg-mist border-chrome-200 text-ink placeholder:text-chrome-400"
+                      className="w-24 h-8 text-xs bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF]"
                       placeholder="S/. c/u"
                       {...register(`detalles.${index}.precioUnitario`)}
                     />
@@ -358,7 +358,7 @@ export default function ComprasPage() {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 shrink-0 hover:text-danger"
+                      className="h-8 w-8 shrink-0 hover:text-red-400"
                       onClick={() => remove(index)}
                       aria-label="Eliminar línea"
                     >
@@ -372,7 +372,7 @@ export default function ComprasPage() {
             {/* Observaciones */}
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="c-obs">Observaciones</Label>
-              <Input id="c-obs" placeholder="Opcional" className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20" {...register('observaciones')} />
+              <Input id="c-obs" placeholder="Opcional" className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20" {...register('observaciones')} />
             </div>
 
             <DialogFooter>

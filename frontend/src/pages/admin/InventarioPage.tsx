@@ -46,7 +46,7 @@ function StockRow({ item, onAjustar, esAdmin, onEliminar }: {
     : 'stock-ok'
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-chrome-200 bg-white p-4">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-gray-200 bg-white p-4">
       <img
         src={imgSrc}
         alt=""
@@ -59,12 +59,12 @@ function StockRow({ item, onAjustar, esAdmin, onEliminar }: {
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <p className="text-sm font-medium text-ink truncate">{item.producto.nombre}</p>
+          <p className="text-sm font-medium text-[#111111] truncate">{item.producto.nombre}</p>
           <Badge variant={nivel}>
             {item.cantidad} un.
           </Badge>
         </div>
-        <p className="text-xs text-chrome-600 mb-2">
+        <p className="text-xs text-[#666666] mb-2">
           Stock mínimo: {item.stockMinimo} un. · Código: {item.producto.codigo}
         </p>
         <Progress value={porcentaje} aria-label={`Stock al ${porcentaje.toFixed(0)}%`} />
@@ -83,7 +83,7 @@ function StockRow({ item, onAjustar, esAdmin, onEliminar }: {
           <Button
             size="sm"
             variant="ghost"
-            className="text-danger hover:bg-danger-50 hover:text-danger-600"
+            className="text-red-500 hover:bg-red-50 hover:text-red-600"
             onClick={() => onEliminar(item)}
             aria-label={`Eliminar producto ${item.producto.nombre}`}
             title="Eliminar producto"
@@ -212,8 +212,8 @@ export default function InventarioPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display text-display-sm text-ink">INVENTARIO</h1>
-        <p className="text-sm text-chrome-600 mt-1">
+        <h1 className="font-display text-display-sm text-[#111111]">INVENTARIO</h1>
+        <p className="text-sm text-[#666666] mt-1">
           Control de stock por sucursal. {alertas.length} alertas activas.
         </p>
       </div>
@@ -221,10 +221,10 @@ export default function InventarioPage() {
       {/* Filtros */}
       <div className="flex flex-wrap gap-2">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-chrome-400" aria-hidden />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" aria-hidden />
           <Input
             placeholder="Buscar producto…"
-            className="pl-9 w-56 bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
+            className="pl-9 w-56 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Filtrar por nombre de producto"
@@ -235,7 +235,7 @@ export default function InventarioPage() {
             value={String(sucursalSel)}
             onValueChange={(v) => setSucursalSel(Number(v))}
           >
-            <SelectTrigger className="w-48 bg-mist border-chrome-200 text-ink" aria-label="Seleccionar sucursal">
+            <SelectTrigger className="w-48 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-label="Seleccionar sucursal">
               <SelectValue placeholder="Sucursal…" />
             </SelectTrigger>
             <SelectContent>
@@ -250,7 +250,7 @@ export default function InventarioPage() {
             value={categoriaFiltro}
             onValueChange={(v) => setCategoriaFiltro(v)}
           >
-            <SelectTrigger className="w-52 bg-mist border-chrome-200 text-ink" aria-label="Filtrar por categoría">
+            <SelectTrigger className="w-52 bg-[#F9FAFB] border-[#D1D5DB] text-[#111111]" aria-label="Filtrar por categoría">
               <SelectValue placeholder="Todas las categorías" />
             </SelectTrigger>
             <SelectContent>
@@ -265,39 +265,39 @@ export default function InventarioPage() {
 
       {/* Resumen */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="bg-white border-chrome-200">
+        <Card className="bg-white border-gray-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-chrome-700 uppercase tracking-wide">Total productos</CardTitle>
+            <CardTitle className="text-xs text-[#374151] uppercase tracking-wide">Total productos</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-ink">{stock.length}</p>
+            <p className="text-2xl font-bold text-[#111111]">{stock.length}</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-chrome-200">
+        <Card className="bg-white border-gray-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-chrome-700 uppercase tracking-wide">Stock crítico</CardTitle>
+            <CardTitle className="text-xs text-[#374151] uppercase tracking-wide">Stock crítico</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-brand">{stockCritico.length}</p>
+            <p className="text-2xl font-bold text-[#CC0000]">{stockCritico.length}</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-chrome-200">
+        <Card className="bg-white border-gray-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-chrome-700 uppercase tracking-wide">Stock OK</CardTitle>
+            <CardTitle className="text-xs text-[#374151] uppercase tracking-wide">Stock OK</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-success">{stockOk.length}</p>
+            <p className="text-2xl font-bold text-[#22C55E]">{stockOk.length}</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Alertas */}
       {alertas.length > 0 && (
-        <Card className="border-danger-100 bg-danger-50">
+        <Card className="border-red-200 bg-red-50">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-danger" aria-hidden />
-              <CardTitle className="text-sm text-danger-600">Productos que requieren atención</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-red-500" aria-hidden />
+              <CardTitle className="text-sm text-red-600">Productos que requieren atención</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -307,7 +307,7 @@ export default function InventarioPage() {
                   key={`${a.productoId}-${a.sucursalId}`}
                   className="flex items-center justify-between text-sm"
                 >
-                  <span className="text-ink">{a.producto.nombre}</span>
+                  <span className="text-[#111111]">{a.producto.nombre}</span>
                   <Badge variant={a.cantidad === 0 ? 'stock-critico' : 'stock-bajo'}>
                     {a.cantidad} / {a.stockMinimo} mín.
                   </Badge>
@@ -319,9 +319,9 @@ export default function InventarioPage() {
       )}
 
       {/* Lista de stock */}
-      <Card className="bg-white border-chrome-200">
+      <Card className="bg-white border-gray-200">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-chrome-700">Inventario completo</CardTitle>
+          <CardTitle className="text-sm font-medium text-[#374151]">Inventario completo</CardTitle>
         </CardHeader>
         <CardContent>
           {cargando ? (
@@ -332,8 +332,8 @@ export default function InventarioPage() {
             </div>
           ) : stockFiltrado.length === 0 ? (
             <div className="py-16 text-center">
-              <CheckCircle className="h-12 w-12 mx-auto text-chrome-300 mb-3" />
-              <p className="text-chrome-600 text-sm">
+              <CheckCircle className="h-12 w-12 mx-auto text-gray-300 mb-3" />
+              <p className="text-[#666666] text-sm">
                 {busqueda || categoriaFiltro !== 'todas' ? 'Sin resultados para los filtros aplicados.' : 'No hay productos registrados.'}
               </p>
             </div>
@@ -355,40 +355,40 @@ export default function InventarioPage() {
 
       {/* Modal ajuste */}
       <Dialog open={!!ajustandoItem} onOpenChange={() => setAjustandoItem(null)}>
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>Ajuste de stock</DialogTitle>
             <DialogDescription>
-              <strong className="text-ink">{ajustandoItem?.producto.nombre}</strong>
-              {' '}— Stock actual: <strong className="text-ink">{ajustandoItem?.cantidad} un.</strong>
+              <strong className="text-[#111111]">{ajustandoItem?.producto.nombre}</strong>
+              {' '}— Stock actual: <strong className="text-[#111111]">{ajustandoItem?.cantidad} un.</strong>
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit(onAjuste)} noValidate className="grid gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="adj-cantidad">Cantidad a ajustar <span className="text-brand" aria-hidden>*</span></Label>
+              <Label htmlFor="adj-cantidad">Cantidad a ajustar <span className="text-racing" aria-hidden>*</span></Label>
               <Input
                 id="adj-cantidad"
                 type="number"
-                className="bg-mist border-chrome-200 text-ink focus-visible:border-brand focus-visible:ring-brand/20"
+                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
                 {...register('cantidad')}
                 aria-describedby="adj-hint"
                 aria-invalid={!!errors.cantidad}
               />
-              <p id="adj-hint" className="text-xs text-chrome-400 italic">
+              <p id="adj-hint" className="text-xs text-[#9CA3AF] italic">
                 Positivo para ingresar stock, negativo para restar.
               </p>
-              {errors.cantidad && <p role="alert" className="text-xs text-danger">{errors.cantidad.message}</p>}
+              {errors.cantidad && <p role="alert" className="text-xs text-red-400">{errors.cantidad.message}</p>}
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="adj-motivo">Motivo del ajuste <span className="text-brand" aria-hidden>*</span></Label>
+              <Label htmlFor="adj-motivo">Motivo del ajuste <span className="text-racing" aria-hidden>*</span></Label>
               <Input
                 id="adj-motivo"
                 placeholder="Ej: Recepción de mercadería, pérdida, etc."
-                className="bg-mist border-chrome-200 text-ink placeholder:text-chrome-400 focus-visible:border-brand focus-visible:ring-brand/20"
+                className="bg-[#F9FAFB] border-[#D1D5DB] text-[#111111] placeholder:text-[#9CA3AF] focus-visible:border-[#CC0000] focus-visible:ring-[#CC0000]/20"
                 {...register('motivo')}
                 aria-invalid={!!errors.motivo}
               />
-              {errors.motivo && <p role="alert" className="text-xs text-danger">{errors.motivo.message}</p>}
+              {errors.motivo && <p role="alert" className="text-xs text-red-400">{errors.motivo.message}</p>}
             </div>
             <DialogFooter>
               <Button type="button" variant="secondary" onClick={() => setAjustandoItem(null)}>
@@ -411,12 +411,12 @@ export default function InventarioPage() {
         open={!!eliminandoItem}
         onOpenChange={(open) => { if (!open) cerrarDialogEliminar() }}
       >
-        <DialogContent className="bg-white text-ink">
+        <DialogContent className="bg-white text-[#111111]">
           <DialogHeader>
             <DialogTitle>¿Eliminar producto?</DialogTitle>
             <DialogDescription>
               Esta acción desactivará{' '}
-              <strong className="text-ink">{eliminandoItem?.producto.nombre}</strong>{' '}
+              <strong className="text-[#111111]">{eliminandoItem?.producto.nombre}</strong>{' '}
               del sistema. El historial se mantendrá.
             </DialogDescription>
           </DialogHeader>
@@ -428,11 +428,11 @@ export default function InventarioPage() {
               placeholder="Ej: producto descontinuado, dañado, fuera de stock permanente..."
               value={motivoEliminar}
               onChange={(e) => setMotivoEliminar(e.target.value)}
-              className="w-full rounded-md border border-chrome-200 bg-mist px-3 py-2 text-sm text-ink placeholder:text-chrome-400 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20/20 resize-none"
+              className="w-full rounded-md border border-[#D1D5DB] bg-[#F9FAFB] px-3 py-2 text-sm text-[#111111] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#CC0000] focus:ring-1 focus:ring-[#CC0000]/20 resize-none"
             />
           </div>
           {errorEliminar && (
-            <p role="alert" className="text-sm text-danger">{errorEliminar}</p>
+            <p role="alert" className="text-sm text-red-500">{errorEliminar}</p>
           )}
           <DialogFooter>
             <Button
@@ -444,7 +444,7 @@ export default function InventarioPage() {
             </Button>
             <Button
               type="button"
-              className="bg-danger-600 hover:bg-danger-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white"
               disabled={eliminando}
               onClick={() => void confirmarEliminar()}
             >

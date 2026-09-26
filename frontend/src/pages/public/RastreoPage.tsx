@@ -21,13 +21,13 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 const ESTADO_META: Record<string, { label: string; bg: string; color: string }> = {
-  pendiente:   { label: 'Pendiente',      bg: '#F1F5F9', color: '#33485C' },
+  pendiente:   { label: 'Pendiente',      bg: '#F3F4F6', color: '#374151' },
   confirmado:  { label: 'Confirmado',     bg: '#EFF6FF', color: '#3B82F6' },
   preparando:  { label: 'En preparación', bg: '#FFF7ED', color: '#FF6B00' },
   listo:       { label: 'Listo',          bg: '#FEFCE8', color: '#EAB308' },
   en_transito: { label: 'En tránsito',    bg: '#EFF6FF', color: '#1D4ED8' },
   entregado:   { label: 'Entregado',      bg: '#F0FDF4', color: '#22C55E' },
-  cancelado:   { label: 'Cancelado',      bg: '#FEF2F2', color: '#DC2626' },
+  cancelado:   { label: 'Cancelado',      bg: '#FEF2F2', color: '#CC0000' },
 }
 
 // Timeline: listo y en_transito ambos mapean al paso 3
@@ -75,31 +75,31 @@ function Timeline({ estado }: { estado: string }) {
                   aria-current={current ? 'step' : undefined}
                   className={cn(
                     'flex h-12 w-12 items-center justify-center rounded-full transition-colors',
-                    done    && 'bg-brand',
-                    current && 'border-2 border-brand bg-white animate-pulse',
-                    !done && !current && 'bg-chrome-100',
+                    done    && 'bg-[#CC0000]',
+                    current && 'border-2 border-[#CC0000] bg-white animate-pulse',
+                    !done && !current && 'bg-[#E5E7EB]',
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-5 w-5',
                       done    && 'text-white',
-                      current && 'text-brand',
-                      !done && !current && 'text-chrome-400',
+                      current && 'text-[#CC0000]',
+                      !done && !current && 'text-gray-400',
                     )}
                     aria-hidden
                   />
                 </div>
                 <span className={cn(
                   'text-xs font-medium text-center max-w-[64px]',
-                  done || current ? 'text-ink' : 'text-chrome-400',
+                  done || current ? 'text-[#111111]' : 'text-gray-400',
                 )}>
                   {label}
                 </span>
               </div>
               {i < PASOS.length - 1 && (
                 <div
-                  className={cn('h-0.5 w-8 lg:w-14 mx-2 mb-7 transition-colors', active > i ? 'bg-brand' : 'bg-chrome-100')}
+                  className={cn('h-0.5 w-8 lg:w-14 mx-2 mb-7 transition-colors', active > i ? 'bg-[#CC0000]' : 'bg-[#E5E7EB]')}
                   aria-hidden
                 />
               )}
@@ -120,27 +120,27 @@ function Timeline({ estado }: { estado: string }) {
                 <div
                   className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-full shrink-0',
-                    done    && 'bg-brand',
-                    current && 'border-2 border-brand bg-white animate-pulse',
-                    !done && !current && 'bg-chrome-100',
+                    done    && 'bg-[#CC0000]',
+                    current && 'border-2 border-[#CC0000] bg-white animate-pulse',
+                    !done && !current && 'bg-[#E5E7EB]',
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-4 w-4',
                       done    && 'text-white',
-                      current && 'text-brand',
-                      !done && !current && 'text-chrome-400',
+                      current && 'text-[#CC0000]',
+                      !done && !current && 'text-gray-400',
                     )}
                     aria-hidden
                   />
                 </div>
                 {!isLast && (
-                  <div className={cn('w-0.5 h-6 my-1', active > i ? 'bg-brand' : 'bg-chrome-100')} aria-hidden />
+                  <div className={cn('w-0.5 h-6 my-1', active > i ? 'bg-[#CC0000]' : 'bg-[#E5E7EB]')} aria-hidden />
                 )}
               </div>
               <div className="py-2">
-                <span className={cn('text-sm font-medium', done || current ? 'text-ink' : 'text-chrome-400')}>
+                <span className={cn('text-sm font-medium', done || current ? 'text-[#111111]' : 'text-gray-400')}>
                   {label}
                 </span>
               </div>
@@ -155,24 +155,24 @@ function Timeline({ estado }: { estado: string }) {
 interface DetalleItem { nombre: string; cantidad: number; precioUnitario: number; subtotal: number }
 
 function Productos({ obs }: { obs: string | null }) {
-  if (!obs) return <p className="text-sm text-chrome-500">Sin detalle disponible</p>
+  if (!obs) return <p className="text-sm text-gray-500">Sin detalle disponible</p>
   let items: DetalleItem[]
   try {
     const parsed = JSON.parse(obs) as DetalleItem[]
     if (!Array.isArray(parsed) || parsed.length === 0) throw new Error()
     items = parsed
   } catch {
-    return <p className="text-sm text-chrome-600">{obs}</p>
+    return <p className="text-sm text-gray-600">{obs}</p>
   }
   return (
     <ul className="space-y-3">
       {items.map((item, i) => (
         <li key={i} className="flex items-start justify-between gap-2 text-sm">
           <div>
-            <p className="font-medium text-ink">{item.nombre}</p>
-            <p className="text-xs text-chrome-500">{item.cantidad} × {formatPrecio(item.precioUnitario)}</p>
+            <p className="font-medium text-[#111111]">{item.nombre}</p>
+            <p className="text-xs text-gray-500">{item.cantidad} × {formatPrecio(item.precioUnitario)}</p>
           </div>
-          <span className="font-semibold text-ink tabular-nums shrink-0">
+          <span className="font-semibold text-[#111111] tabular-nums shrink-0">
             {formatPrecio(item.subtotal)}
           </span>
         </li>
@@ -259,15 +259,15 @@ export default function RastreoPage() {
               placeholder="CT-2026-XXXX"
               aria-invalid={!!errors.codigo}
               aria-describedby="codigo-desc"
-              className="h-12 w-full rounded-lg border border-chrome-200 bg-white px-4 text-sm uppercase tracking-wider text-ink placeholder:text-chrome-400 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 aria-[invalid=true]:border-danger"
+              className="h-12 w-full rounded-lg border border-[#D1D5DB] bg-white px-4 text-sm uppercase tracking-wider text-[#111111] placeholder:text-gray-400 outline-none transition-colors focus:border-[#CC0000] focus:ring-2 focus:ring-[#CC0000]/20 aria-[invalid=true]:border-red-400"
             />
             {errors.codigo ? (
-              <p id="codigo-desc" role="alert" className="mt-1 text-xs text-danger">
+              <p id="codigo-desc" role="alert" className="mt-1 text-xs text-red-500">
                 Por favor ingresa un código de seguimiento CT-2026-XXXX.{' '}
                 <span className="block">Puedes encontrarlo en tu sección &apos;Mis compras&apos;</span>
               </p>
             ) : (
-              <p id="codigo-desc" className="mt-1 text-xs text-chrome-400">
+              <p id="codigo-desc" className="mt-1 text-xs text-gray-400">
                 Ingresa tu código de seguimiento CT-2026-XXXX
               </p>
             )}
@@ -276,7 +276,7 @@ export default function RastreoPage() {
             type="submit"
             disabled={isSubmitting}
             aria-label="Buscar pedido"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-brand text-white transition-colors hover:bg-brand-900 disabled:opacity-60"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#CC0000] text-white transition-colors hover:bg-[#AA0000] disabled:opacity-60"
           >
             {isSubmitting
               ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -288,37 +288,37 @@ export default function RastreoPage() {
         <div className="mt-10">
           {!buscado && (
             <div className="flex flex-col items-center gap-3 py-16 text-center" aria-live="polite">
-              <Package className="h-12 w-12 text-chrome-300" aria-hidden />
-              <p className="text-sm text-chrome-500">Ingresa tu código para ver el estado</p>
+              <Package className="h-12 w-12 text-gray-300" aria-hidden />
+              <p className="text-sm text-gray-500">Ingresa tu código para ver el estado</p>
             </div>
           )}
 
           {buscado && hayError && (
             <div className="flex flex-col items-center gap-3 py-16 text-center" role="alert">
-              <XCircle className="h-12 w-12 text-brand" aria-hidden />
-              <p className="text-base font-semibold text-ink">
+              <XCircle className="h-12 w-12 text-[#CC0000]" aria-hidden />
+              <p className="text-base font-semibold text-[#111111]">
                 No encontramos un pedido con ese código
               </p>
-              <p className="text-sm text-chrome-500">Verifica el código e intenta de nuevo</p>
+              <p className="text-sm text-gray-500">Verifica el código e intenta de nuevo</p>
             </div>
           )}
 
           {pedido && (
-            <div className="rounded-2xl bg-white p-8 shadow-card-md" role="region" aria-label="Detalle del pedido">
+            <div className="rounded-2xl bg-white p-8 shadow-md" role="region" aria-label="Detalle del pedido">
               {/* Header */}
               <div className="flex items-start justify-between gap-4 mb-8">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-chrome-400 mb-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-400 mb-1">
                     Código de pedido
                   </p>
-                  <p className="text-2xl font-bold text-ink">{pedido.codigoPedido}</p>
+                  <p className="text-2xl font-bold text-[#111111]">{pedido.codigoPedido}</p>
                 </div>
                 <EstadoBadge estado={pedido.estado} />
               </div>
 
               {/* Timeline */}
               {pedido.estado !== 'cancelado' && (
-                <div className="mb-8 pb-8 border-b border-chrome-100">
+                <div className="mb-8 pb-8 border-b border-gray-100">
                   <Timeline estado={pedido.estado} />
                 </div>
               )}
@@ -326,29 +326,29 @@ export default function RastreoPage() {
               {/* Detalle — 2 columnas */}
               <div className="grid gap-8 md:grid-cols-2 mb-8">
                 <div>
-                  <h2 className="text-sm font-semibold text-ink mb-3">Información del pedido</h2>
+                  <h2 className="text-sm font-semibold text-[#111111] mb-3">Información del pedido</h2>
                   <dl className="space-y-3 text-sm">
                     {pedido.fechaPedido && (
                       <div>
-                        <dt className="text-chrome-500">Fecha de creación</dt>
-                        <dd className="font-medium text-ink">{formatFecha(pedido.fechaPedido)}</dd>
+                        <dt className="text-gray-500">Fecha de creación</dt>
+                        <dd className="font-medium text-[#111111]">{formatFecha(pedido.fechaPedido)}</dd>
                       </div>
                     )}
                     {pedido.direccionEntrega && (
                       <div>
-                        <dt className="text-chrome-500">Dirección de entrega</dt>
-                        <dd className="font-medium text-ink">{pedido.direccionEntrega}</dd>
+                        <dt className="text-gray-500">Dirección de entrega</dt>
+                        <dd className="font-medium text-[#111111]">{pedido.direccionEntrega}</dd>
                       </div>
                     )}
                     <div>
-                      <dt className="text-chrome-500">Repartidor asignado</dt>
-                      <dd className="font-medium text-ink">
+                      <dt className="text-gray-500">Repartidor asignado</dt>
+                      <dd className="font-medium text-[#111111]">
                         {pedido.repartidorNombre ?? 'Por asignar'}
                       </dd>
                     </div>
-                    <div className="pt-2 border-t border-chrome-100">
-                      <dt className="text-chrome-500">Total</dt>
-                      <dd className="text-lg font-bold text-ink tabular-nums">
+                    <div className="pt-2 border-t border-gray-100">
+                      <dt className="text-gray-500">Total</dt>
+                      <dd className="text-lg font-bold text-[#111111] tabular-nums">
                         {formatPrecio(pedido.total)}
                       </dd>
                     </div>
@@ -356,15 +356,15 @@ export default function RastreoPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-sm font-semibold text-ink mb-3">Productos del pedido</h2>
+                  <h2 className="text-sm font-semibold text-[#111111] mb-3">Productos del pedido</h2>
                   <Productos obs={pedido.observaciones} />
                 </div>
               </div>
 
               {/* Historial */}
               {historial.length > 0 && (
-                <div className="border-t border-chrome-100 pt-6">
-                  <h2 className="text-xs font-semibold uppercase tracking-widest text-chrome-400 mb-4">
+                <div className="border-t border-gray-100 pt-6">
+                  <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
                     Historial de seguimiento
                   </h2>
                   <ul className="space-y-3">
@@ -374,16 +374,16 @@ export default function RastreoPage() {
                         <li key={i} className="flex items-start gap-3 text-sm">
                           <span
                             className="mt-1.5 h-2 w-2 rounded-full shrink-0"
-                            style={{ background: meta?.color ?? '#94A6B8' }}
+                            style={{ background: meta?.color ?? '#9CA3AF' }}
                             aria-hidden
                           />
                           <div>
-                            <span className="text-xs text-chrome-400">{formatFecha(h.fecha)}</span>
-                            <span className="font-semibold text-ink ml-2">
+                            <span className="text-xs text-gray-400">{formatFecha(h.fecha)}</span>
+                            <span className="font-semibold text-[#111111] ml-2">
                               {meta?.label ?? h.estado}
                             </span>
                             {h.comentario && (
-                              <span className="text-chrome-500 ml-1">— {h.comentario}</span>
+                              <span className="text-gray-500 ml-1">— {h.comentario}</span>
                             )}
                           </div>
                         </li>

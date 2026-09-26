@@ -1,10 +1,9 @@
 import { assets } from '@/config/assets'
 import type { Producto, Categoria } from '@/types'
 
-export const PRODUCTO_PLACEHOLDER =
-  'https://placehold.co/400x300/0F3341/A3C9DD?text=RE+MOTOS'
+export const PRODUCTO_PLACEHOLDER = 'https://placehold.co/400x300/0A0A0A/FF6B00?text=MOTOGEST'
 
-/** Nivel 1: imagen_url de BD. Nivel 2: placeholder de marca. */
+/** Nivel 1: imagen_url de BD. Nivel 2: placeholder MOTOGEST. */
 export function getProductImage(p: Producto): string {
   if (p.imagen_url) return p.imagen_url
   return PRODUCTO_PLACEHOLDER
